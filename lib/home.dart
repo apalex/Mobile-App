@@ -31,7 +31,12 @@ class _HomeState extends State<Home> {
             icon: const Icon(Icons.notifications),
             ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const Login()),
+                );
+            },
             icon: const Icon(Icons.account_circle),
             ),
         ],
