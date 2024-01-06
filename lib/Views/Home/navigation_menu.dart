@@ -1,8 +1,8 @@
-import 'package:crypto_app/home.dart';
-import 'package:crypto_app/markets.dart';
-import 'package:crypto_app/trade.dart';
-import 'package:crypto_app/margins.dart';
-import 'package:crypto_app/portfolio.dart';
+import 'package:crypto_app/Views/Home/home.dart';
+import 'package:crypto_app/Views/Home/markets.dart';
+import 'package:crypto_app/Views/Home/trade.dart';
+import 'package:crypto_app/Views/Home/margins.dart';
+import 'package:crypto_app/Views/Portfolio/portfolio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
