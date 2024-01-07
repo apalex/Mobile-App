@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../main.dart';
-import 'login.dart';
+import 'package:crypto_app/main.dart';
+import 'package:crypto_app/login.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);

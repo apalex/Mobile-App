@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../main.dart';
+import 'package:crypto_app/main.dart';
 
 class Login extends StatelessWidget {
   const Login({Key? key}) : super(key: key);

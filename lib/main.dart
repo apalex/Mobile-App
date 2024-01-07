@@ -1,4 +1,4 @@
-import 'package:crypto_app/Views/Home/navigation_menu.dart';
+import 'package:crypto_app/navigation_menu.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
