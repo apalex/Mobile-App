@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:crypto_app/main.dart';
 import 'package:crypto_app/login.dart';
+import 'package:crypto_app/notifications.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -31,7 +32,12 @@ class _HomeState extends State<Home> {
             label: const Text("Search"),
             ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => const Notifications()),
+                );
+            },
             icon: const Icon(Icons.notifications),
             ),
           IconButton(
