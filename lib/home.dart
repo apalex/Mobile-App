@@ -17,14 +17,18 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: const Text("Mintless"),
         actions: <Widget>[
-          IconButton(
+          OutlinedButton.icon(
             onPressed: () {
-              showSearch(
-                context: context,
-                delegate: CustomSearchDelegate(),
-                );
+              showSearch(context: context, delegate: CustomSearchDelegate());
             },
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(199, 20),
+              foregroundColor: Colors.grey,
+              padding: const EdgeInsets.all(6),
+              alignment: Alignment.centerLeft,
+            ),
             icon: const Icon(Icons.search),
+            label: const Text("Search"),
             ),
           IconButton(
             onPressed: () {},

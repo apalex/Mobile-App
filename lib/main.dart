@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
 
 // Search Feature in Home()
 class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchTerms = ["Test", "Subway", "McDonalds"];
+  List<String> searchTerms = ["Bitcoin", "Ethereum", "Solana", "Avalanche"];
 
   @override
   List<Widget> buildActions(BuildContext context) {
