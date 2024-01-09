@@ -31,52 +31,9 @@ class _MarketsState extends State<Markets> {
             ),
           centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(
-              bottom: 20.0
-              ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                ListView.builder(
-                  itemCount: 11,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 60,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey[700]!,
-                                  offset: const Offset(2, 15),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      body: OutlinedButton(onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Coin()));
+      }, child: const Text("Bitcoin")),
     ),
   );
 }
