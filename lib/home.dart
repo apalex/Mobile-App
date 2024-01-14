@@ -76,6 +76,7 @@ class _HomeState extends State<Home> {
     double myHeight = MediaQuery.of(context).size.height;
     double myWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: Scaffold(
       backgroundColor: Colors.blueGrey[50],
       appBar: _buildAppBar(context),

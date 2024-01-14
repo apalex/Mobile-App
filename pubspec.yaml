@@ -38,6 +38,7 @@ dependencies:
   anim_search_bar: ^2.0.2
   get:
   sqflite:
+  http:
 
 dev_dependencies:
   flutter_test:
