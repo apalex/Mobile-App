@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:crypto_app/main.dart';
+import 'package:crypto_app/registration.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _LoginState extends State<Login> {
           ),
         ),
         body: Container(
-          color: Color.fromARGB(255, 246, 244, 244),
+          color: const Color.fromARGB(255, 246, 244, 244),
           child: Center(
             child: SingleChildScrollView(
               child: Padding(
@@ -41,15 +41,41 @@ class _LoginState extends State<Login> {
                   key: formKey,
                   child: Column(
                     children: [
+                      // Welcome
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                thickness: 0.5,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                            const Text(
+                              "Welcome back",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                thickness: 0.5,
+                                color: Colors.grey[400],
+                              )
+                            ),
+                          ],
+                        ),
+                      ),
                       // Username Input Box
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
+                        margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10, top: 40),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
                         child: TextFormField(
+                          controller: username,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Username is required";
@@ -76,6 +102,7 @@ class _LoginState extends State<Login> {
                           color: Colors.white,
                         ),
                         child: TextFormField(
+                          controller: password,
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Password is required";
@@ -146,29 +173,27 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        padding: const EdgeInsets.all(12),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                thickness: 0.5,
-                                color: Colors.grey[400],
-                              ),
+                      const SizedBox(height: 100,),
+                      // Not a member? Register now
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Not a member?"),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Registration()
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              "Register now",
+                              style: TextStyle(color: Colors.grey, fontSize: 15),
                             ),
-                            const Text(
-                              "Or continue with",
-                              style: TextStyle(fontSize: 16),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                thickness: 0.5,
-                                color: Colors.grey[400],
-                              )
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
