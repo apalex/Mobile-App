@@ -5,17 +5,18 @@ CREATE TABLE User_Info (
     Username TEXT NOT NULL UNIQUE,
     Email TEXT NOT NULL UNIQUE,
     Password TEXT NOT NULL,
-    Phone_Number TEXT NOT NULL
+    Phone_Number TEXT NOT NULL,
+    CreatedOn DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE User_Address (
     User_ID INTEGER PRIMARY KEY,
-    Address1 TEXT NOT NULL,
+    Address1 TEXT,
     Address2 TEXT,
-    Country TEXT NOT NULL,
-    Province TEXT NOT NULL,
-    City TEXT NOT NULL,
-    Zip_Code TEXT NOT NULL,
+    Country TEXT,
+    Province TEXT,
+    City TEXT,
+    Zip_Code TEXT,
     FOREIGN KEY (User_ID) REFERENCES User_Info(User_ID)
 );
 
