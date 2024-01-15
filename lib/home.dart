@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
     return MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
-      backgroundColor: Colors.blueGrey[50],
+      backgroundColor: Color.fromARGB(255, 246, 244, 244),
       appBar: _buildAppBar(context),
       body: _buildBody(context),
       // body: Container(

@@ -1,22 +1,181 @@
 import 'package:flutter/material.dart';
 import 'package:crypto_app/main.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final username = TextEditingController();
+  final password = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  bool isVisible = true;
+  FocusNode focusNodeUser = FocusNode();
+  FocusNode focusNodePass = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          title: const Text("Login"),
+          centerTitle: true,
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
             },
             child: const Icon(Icons.arrow_back_sharp),
           ),
-          title: const Text("Login Page"),
-          centerTitle: true,
+        ),
+        body: Container(
+          color: Color.fromARGB(255, 246, 244, 244),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      // Username Input Box
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Username is required";
+                            }
+                            return null;
+                          },
+                          focusNode: focusNodeUser,
+                          decoration: InputDecoration(
+                            label: const Text("Username"),
+                            labelStyle: TextStyle(
+                              color: focusNodeUser.hasFocus ? Colors.black : Colors.black
+                            ),
+                            border: InputBorder.none,
+                            icon: const Icon(Icons.person),
+                          ),
+                        ),
+                      ),
+                      // Password Input Box
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        margin: const EdgeInsets.only(left: 4, right: 4, top: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Password is required";
+                            }
+                            return null;
+                          },
+                          obscureText: isVisible,
+                          focusNode: focusNodePass,
+                          decoration: InputDecoration(
+                            label: const Text("Password"),
+                            labelStyle: TextStyle(
+                              color: focusNodePass.hasFocus ? Colors.black : Colors.black
+                            ),
+                            border: InputBorder.none,
+                            icon: const Icon(Icons.lock),
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isVisible = !isVisible;
+                                });
+                              },
+                              icon: Icon(isVisible
+                              ? Icons.visibility_off
+                              : Icons.visibility)
+                              ),
+                          ),
+                        ),
+                      ),
+                      // Forgot Password
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                // Bring to support page
+                              },
+                              child: const Text(
+                                "Forgot Password?",
+                                style: TextStyle(
+                                  color: Colors.grey
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      // Login Button
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: 55,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+
+                            }
+                          },
+                          child: const Text(
+                            "Login",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Divider(
+                                thickness: 0.5,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                            const Text(
+                              "Or continue with",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            Expanded(
+                              child: Divider(
+                                thickness: 0.5,
+                                color: Colors.grey[400],
+                              )
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
