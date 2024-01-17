@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -15,9 +16,12 @@ class _RegistrationState extends State<Registration> {
   final email = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
+  final referralId = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool isVisiblePass = true;
   bool isVisibleConfirm = true;
+  bool isVisibleReferral = true;
+  bool isAgree = true;
   FocusNode focusNodeFirst = FocusNode();
   FocusNode focusNodeLast = FocusNode();
   FocusNode focusNodeUser = FocusNode();
@@ -25,6 +29,8 @@ class _RegistrationState extends State<Registration> {
   FocusNode focusNodeEmail = FocusNode();
   FocusNode focusNodePass = FocusNode();
   FocusNode focusNodeConfirm = FocusNode();
+  FocusNode focusNodeReferral = FocusNode();
+  RegExp regExPassword = RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +131,9 @@ class _RegistrationState extends State<Registration> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Username is required";
-                            }
+                            } else if (value.length < 3) {
+                              return "Minimum of 4 characters required";
+                            } // Make another one where it goes through database to see if existing username is in use already
                             return null;
                           },
                           focusNode: focusNodeUser,
@@ -179,7 +187,9 @@ class _RegistrationState extends State<Registration> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Email is required";
-                            } // Make so if else email is valid/in use etc
+                            } else if (!EmailValidator.validate(value)) {
+                              return "Email must be valid";
+                            } // Make another else if for if email is already in use
                             return null;
                           },
                           focusNode: focusNodeEmail,
@@ -206,7 +216,9 @@ class _RegistrationState extends State<Registration> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Password is required";
-                            }
+                            } else if (!regExPassword.hasMatch(value)) {
+                              return "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
+                            } // else return true
                             return null;
                           },
                           obscureText: isVisiblePass,
@@ -234,7 +246,7 @@ class _RegistrationState extends State<Registration> {
                       // Confirm Password Input Box
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, bottom: 25, top: 15),
+                        margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10, top: 15),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
@@ -271,8 +283,107 @@ class _RegistrationState extends State<Registration> {
                           ),
                         ),
                       ),
+                      // Referral ID Input Box
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        margin: const EdgeInsets.only(left: 4, right: 4),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isVisibleReferral = !isVisibleReferral;
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              const Text(
+                                "Referral ID (Optional)",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(width: 5,),
+                              Icon(
+                                isVisibleReferral
+                                ? Icons.keyboard_arrow_up_sharp
+                                : Icons.keyboard_arrow_down_sharp,
+                                size: 20,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: !isVisibleReferral,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10, top: 15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          child: TextFormField(
+                            controller: referralId,
+                            validator: (value) {
+                              return null;
+                            },
+                            focusNode: focusNodeReferral,
+                            decoration: InputDecoration(
+                              label: const Text("Referral ID"),
+                              labelStyle: TextStyle(
+                                color: focusNodeReferral.hasFocus ? Colors.black : Colors.black
+                              ),
+                              border: InputBorder.none,
+                              icon: const Icon(Icons.mobile_friendly_sharp),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // ToS agree
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        margin: const EdgeInsets.only(left: 4, right: 4, bottom: 15, top: 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isAgree = !isAgree;
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                isAgree
+                                ? Icons.radio_button_off_sharp
+                                : Icons.radio_button_on_sharp,
+                                size: 20,
+                              ),
+                              RichText(
+                                text: const TextSpan(
+                                  text: 'By creating an account, I agree to Mintless\'\n',
+                                  style: TextStyle(color: Colors.black, fontSize: 15,),
+                                  children: [
+                                    TextSpan(
+                                      text: "Terms of Service ",
+                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)
+                                    ),
+                                    TextSpan(
+                                      text: "and ",
+                                      style: TextStyle(color: Colors.black)
+                                    ),
+                                    TextSpan(
+                                      text: "Privacy Policy",
+                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)
+                                    ),
+                                  ],
+                                ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
                       // Register Button
                       Container(
+                        margin: const EdgeInsets.only(top: 5),
                         width: MediaQuery.of(context).size.width,
                         height: 55,
                         decoration: BoxDecoration(
