@@ -1,3 +1,5 @@
+import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -31,6 +33,13 @@ class _RegistrationState extends State<Registration> {
   FocusNode focusNodeConfirm = FocusNode();
   FocusNode focusNodeReferral = FocusNode();
   RegExp regExPassword = RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+  final db = DatabaseHelper();
+
+  @override
+  void initState() {
+    super.initState();
+    db.open();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +142,9 @@ class _RegistrationState extends State<Registration> {
                               return "Username is required";
                             } else if (value.length < 3) {
                               return "Minimum of 4 characters required";
-                            } // Make another one where it goes through database to see if existing username is in use already
+                            } else if (db.checkUsername(value) == false) {
+                              return "Username is already in use";
+                            }
                             return null;
                           },
                           focusNode: focusNodeUser,
@@ -217,7 +228,7 @@ class _RegistrationState extends State<Registration> {
                             if (value!.isEmpty) {
                               return "Password is required";
                             } else if (!regExPassword.hasMatch(value)) {
-                              return "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
+                              return "Minimum eight characters, at least one uppercase \nletter, one lowercase letter, one number \nand one special character";
                             } // else return true
                             return null;
                           },
@@ -391,8 +402,23 @@ class _RegistrationState extends State<Registration> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: TextButton(
-                          onPressed: () {
-
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              await db.insertUser(User(
+                                firstName: firstName.text,
+                                lastName: lastName.text,
+                                username: username.text,
+                                email: email.text,
+                                phoneNum: phoneNum.text,
+                                userPassword: password.text,
+                                )
+                              ).whenComplete(() {
+                                Navigator.of(context).pop(true);
+                                // Make a registration successful page instead
+                                // with initialized and a home button once you click
+                                // or get started
+                              });
+                            }
                           },
                           child: const Text(
                             "Register",
