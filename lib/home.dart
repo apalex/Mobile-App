@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:crypto_app/main.dart';
 import 'package:crypto_app/login.dart';
 import 'package:crypto_app/notifications.dart';
+import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/SQLite/database_helper.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,6 +13,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late DatabaseHelper handler;
+  late Future<List<User>> users;
+  final db = DatabaseHelper();
+
+  @override
+  void initState() {
+    handler = DatabaseHelper();
+    users = handler.getUsers();
+    handler.open().whenComplete(() {
+      users = getAllUsers();
+    });
+    super.initState();
+  }
+
+  Future<List<User>> getAllUsers() {
+    return handler.getUsers();
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      users = getAllUsers();
+    });
+  }
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
@@ -48,7 +73,11 @@ class _HomeState extends State<Home> {
             MaterialPageRoute(
               builder: (context) => const Login()
               )
-            );
+            ).then((value) => {
+              if (value) {
+                _refresh()
+              }
+            });
         },
         icon: const Icon(Icons.account_circle))
       ],
@@ -56,18 +85,28 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return const Column(
-      children: [
-        SizedBox(
-          height: 25,
-        ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [],
-          ),
-        )
-      ],
+    return FutureBuilder<List<User>>(
+      future: users,
+      builder: (BuildContext context, AsyncSnapshot <List<User>> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+          return const Center(child: Text("No data"));
+        } else if (snapshot.hasError) {
+          return Text(snapshot.error.toString());
+        } else {
+          final items = snapshot.data ?? <User>[];
+          return ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+            return ListTile(
+              title: Center(
+                child: Text(items[index].username),
+              ),
+            );
+          });
+        }
+      }
     );
   }
 
