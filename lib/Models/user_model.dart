@@ -8,6 +8,7 @@ class User {
   final String userPassword;
   final String? createdOn;
   final int? isActive;
+  final String? permissions;
 
   const User({
     this.userId,
@@ -18,7 +19,8 @@ class User {
     required this.phoneNum,
     required this.userPassword,
     this.createdOn,
-    this.isActive
+    this.isActive,
+    this.permissions
   });
 
   factory User.fromMap(Map<String, dynamic> json) => User(
@@ -30,7 +32,8 @@ class User {
     phoneNum: json['phoneNum'],
     userPassword: json['userPassword'],
     createdOn: json['createdOn'],
-    isActive: json['isActive']
+    isActive: json['isActive'],
+    permissions: json['permissions']
   );
   
   Map<String, dynamic> toMap() => {
@@ -42,7 +45,8 @@ class User {
     'phoneNum': phoneNum,
     'userPassword': userPassword,
     'createdOn': createdOn,
-    'isActive': isActive
+    'isActive': isActive,
+    'permissions': permissions
   };  
 
 }

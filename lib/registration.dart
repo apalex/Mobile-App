@@ -1,5 +1,6 @@
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
+import 'package:crypto_app/registrationsuccess.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -24,6 +25,9 @@ class _RegistrationState extends State<Registration> {
   bool isVisibleConfirm = true;
   bool isVisibleReferral = true;
   bool isAgree = true;
+  bool isAgreeColor = true;
+  bool isUsernameInUse = false;
+  bool isEmailInUse = false;
   FocusNode focusNodeFirst = FocusNode();
   FocusNode focusNodeLast = FocusNode();
   FocusNode focusNodeUser = FocusNode();
@@ -41,14 +45,39 @@ class _RegistrationState extends State<Registration> {
     db.open();
   }
 
+  checkUsername() async {
+    var response = await db.checkUsername(username.text);
+    if (response == true) {
+      setState(() {
+        isUsernameInUse = false;
+      });
+    } else {
+      setState(() {
+        isUsernameInUse = true;
+      });
+    }
+  }
+
+  checkEmail() async {
+    var response = await db.checkEmail(email.text);
+    if (response == true) {
+      setState(() {
+        isEmailInUse = false;
+      });
+    } else {
+      setState(() {
+        isEmailInUse = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("Register"),
-          centerTitle: true,
+          elevation: 1,
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -142,7 +171,7 @@ class _RegistrationState extends State<Registration> {
                               return "Username is required";
                             } else if (value.length < 3) {
                               return "Minimum of 4 characters required";
-                            } else if (db.checkUsername(value) == false) {
+                            } else if (isUsernameInUse == true) {
                               return "Username is already in use";
                             }
                             return null;
@@ -171,6 +200,8 @@ class _RegistrationState extends State<Registration> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Phone Number is required";
+                            } else if (value.length != 10) {
+                              return "Please enter a valid phone number";
                             }
                             return null;
                           },
@@ -200,7 +231,9 @@ class _RegistrationState extends State<Registration> {
                               return "Email is required";
                             } else if (!EmailValidator.validate(value)) {
                               return "Email must be valid";
-                            } // Make another else if for if email is already in use
+                            } else if (isEmailInUse == true) {
+                              return "Email is already in use";
+                            }
                             return null;
                           },
                           focusNode: focusNodeEmail,
@@ -369,21 +402,34 @@ class _RegistrationState extends State<Registration> {
                                 size: 20,
                               ),
                               RichText(
-                                text: const TextSpan(
+                                text: TextSpan(
                                   text: 'By creating an account, I agree to Mintless\'\n',
-                                  style: TextStyle(color: Colors.black, fontSize: 15,),
+                                  style: TextStyle(
+                                    color: isAgreeColor ? Colors.black : Colors.redAccent,
+                                    fontSize: 15,
+                                  ),
                                   children: [
                                     TextSpan(
                                       text: "Terms of Service ",
-                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)
+                                      style: TextStyle(
+                                        color: isAgreeColor ? Colors.black : Colors.redAccent,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15
+                                      ),
                                     ),
                                     TextSpan(
                                       text: "and ",
-                                      style: TextStyle(color: Colors.black)
+                                      style: TextStyle(
+                                        color: isAgreeColor ? Colors.black : Colors.redAccent
+                                      ),
                                     ),
                                     TextSpan(
                                       text: "Privacy Policy",
-                                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)
+                                      style: TextStyle(
+                                        color: isAgreeColor ? Colors.black : Colors.redAccent,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -403,7 +449,17 @@ class _RegistrationState extends State<Registration> {
                         ),
                         child: TextButton(
                           onPressed: () async {
-                            if (formKey.currentState!.validate()) {
+                            checkUsername();
+                            if (isAgree == true) {
+                              setState(() {
+                                isAgreeColor = false;
+                              });
+                            } else {
+                              setState(() {
+                                isAgreeColor = true;
+                              });
+                            }
+                            if (formKey.currentState!.validate() && isAgreeColor == true && isUsernameInUse == false && isEmailInUse == false) {
                               await db.insertUser(User(
                                 firstName: firstName.text,
                                 lastName: lastName.text,
@@ -411,12 +467,17 @@ class _RegistrationState extends State<Registration> {
                                 email: email.text,
                                 phoneNum: phoneNum.text,
                                 userPassword: password.text,
+                                createdOn: DateTime.now().toIso8601String(),
+                                isActive: 1,
+                                permissions: "User"
                                 )
                               ).whenComplete(() {
-                                Navigator.of(context).pop(true);
-                                // Make a registration successful page instead
-                                // with initialized and a home button once you click
-                                // or get started
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const RegistrationSuccess()
+                                  ),
+                                );
                               });
                             }
                           },

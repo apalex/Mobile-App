@@ -1,3 +1,5 @@
+import 'package:crypto_app/SQLite/database_helper.dart';
+import 'package:crypto_app/navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/registration.dart';
 
@@ -13,8 +15,27 @@ class _LoginState extends State<Login> {
   final password = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool isVisible = true;
+  bool isWrong = false;
   FocusNode focusNodeUser = FocusNode();
   FocusNode focusNodePass = FocusNode();
+  final db = DatabaseHelper();
+
+  login() async {
+    var response = await db.login(username.text, password.text);
+    if (response == true) {
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const NavigationMenu()
+        ),
+      );
+    } else {
+      setState(() {
+        isWrong = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +45,7 @@ class _LoginState extends State<Login> {
         appBar: AppBar(
           title: const Text("Login"),
           centerTitle: true,
+          elevation: 1,
           leading: GestureDetector(
             onTap: () {
               Navigator.pop(context);
@@ -132,24 +154,21 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       // Forgot Password
-                      Container(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                // Bring to support page
-                              },
-                              child: const Text(
-                                "Forgot Password?",
-                                style: TextStyle(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              // Bring to support page
+                            },
+                            child: const Text(
+                              "Forgot Password?",
+                              style: TextStyle(
                                   color: Colors.grey
-                                  ),
                                 ),
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
                       ),
                       // Login Button
                       Container(
@@ -162,13 +181,26 @@ class _LoginState extends State<Login> {
                         child: TextButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-
+                              login();
                             }
                           },
                           child: const Text(
                             "Login",
                             style: TextStyle(
                               color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      // If Credentials are wrong
+                      Visibility(
+                        visible: isWrong,
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: const Text(
+                            "Wrong information. Please enter again",
+                            style: TextStyle(
+                              color: Colors.red,
                             ),
                           ),
                         ),

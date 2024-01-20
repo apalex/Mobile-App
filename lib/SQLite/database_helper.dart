@@ -8,9 +8,10 @@ class DatabaseHelper {
   Future<Database> open() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, databaseName);
+
     return openDatabase(path, version: 1, onCreate: (db, version) async {
       // User_Info
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Info (userId INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT NOT NULL, lastName TEXT NOT NULL, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL UNIQUE, userPassword TEXT NOT NULL, phoneNum TEXT NOT NULL, createdOn TEXT DEFAULT CURRENT_TIMESTAMP, isActive INTEGER DEFAULT 1);");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Info (userId INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT NOT NULL, lastName TEXT NOT NULL, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL UNIQUE, userPassword TEXT NOT NULL, phoneNum TEXT NOT NULL, createdOn TEXT DEFAULT CURRENT_TIMESTAMP, isActive INTEGER DEFAULT 1, permissions TEXT DEFAULT 'User');");
       // User_Address
       await db.execute("CREATE TABLE IF NOT EXISTS User_Address (userId INTEGER PRIMARY KEY, address1 TEXT, address2 TEXT, country TEXT, province TEXT, city TEXT, zipCode TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Portfolio
@@ -24,6 +25,17 @@ class DatabaseHelper {
     });
   }
 
+  // Login Method
+  Future<bool> login(String username, String password) async {
+    final Database db = await open();
+    var result = await db.rawQuery("SELECT * FROM User_Info WHERE username = '$username' AND userPassword = '$password';");
+    if (result.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // CRUD
   // Create
   Future<int> insertUser(User user) async {
@@ -34,15 +46,21 @@ class DatabaseHelper {
   // Read
   Future<bool> checkUsername(String username) async {
     final Database db = await open();
-    List<Map<String, dynamic>> result = await db.query(
-      'User_Info',
-      where: 'username LIKE ?',
-      whereArgs: ['%$username%'],
-    );
-    if (result.isEmpty) {
-      return true;
-    } else {
+    var result = await db.rawQuery("SELECT * FROM User_Info WHERE username = '$username';");
+    if (result.isNotEmpty) {
       return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<bool> checkEmail(String email) async {
+    final Database db = await open();
+    var result = await db.rawQuery("SELECT * FROM User_Info WHERE email = '$email';");
+    if (result.isNotEmpty) {
+      return false;
+    } else {
+      return true;
     }
   }
 

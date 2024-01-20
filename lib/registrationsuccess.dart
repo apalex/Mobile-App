@@ -7,17 +7,32 @@ class RegistrationSuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           leading: GestureDetector(
             onTap: () {
-              MaterialPageRoute(builder: (context) => const NavigationMenu());
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NavigationMenu(),
+                ),
+              );
             },
             child: const Icon(Icons.close_sharp),
           ),
         ),
-        body: const Center(
-          child: Text("Congratulations! You have successfully made an account with Mintless."),
+        body: Container(
+          padding: const EdgeInsets.all(20),
+          child: const Center(
+            child: Text(
+              "Congratulations! You have successfully made an account with Mintless.",
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
         ),
       ),
     );

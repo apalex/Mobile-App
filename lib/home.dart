@@ -101,7 +101,7 @@ class _HomeState extends State<Home> {
             itemBuilder: (context, index) {
             return ListTile(
               title: Center(
-                child: Text(items[index].username),
+                child: Text('${items[index].userId}'),
               ),
             );
           });
