@@ -40,6 +40,7 @@ class DatabaseHelper {
   // Create
   Future<int> insertUser(User user) async {
     final Database db = await open();
+    // Make insert more secure in future by implementing SQL Injection preventions
     return db.insert('User_Info', user.toMap());
   }
 
