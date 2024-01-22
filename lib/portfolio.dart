@@ -9,6 +9,20 @@ class Portfolio extends StatefulWidget {
 }
 
 class _PortfolioState extends State<Portfolio> {
+  bool isVisibleBal = true;
+  var bal = "111.11";
+  showBalance() {
+    if (isVisibleBal) {
+      setState(() {
+        bal = "\$111.11";
+      });
+      } else {
+      setState(() {
+        bal = "**** **** **** ****";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +30,7 @@ class _PortfolioState extends State<Portfolio> {
       home: Scaffold(
         appBar: AppBar(
           elevation: 0,
+          title: const Text("Portfolio"),
         ),
         body: Container(
           padding: const EdgeInsets.all(8),
@@ -23,9 +38,6 @@ class _PortfolioState extends State<Portfolio> {
             children: <Widget>[
               _buildCreditCard(
                 color: Colors.black87,
-                cardNumber: "1234 1234 1234 1234",
-                cardHolder: "TEST TEST",
-                cardExpiration: "08/2022"
               ),
             ],
           ),
@@ -34,7 +46,7 @@ class _PortfolioState extends State<Portfolio> {
     );
   }
 
-  Widget _buildCreditCard({@required color, @required cardNumber, @required cardHolder, @required cardExpiration})  {
+  Widget _buildCreditCard({@required color})  {
     return Card(
       elevation: 4,
       color: color,
@@ -44,12 +56,12 @@ class _PortfolioState extends State<Portfolio> {
       child: Container(
         height: 200,
         padding: const EdgeInsets.only(left: 16, right: 16),
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             // Logo
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Padding(
@@ -58,7 +70,7 @@ class _PortfolioState extends State<Portfolio> {
                     "Mintless Inc.",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20
+                      fontSize: 22,
                     ),
                   ),
                 ),
@@ -66,18 +78,19 @@ class _PortfolioState extends State<Portfolio> {
             ),
             // Balance
             Padding(
-              padding: EdgeInsets.only(left: 12),
+              padding: const EdgeInsets.only(left: 12),
               child: Column(
                 children: <Widget>[
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.only(bottom: 5, left: 1),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "BALANCE",
+                          "BALANCE (in USDT)",
                           style: TextStyle(
                             color: Colors.grey,
+                            fontSize: 15,
                           ),
                         ),
                       ],
@@ -87,42 +100,62 @@ class _PortfolioState extends State<Portfolio> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "\$111.11",
-                        style: TextStyle(
+                        bal,
+                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 21,
+                          fontSize: 22,
                           fontFamily: "CourrierPrime",
                         ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isVisibleBal = !isVisibleBal;
+                            showBalance();
+                          });
+                        },
+                        icon: Icon(isVisibleBal
+                        ? Icons.visibility
+                        : Icons.visibility_off
+                      ),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-
-            Column(
+            // Extra Decoration of Credit Card
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "CARDHOLDER",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 9,
-                        fontWeight: FontWeight.bold,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "CARDHOLDER",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "VALID THRU",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
+                      Text(
+                        "VALID THRU",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             )
