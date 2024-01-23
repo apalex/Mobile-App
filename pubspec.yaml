@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.19.0
   path_provider: ^2.1.2
   email_validator: '^2.1.16'
+  carousel_slider:
 
 dev_dependencies:
   flutter_test:

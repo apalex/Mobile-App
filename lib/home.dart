@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crypto_app/main.dart';
 import 'package:crypto_app/login.dart';
 import 'package:crypto_app/notifications.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
+import 'package:crypto_app/Models/coin_model.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -16,6 +19,7 @@ class _HomeState extends State<Home> {
   late DatabaseHelper handler;
   late Future<List<User>> users;
   final db = DatabaseHelper();
+  bool isRefreshing = true;
 
   @override
   void initState() {
@@ -24,6 +28,7 @@ class _HomeState extends State<Home> {
     handler.open().whenComplete(() {
       users = getAllUsers();
     });
+    getCoinMarket();
     super.initState();
   }
 
@@ -35,6 +40,30 @@ class _HomeState extends State<Home> {
     setState(() {
       users = getAllUsers();
     });
+  }
+
+  List? coinMarket = [];
+  var coinMarketList;
+  Future<List<CoinModel>?>  getCoinMarket() async {
+    setState(() {
+      isRefreshing = true;
+    });
+    var response = await http.get(Uri.parse("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
+    setState(() {
+      isRefreshing = false;
+    });
+    if (response.statusCode == 200) {
+      var x = response.body;
+      coinMarketList = coinModelFromJson(x);
+      setState(() {
+        coinMarket = coinMarketList;
+      });
+    } else {
+      print(response.statusCode);
+    }
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -66,7 +95,8 @@ class _HomeState extends State<Home> {
                 )
               );
           }, 
-          icon: const Icon(Icons.notifications)),
+          icon: const Icon(Icons.notifications)
+        ),
         IconButton(onPressed: () {
           Navigator.push(
             context, 
@@ -85,29 +115,69 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return FutureBuilder<List<User>>(
-      future: users,
-      builder: (BuildContext context, AsyncSnapshot <List<User>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-          return const Center(child: Text("No data"));
-        } else if (snapshot.hasError) {
-          return Text(snapshot.error.toString());
-        } else {
-          final items = snapshot.data ?? <User>[];
-          return ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-            return ListTile(
-              title: Center(
-                child: Text('${items[index].username}'),
+    return Container(
+      child: Column(
+        children: [
+          // Make the caroussel have multiple items
+          Container(
+            width: MediaQuery.of(context).size.width * 0.75,
+            child: CarouselSlider(
+              items: [1,2,3,4,5,6,7,8,9,10,11,12].map((e) {
+                return Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey
+                  ),
+                  child: Text("Text $e"),
+                );
+              }).toList(),
+              options: CarouselOptions(
+                height: 100,
               ),
-            );
-          });
-        }
-      }
+            ),
+          ),
+          Row(
+            children: [
+              Text("data")
+            ],
+          ),
+          Row(
+            children: [
+              Text("data")
+            ],
+          ),
+          Row(
+            children: [
+              Text("data")
+            ],
+          ),
+        ],
+      ),
     );
+    // FutureBuilder<List<User>>(
+    //   future: users,
+    //   builder: (BuildContext context, AsyncSnapshot <List<User>> snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return const CircularProgressIndicator();
+    //     } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+    //       return const Center(child: Text("No data"));
+    //     } else if (snapshot.hasError) {
+    //       return Text(snapshot.error.toString());
+    //     } else {
+    //       final items = snapshot.data ?? <User>[];
+    //       return ListView.builder(
+    //         itemCount: items.length,
+    //         itemBuilder: (context, index) {
+    //         return ListTile(
+    //           title: Center(
+    //             child: Text('${items[index].username}'),
+    //           ),
+    //         );
+    //       });
+    //     }
+    //   }
+    // );
   }
 
   @override
