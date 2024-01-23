@@ -36,7 +36,9 @@ class _RegistrationState extends State<Registration> {
   FocusNode focusNodePass = FocusNode();
   FocusNode focusNodeConfirm = FocusNode();
   FocusNode focusNodeReferral = FocusNode();
+  RegExp regExName = RegExp(r"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
   RegExp regExPassword = RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
+  RegExp regExpUsername = RegExp(r"^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+){1,}$");
   final db = DatabaseHelper();
 
   @override
@@ -115,6 +117,8 @@ class _RegistrationState extends State<Registration> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "First Name is required";
+                            } else if (!regExName.hasMatch(value)) {
+                              return "Please enter name with no special unsupported characters";
                             }
                             return null;
                           },
@@ -142,6 +146,8 @@ class _RegistrationState extends State<Registration> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Last Name is required";
+                            } else if (!regExName.hasMatch(value)) {
+                              return "Please enter naem with no special unsupported characters";
                             }
                             return null;
                           },
@@ -173,6 +179,8 @@ class _RegistrationState extends State<Registration> {
                               return "Minimum of 4 characters required";
                             } else if (isUsernameInUse == true) {
                               return "Username is already in use";
+                            } else if (!regExpUsername.hasMatch(value)) {
+                              return "Minimum 2 characters, no special characters,\nonly '_' and '.' are allowed";
                             }
                             return null;
                           },

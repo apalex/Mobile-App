@@ -14,6 +14,7 @@ class Markets extends StatefulWidget {
 
 class _MarketsState extends State<Markets> {
   List<dynamic> cryptoData = [];
+  bool isRefreshing = true;
 
   @override
   void initState() {
@@ -23,9 +24,12 @@ class _MarketsState extends State<Markets> {
 
   Future<void> fetchCryptoData() async {
     final response = await http.get(Uri.parse('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false'));
-
+    setState(() {
+      isRefreshing = true;
+    });
     if (response.statusCode == 200) {
       setState(() {
+        isRefreshing = false;
         cryptoData = json.decode(response.body);
       });
     } else {
@@ -76,7 +80,11 @@ class _MarketsState extends State<Markets> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: isRefreshing == true
+            ? const Center(
+              child: CircularProgressIndicator(),
+            )
+            : ListView.builder(
               itemCount: cryptoData.length,
               itemBuilder: (context, index) {
                 final coin = cryptoData[index];
