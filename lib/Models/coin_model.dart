@@ -17,7 +17,7 @@ class CoinModel {
     double high24H;
     double low24H;
     double priceChange24H;
-    // double priceChangePercentage24H;
+    double priceChangePercentage24H;
     // double marketCapChange24H;
     double marketCapChangePercentage24H;
     // int circulatingSupply;
@@ -46,7 +46,7 @@ class CoinModel {
         required this.high24H,
         required this.low24H,
         required this.priceChange24H,
-        // required this.priceChangePercentage24H,
+        required this.priceChangePercentage24H,
         // required this.marketCapChange24H,
         required this.marketCapChangePercentage24H,
         // required this.circulatingSupply,
@@ -76,7 +76,7 @@ class CoinModel {
         high24H: json["high_24h"].toDouble(),
         low24H: json["low_24h"].toDouble(),
         priceChange24H: json["price_change_24h"]?.toDouble(),
-        // priceChangePercentage24H: json["price_change_percentage_24h"]?.toDouble(),
+        priceChangePercentage24H: json["price_change_percentage_24h"]?.toDouble(),
         // marketCapChange24H: json["market_cap_change_24h"]?.toDouble(),
         marketCapChangePercentage24H: json["market_cap_change_percentage_24h"]?.toDouble(),
         // circulatingSupply: json["circulating_supply"],
@@ -106,7 +106,7 @@ class CoinModel {
         "high_24h": high24H,
         "low_24h": low24H,
         "price_change_24h": priceChange24H,
-        // "price_change_percentage_24h": priceChangePercentage24H,
+        "price_change_percentage_24h": priceChangePercentage24H,
         // "market_cap_change_24h": marketCapChange24H,
         "market_cap_change_percentage_24h": marketCapChangePercentage24H,
         // "circulating_supply": circulatingSupply,
