@@ -1,29 +1,38 @@
 import 'package:flutter/material.dart';
 
-class Coin extends StatelessWidget {
-  // final String? title;
-  // final double percentChange;
+class Coin extends StatefulWidget {
+  var coin;
+  Coin({this.coin});
 
-  // Coin({
-  //   required this.percentChange,
-  //   this.title,
-  // });
+  @override
+  State<Coin> createState() => _CoinState();
+}
+
+class _CoinState extends State<Coin> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(4),
+        child: Container(
+          color: Colors.black,
+          height: 2,
+        ),
+      ),
       leading: GestureDetector(
         onTap: () {
           Navigator.pop(context);
         },
         child: const Icon(Icons.arrow_back_sharp),
       ),
-      title: const Text("BTC"),
+      title: Text(widget.coin.symbol.toUpperCase()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: _buildAppBar(context),
 
