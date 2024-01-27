@@ -3,7 +3,7 @@ import 'package:crypto_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto_app/coin_view.dart';
-import 'package:get/get.dart';
+import 'package:crypto_app/Models/coin_model.dart';
 
 class Markets extends StatefulWidget {
   const Markets({Key? key}) : super(key: key);
@@ -13,27 +13,32 @@ class Markets extends StatefulWidget {
 }
 
 class _MarketsState extends State<Markets> {
-  List<dynamic> cryptoData = [];
   bool isRefreshing = true;
 
   @override
   void initState() {
+    getCoinData();
     super.initState();
-    fetchCryptoData();
   }
 
-  Future<void> fetchCryptoData() async {
-    final response = await http.get(Uri.parse('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false'));
+  List? coinMarket = [];
+  var coinMarketList;
+  Future<List<CoinModel>?>  getCoinData() async {
+    var response = await http.get(Uri.parse("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"), headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+    });
     setState(() {
-      isRefreshing = true;
+      isRefreshing = false;
     });
     if (response.statusCode == 200) {
+      var x = response.body;
+      coinMarketList = coinModelFromJson(x);
       setState(() {
-        isRefreshing = false;
-        cryptoData = json.decode(response.body);
+        coinMarket = coinMarketList;
       });
     } else {
-      throw Exception("Failed to load Data");
+      print(response.statusCode);
     }
   }
 
@@ -85,29 +90,31 @@ class _MarketsState extends State<Markets> {
               child: CircularProgressIndicator(),
             )
             : ListView.builder(
-              itemCount: cryptoData.length,
+              itemCount: coinMarket!.length,
               itemBuilder: (context, index) {
-                final coin = cryptoData[index];
-                final name = coin['name'];
-                final symbol = coin['symbol'];
-                final image = coin['image'];
-                final price = coin['current_price'];
-                var priceChange = coin['price_change_24h'];
-                var priceChangePercentage = coin['price_change_percentage_24h'];
-                if (priceChange > 0) {
-                  priceChange = "+${priceChange.toStringAsFixed(2)}";
-                  priceChangePercentage = "+${priceChangePercentage.toStringAsFixed(2)}";
+                var priceChange;
+                var priceChangePercentage;
+                if (coinMarket![index].priceChange24H > 0) {
+                  priceChange = "+${coinMarket![index].priceChange24H.toStringAsFixed(2)}";
+                  priceChangePercentage = "+${coinMarket![index].priceChangePercentage24H.toStringAsFixed(2)}";
                 } else {
-                  priceChange = "${priceChange.toStringAsFixed(2)}";
-                  priceChangePercentage = "${priceChangePercentage.toStringAsFixed(2)}";
+                  priceChange = "${coinMarket![index].priceChange24H.toStringAsFixed(2)}";
+                  priceChangePercentage = "${coinMarket![index].priceChangePercentage24H.toStringAsFixed(2)}";
                 }
                 return ListTile(
                   textColor: Colors.black,
-                  leading: Image.network(image),
-                  title: Text('$name - ${symbol.toUpperCase()}'),
+                  leading: Image.network(coinMarket![index].image),
+                  title: Text('${coinMarket![index].name} - ${coinMarket![index].symbol.toUpperCase()}'),
                   subtitle: Text('24h Change: $priceChange | $priceChangePercentage%'),
-                  trailing: Text('\$${price.toStringAsFixed(2)}', style: const TextStyle(fontSize: 15),),
-                  onTap: () => Coin(),
+                  trailing: Text('\$${coinMarket![index].currentPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 15),),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Coin(coin: coinMarket![index],)
+                      )
+                    );
+                  },
                 );
               }
               ),

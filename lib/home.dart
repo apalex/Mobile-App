@@ -8,8 +8,6 @@ import 'package:crypto_app/notifications.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/Models/coin_model.dart';
-import 'package:carousel_slider/carousel_controller.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class Home extends StatefulWidget {

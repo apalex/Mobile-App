@@ -12,13 +12,7 @@ class _CoinState extends State<Coin> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(4),
-        child: Container(
-          color: Colors.black,
-          height: 2,
-        ),
-      ),
+      elevation: 0,
       leading: GestureDetector(
         onTap: () {
           Navigator.pop(context);
@@ -35,7 +29,26 @@ class _CoinState extends State<Coin> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: _buildAppBar(context),
-
+        body: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide())
+              ),
+              child: Row(
+                children: [
+                  Text("Chart"),
+                  Text("Info")
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                Text("")
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
