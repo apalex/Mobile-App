@@ -8,6 +8,9 @@ import 'package:crypto_app/notifications.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/Models/coin_model.dart';
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_options.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -21,6 +24,11 @@ class _HomeState extends State<Home> {
   late Future<List<User>> users;
   final db = DatabaseHelper();
   bool isRefreshing = true;
+  final List<String> imgList = [
+    'https://assets.bitdegree.org/crypto/storage/media/Future-of-Bitcoin.o.jpg',
+    'https://academy.moralis.io/wp-content/uploads/2022/09/22_09_Ethereum-Post-Merge-Future-of-Ethereum-1-1.jpg',
+    'https://www.analyticsinsight.net/wp-content/uploads/2022/10/Solana-SOL-Spirals-Out-Of-Control-The-Hideaways-HDWY-Skyrockets-To-Second-Presale.jpg'
+  ];
 
   @override
   void initState() {
@@ -116,19 +124,39 @@ class _HomeState extends State<Home> {
     return Container(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom,
           child: Column(
             children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Featured Coins",
-                    style: TextStyle(
-                      fontSize: 23
-                      ),
+              // Carousel
+              CarouselSlider(
+                items: imgList.map((e) => Container(
+                  child: Center(
+                    child: Image.network(
+                      e,
+                      fit: BoxFit.cover,
+                      height: MediaQuery.of(context).size.height,
                     ),
-                ],
+                  ),
+                )).toList(),
+                options: CarouselOptions(
+                  height: 250,
+                  autoPlay: true,
+                  viewportFraction: 1
+                )
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Featured Coins",
+                      style: TextStyle(
+                        fontSize: 23
+                        ),
+                      ),
+                  ],
+                ),
               ),
               Container(
                 height: MediaQuery.of(context).size.height * 0.14,
@@ -146,7 +174,7 @@ class _HomeState extends State<Home> {
                   }
                 ),
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -163,9 +191,8 @@ class _HomeState extends State<Home> {
                   child: CircularProgressIndicator(),
                 )
                 : ListView.builder(
-                  itemCount: 6,
+                  itemCount: 12,
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return RecommendedCoin(coin: coinMarket![index],
                   );
