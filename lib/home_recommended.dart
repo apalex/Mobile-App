@@ -1,4 +1,5 @@
 import 'package:chart_sparkline/chart_sparkline.dart';
+import 'package:crypto_app/coin_view.dart';
 import 'package:flutter/material.dart';
 
 class RecommendedCoin extends StatelessWidget {
@@ -7,15 +8,23 @@ class RecommendedCoin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 6, top: 12, bottom: 6),
-      child: Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Coin(coin: coin)
+          )
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(left: 6, top: 12, bottom: 12),
         child: Row(
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.07,),
             Expanded(
               flex: 1,
-              child: Container(
+              child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.06,
                 child: Image.network(coin.image)
               ),
@@ -33,19 +42,12 @@ class RecommendedCoin extends StatelessWidget {
                       fontWeight: FontWeight.bold
                       ),
                   ),
-                  Text(
-                    '0.4' + coin.symbol,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey),
-                  ),
                 ],
               ),
             ),
             Expanded(
               flex: 2,
-              child: Container(
+              child: SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
                 child: Sparkline(
                   data: coin.sparklineIn7D.price,
@@ -68,18 +70,11 @@ class RecommendedCoin extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '\$' + coin.currentPrice.toStringAsFixed(2),
-                    style: TextStyle(
+                    '\$${coin.currentPrice.toStringAsFixed(2)}',
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold
                       ),
-                  ),
-                  Text(
-                    coin.priceChange24H.toStringAsFixed(2) + '%',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.grey),
                   ),
                 ],
               ),

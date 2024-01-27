@@ -1,3 +1,4 @@
+import 'package:crypto_app/home_featured.dart';
 import 'package:crypto_app/home_recommended.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +26,7 @@ class _HomeState extends State<Home> {
   void initState() {
     handler = DatabaseHelper();
     users = handler.getUsers();
-    getCoinMarket();
+    getCoinData();
     handler.open().whenComplete(() {
       users = getAllUsers();
     });
@@ -44,7 +45,7 @@ class _HomeState extends State<Home> {
 
   List? coinMarket = [];
   var coinMarketList;
-  Future<List<CoinModel>?>  getCoinMarket() async {
+  Future<List<CoinModel>?>  getCoinData() async {
     var response = await http.get(Uri.parse("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"), headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -115,30 +116,45 @@ class _HomeState extends State<Home> {
     return Container(
       child: SingleChildScrollView(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+          height: MediaQuery.of(context).size.height * 0.8,
           child: Column(
             children: [
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Featured Coins", style: TextStyle(fontSize: 23),),
+                  Text(
+                    "Featured Coins",
+                    style: TextStyle(
+                      fontSize: 23
+                      ),
+                    ),
                 ],
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.10,
+                height: MediaQuery.of(context).size.height * 0.14,
                 width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
+                margin: const EdgeInsets.only(bottom: 8, top: 4),
+                child: isRefreshing
+                ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+                : ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: coinMarket!.length,
+                  itemCount: 12,
                   itemBuilder: (context, index) {
-                    return Text("test");
+                    return FeaturedCoin(coin: coinMarket![index]);
                   }
                 ),
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Recommended", style: TextStyle(fontSize: 23,),),
+                  Text(
+                    "Recommended",
+                    style: TextStyle(
+                      fontSize: 23,
+                      ),
+                    ),
                 ],
               ),
               Expanded(
@@ -149,7 +165,7 @@ class _HomeState extends State<Home> {
                 : ListView.builder(
                   itemCount: 6,
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return RecommendedCoin(coin: coinMarket![index],
                   );
@@ -188,8 +204,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double myHeight = MediaQuery.of(context).size.height;
-    double myWidth = MediaQuery.of(context).size.width;
     return MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
