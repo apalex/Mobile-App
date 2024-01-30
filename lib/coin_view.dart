@@ -96,7 +96,7 @@ class _CoinState extends State<Coin> {
                       ),
                       child: TextButton(
                         onPressed: () {},
-                        child: Text(
+                        child: const Text(
                           "Chart",
                           style: TextStyle(
                             color: Colors.black,
@@ -109,7 +109,7 @@ class _CoinState extends State<Coin> {
                     // Coin Info
                     TextButton(
                       onPressed: () {},
-                      child: Text(
+                      child: const Text(
                         "Info",
                         style: TextStyle(
                           color: Colors.grey,
@@ -121,42 +121,56 @@ class _CoinState extends State<Coin> {
                   ],
                 ),
               ),
+              // Chart Container will put a switch to whenever user clicks chart or info button
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 6),
+                        child: Text(
+                          widget.coin.currentPrice.toString(),
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 72, 227, 152),
+                            fontSize: 24
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, right: 2, bottom: 1),
+                        child: Text(widget.coin.priceChange24H > 0 ? '24h \$ Change: +${widget.coin.priceChange24H.toStringAsFixed(2)}' : '24h \$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, right: 2, top: 1),
+                        child: Text(widget.coin.priceChangePercentage24H > 0 ? '24h % Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%' : '24h % Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%', style: const TextStyle(fontSize: 13),),
+                      ),
+                    ],
+                  ),
+                  // Coin Short Info Section
+                  const Column(
+                    children: [
+                      Text('Market Cap Rank', style: TextStyle(color: Colors.grey, fontSize: 12),),
+                      Text("24h High", style: TextStyle(color: Colors.grey, fontSize: 12),),
+                      Text("24h Low", style: TextStyle(color: Colors.grey, fontSize: 12),),
+                      Text("24h Volume(USDT)", style: TextStyle(color: Colors.grey, fontSize: 12),),
+                    ],
+                  ),
                   Container(
+                    margin: const EdgeInsets.only(right: 4),
                     padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
-                        Text(
-                          widget.coin.currentPrice.toString(),
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 72, 227, 152),
-                            fontSize: 26
-                          ),
-                        ),
-                        Text(
-                          "+\$100   +25%",
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 72, 227, 152),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Column(
-                      children: [
-                        Text("TestTestTestTestTest"),
-                        Text("Test"),
-                        Text("TestTestTestTestTest"),
-                        Text("Test"),
+                        Text('#${widget.coin.marketCapRank.toString()}', style: const TextStyle(fontSize: 12),),
+                        Text('\$${widget.coin.high24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 12),),
+                        Text('\$${widget.coin.low24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 12),),
+                        Text('\$${widget.coin.marketCapChange24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 12),),
                       ],
                     ),
                   ),
                 ],
               ),
-              Divider(),
+              const Divider(),
               // Time Selector
               Row(
                 children: [
@@ -195,6 +209,12 @@ class _CoinState extends State<Coin> {
                   ],
                 ),
               ),
+              // Buy / Sell Buttons
+              Row(
+                children: [
+                  
+                ],
+              )
             ],
           ),
         ),
