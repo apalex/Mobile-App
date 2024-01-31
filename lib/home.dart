@@ -163,7 +163,7 @@ class _HomeState extends State<Home> {
                 child: isRefreshing
                 ? const Center(
                   child: CircularProgressIndicator(),
-                )
+                ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so cannot send many requests in a short amount of time. Please wait a few minutes"),)
                 : ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: 12,
@@ -172,7 +172,7 @@ class _HomeState extends State<Home> {
                   }
                 ),
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -187,7 +187,7 @@ class _HomeState extends State<Home> {
                 child: isRefreshing
                 ? const Center(
                   child: CircularProgressIndicator(),
-                )
+                ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so cannot send many requests in a short amount of time. Please wait a few minutes"),)
                 : ListView.builder(
                   itemCount: 12,
                   shrinkWrap: true,
