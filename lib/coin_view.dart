@@ -122,20 +122,20 @@ class _CoinState extends State<Coin> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: _buildAppBar(context),
-        body: Container(
+        body: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   border: Border(bottom: BorderSide())
                 ),
                 child: Row(
                   children: [
                     // Chart
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
                             width: 3,
@@ -171,59 +171,59 @@ class _CoinState extends State<Coin> {
                 ),
               ),
               // Chart Container will put a switch to whenever user clicks chart or info button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(top: 6),
-                        child: Text(
-                          widget.coin.currentPrice.toString(),
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 72, 227, 152),
-                            fontSize: 24
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.11,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 12),
+                      child: Column(
+                        children: [
+                          Text(
+                            widget.coin.currentPrice.toString(),
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 72, 227, 152),
+                              fontSize: 24
+                            ),
                           ),
-                        ),
+                          Text(widget.coin.priceChange24H > 0 ? '24h \$ Change: +${widget.coin.priceChange24H.toStringAsFixed(2)}' : '24h \$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
+                          Text(widget.coin.priceChangePercentage24H > 0 ? '24h % Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%' : '24h % Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%', style: const TextStyle(fontSize: 13),),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 2, bottom: 2),
-                        child: Text(widget.coin.priceChange24H > 0 ? '24h \$ Change: +${widget.coin.priceChange24H.toStringAsFixed(2)}' : '24h \$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4, right: 2, top: 2),
-                        child: Text(widget.coin.priceChangePercentage24H > 0 ? '24h % Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%' : '24h % Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%', style: const TextStyle(fontSize: 13),),
-                      ),
-                    ],
-                  ),
-                  // Coin Short Info Section
-                  const Column(
-                    children: [
-                      Text('Market Cap Rank', style: TextStyle(color: Colors.grey, fontSize: 12),),
-                      Text("24h High", style: TextStyle(color: Colors.grey, fontSize: 12),),
-                      Text("24h Low", style: TextStyle(color: Colors.grey, fontSize: 12),),
-                      Text("24h Volume(USDT)", style: TextStyle(color: Colors.grey, fontSize: 12),),
-                    ],
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(right: 4),
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      children: [
-                        Text('#${widget.coin.marketCapRank.toString()}', style: const TextStyle(fontSize: 12),),
-                        Text('\$${widget.coin.high24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 12),),
-                        Text('\$${widget.coin.low24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 12),),
-                        Text('\$${widget.coin.marketCapChange24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 12),),
-                      ],
                     ),
-                  ),
-                ],
+                    // Coin Short Info Section
+                    Container(
+                      margin: const EdgeInsets.only(top: 15),
+                      child: const Column(
+                        children: [
+                          Text('Market Cap Rank', style: TextStyle(color: Colors.grey, fontSize: 13),),
+                          Text("24h High", style: TextStyle(color: Colors.grey, fontSize: 13),),
+                          Text("24h Low", style: TextStyle(color: Colors.grey, fontSize: 13),),
+                          Text("24h Volume(USDT)", style: TextStyle(color: Colors.grey, fontSize: 13),),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 4, top: 15),
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      child: Column(
+                        children: [
+                          Text('#${widget.coin.marketCapRank.toString()}', style: const TextStyle(fontSize: 13),),
+                          Text('\$${widget.coin.high24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
+                          Text('\$${widget.coin.low24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
+                          Text('\$${widget.coin.marketCapChange24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
               const Divider(),
               SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
               // Time Selector
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.04,
                 child: ListView.builder(
                   itemCount: timeList.length,
@@ -264,13 +264,13 @@ class _CoinState extends State<Coin> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
               // Chart
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.4,
+                height: MediaQuery.of(context).size.height * 0.45,
                 child: isRefresh
                 ? const Center(
                   child: CircularProgressIndicator(),
-                ) : coinChart == null ? const Center(child: Text("This App is using a free API, so cannot send many requests in a short amount of time. Please wait a few minutes"),)
+                ) : coinChart == null ? const Center(child: Text("This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),)
                 : SfCartesianChart(
                   trackballBehavior: trackballBehavior,
                   zoomPanBehavior: ZoomPanBehavior(
@@ -295,10 +295,37 @@ class _CoinState extends State<Coin> {
                 ),
               ),
               // Buy / Sell Buttons
-              Row(
-                children: [
-                  
-                ],
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.15,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(6),
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      height: MediaQuery.of(context).size.height * 0.055,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green
+                        ),
+                      child: const Text("Buy", style: TextStyle(fontSize: 18, color: Colors.white),),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(6),
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      height: MediaQuery.of(context).size.height * 0.055,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red
+                        ),
+                      child: const Text("Sell", style: TextStyle(fontSize: 18, color: Colors.white),),
+                      ),
+                    ),
+                  ],
+                ),
               )
             ],
           ),

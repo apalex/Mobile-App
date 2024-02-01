@@ -119,86 +119,82 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return Container(
-      child: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom,
-          child: Column(
-            children: [
-              // Carousel
-              CarouselSlider(
-                items: imgList.map((e) => Container(
-                  child: Center(
-                    child: Image.network(
-                      e,
-                      fit: BoxFit.cover,
-                      height: MediaQuery.of(context).size.height,
-                    ),
-                  ),
-                )).toList(),
-                options: CarouselOptions(
-                  height: 250,
-                  autoPlay: true,
-                  viewportFraction: 1
-                )
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 8),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Featured Coins",
-                      style: TextStyle(
-                        fontSize: 23
-                        ),
-                      ),
-                  ],
+    return SingleChildScrollView(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom,
+        child: Column(
+          children: [
+            // Carousel
+            CarouselSlider(
+              items: imgList.map((e) => Center(
+                child: Image.network(
+                  e,
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height,
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.14,
-                width: MediaQuery.of(context).size.width,
-                margin: const EdgeInsets.only(bottom: 8, top: 4),
-                child: isRefreshing
-                ? const Center(
-                  child: CircularProgressIndicator(),
-                ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so cannot send many requests in a short amount of time. Please wait a few minutes"),)
-                : ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 12,
-                  itemBuilder: (context, index) {
-                    return FeaturedCoin(coin: coinMarket![index]);
-                  }
-                ),
-              ),
-              const Row(
+              )).toList(),
+              options: CarouselOptions(
+                height: 250,
+                autoPlay: true,
+                viewportFraction: 1
+              )
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Recommended",
+                    "Featured Coins",
                     style: TextStyle(
-                      fontSize: 23,
+                      fontSize: 23
                       ),
                     ),
                 ],
               ),
-              Expanded(
-                child: isRefreshing
-                ? const Center(
-                  child: CircularProgressIndicator(),
-                ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so cannot send many requests in a short amount of time. Please wait a few minutes"),)
-                : ListView.builder(
-                  itemCount: 12,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return RecommendedCoin(coin: coinMarket![index],
-                  );
-                  }
-                ),
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.14,
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(bottom: 8, top: 4),
+              child: isRefreshing
+              ? const Center(
+                child: CircularProgressIndicator(),
+              ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),)
+              : ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 12,
+                itemBuilder: (context, index) {
+                  return FeaturedCoin(coin: coinMarket![index]);
+                }
               ),
-            ],
-          ),
+            ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Recommended",
+                  style: TextStyle(
+                    fontSize: 23,
+                    ),
+                  ),
+              ],
+            ),
+            Expanded(
+              child: isRefreshing
+              ? const Center(
+                child: CircularProgressIndicator(),
+              ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),)
+              : ListView.builder(
+                itemCount: 12,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return RecommendedCoin(coin: coinMarket![index],
+                );
+                }
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -232,7 +228,7 @@ class _HomeState extends State<Home> {
     return MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Scaffold(
-      backgroundColor: Color.fromARGB(255, 246, 244, 244),
+      backgroundColor: const Color.fromARGB(255, 246, 244, 244),
       appBar: _buildAppBar(context),
       body: _buildBody(context),
       // body: Container(

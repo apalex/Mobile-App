@@ -87,7 +87,7 @@ class _MarketsState extends State<Markets> {
             child: isRefreshing == true
             ? const Center(
               child: CircularProgressIndicator(),
-            )
+            ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),)
             : ListView.builder(
               itemCount: coinMarket!.length,
               itemBuilder: (context, index) {

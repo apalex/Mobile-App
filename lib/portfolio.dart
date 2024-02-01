@@ -1,4 +1,3 @@
-import 'package:crypto_app/main.dart';
 import 'package:flutter/material.dart';
 
 class Portfolio extends StatefulWidget {
@@ -158,7 +157,7 @@ class _PortfolioState extends State<Portfolio> {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

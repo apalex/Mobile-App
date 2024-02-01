@@ -1,7 +1,7 @@
 import 'package:crypto_app/home.dart';
 import 'package:crypto_app/markets.dart';
 import 'package:crypto_app/trade.dart';
-import 'package:crypto_app/margins.dart';
+import 'package:crypto_app/futures.dart';
 import 'package:crypto_app/portfolio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +26,7 @@ class NavigationMenu extends StatelessWidget {
               NavigationDestination(icon: Icon(Icons.home_sharp), label: "Home"),
               NavigationDestination(icon: Icon(Icons.bar_chart_sharp), label: "Markets"),
               NavigationDestination(icon: Icon(Icons.compare_arrows_sharp), label: "Trade"),
-              NavigationDestination(icon: Icon(Icons.keyboard_double_arrow_up_sharp), label: "Margins"),
+              NavigationDestination(icon: Icon(Icons.keyboard_double_arrow_up_sharp), label: "Futures"),
               NavigationDestination(icon: Icon(Icons.wallet_rounded), label: "Portfolio"),
             ],
           ),
@@ -41,8 +41,8 @@ class NavigationController extends GetxController {
   final screens = [
     const Home(),
     const Markets(),
-    const Trade(),
-    const Margins(),
+    Trade(),
+    const Futures(),
     const Portfolio(),
   ];
 }
