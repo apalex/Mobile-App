@@ -51,11 +51,14 @@ class _HomeState extends State<Home> {
 
   List? coinMarket = [];
   var coinMarketList;
-  Future<List<CoinModel>?>  getCoinData() async {
-    var response = await http.get(Uri.parse("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"), headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    });
+  Future<List<CoinModel>?> getCoinData() async {
+    var response = await http.get(
+        Uri.parse(
+            "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        });
     setState(() {
       isRefreshing = false;
     });
@@ -77,43 +80,36 @@ class _HomeState extends State<Home> {
         OutlinedButton.icon(
           onPressed: () {
             showSearch(
-              context: context, 
+              context: context,
               delegate: CustomSearchDelegate(),
-              );
+            );
           },
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(199, 20),
             foregroundColor: Colors.grey,
-            padding: const EdgeInsets.all(6), 
+            padding: const EdgeInsets.all(6),
             alignment: Alignment.centerLeft,
           ),
-          icon: const Icon(Icons.search), 
+          icon: const Icon(Icons.search),
           label: const Text("Search"),
-          ),
-        IconButton(
-          onPressed: () {
-            Navigator.push(
-              context, 
-              MaterialPageRoute(
-                builder: (context) => const Notifications()
-                )
-              );
-          }, 
-          icon: const Icon(Icons.notifications)
         ),
-        IconButton(onPressed: () {
-          Navigator.push(
-            context, 
-            MaterialPageRoute(
-              builder: (context) => const Login()
-              )
-            ).then((value) => {
-              if (value) {
-                _refresh()
-              }
-            });
-        },
-        icon: const Icon(Icons.account_circle))
+        IconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Notifications()));
+            },
+            icon: const Icon(Icons.notifications)),
+        IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const Login()))
+                  .then((value) => {
+                        if (value) {_refresh()}
+                      });
+            },
+            icon: const Icon(Icons.account_circle))
       ],
     );
   }
@@ -121,24 +117,23 @@ class _HomeState extends State<Home> {
   Widget _buildBody(BuildContext context) {
     return SingleChildScrollView(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom,
+        height: MediaQuery.of(context).size.height -
+            MediaQuery.of(context).padding.bottom,
         child: Column(
           children: [
             // Carousel
             CarouselSlider(
-              items: imgList.map((e) => Center(
-                child: Image.network(
-                  e,
-                  fit: BoxFit.cover,
-                  height: MediaQuery.of(context).size.height,
-                ),
-              )).toList(),
-              options: CarouselOptions(
-                height: 250,
-                autoPlay: true,
-                viewportFraction: 1
-              )
-            ),
+                items: imgList
+                    .map((e) => Center(
+                          child: Image.network(
+                            e,
+                            fit: BoxFit.cover,
+                            height: MediaQuery.of(context).size.height,
+                          ),
+                        ))
+                    .toList(),
+                options: CarouselOptions(
+                    height: 250, autoPlay: true, viewportFraction: 1)),
             Container(
               margin: const EdgeInsets.only(top: 8),
               child: const Row(
@@ -146,10 +141,8 @@ class _HomeState extends State<Home> {
                 children: [
                   Text(
                     "Featured Coins",
-                    style: TextStyle(
-                      fontSize: 23
-                      ),
-                    ),
+                    style: TextStyle(fontSize: 23),
+                  ),
                 ],
               ),
             ),
@@ -158,16 +151,23 @@ class _HomeState extends State<Home> {
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(bottom: 8, top: 4),
               child: isRefreshing
-              ? const Center(
-                child: CircularProgressIndicator(),
-              ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),)
-              : ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 12,
-                itemBuilder: (context, index) {
-                  return FeaturedCoin(coin: coinMarket![index]);
-                }
-              ),
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : coinMarket == null || coinMarket!.isEmpty
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                                "This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),
+                          ),
+                        )
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 12,
+                          itemBuilder: (context, index) {
+                            return FeaturedCoin(coin: coinMarket![index]);
+                          }),
             ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -176,23 +176,31 @@ class _HomeState extends State<Home> {
                   "Recommended",
                   style: TextStyle(
                     fontSize: 23,
-                    ),
                   ),
+                ),
               ],
             ),
             Expanded(
               child: isRefreshing
-              ? const Center(
-                child: CircularProgressIndicator(),
-              ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Text("This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),)
-              : ListView.builder(
-                itemCount: 12,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return RecommendedCoin(coin: coinMarket![index],
-                );
-                }
-              ),
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : coinMarket == null || coinMarket!.isEmpty
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                                "This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: 12,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return RecommendedCoin(
+                              coin: coinMarket![index],
+                            );
+                          }),
             ),
           ],
         ),
@@ -226,42 +234,42 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: Scaffold(
-      backgroundColor: const Color.fromARGB(255, 246, 244, 244),
-      appBar: _buildAppBar(context),
-      body: _buildBody(context),
-      // body: Container(
-      //   height: myHeight,
-      //   width: myWidth,
-      //   decoration: const BoxDecoration(
-      //     gradient: LinearGradient(
-      //       begin: Alignment.topLeft,
-      //       end: Alignment.bottomRight,
-      //       colors: [
-      //         Colors.blue,
-      //         Colors.grey
-      //       ],
-      //       ),
-      //   ),
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.end,
-      //     children: [
-      //       Container(
-      //         height: myHeight * 0.65,
-      //         width: myWidth,
-      //         decoration: const BoxDecoration(
-      //           color: Colors.white,
-      //           borderRadius: BorderRadius.only(
-      //             topLeft: Radius.circular(50),
-      //             topRight: Radius.circular(50),
-      //           )
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // ),
-    ),
-  );
-}
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 246, 244, 244),
+        appBar: _buildAppBar(context),
+        body: _buildBody(context),
+        // body: Container(
+        //   height: myHeight,
+        //   width: myWidth,
+        //   decoration: const BoxDecoration(
+        //     gradient: LinearGradient(
+        //       begin: Alignment.topLeft,
+        //       end: Alignment.bottomRight,
+        //       colors: [
+        //         Colors.blue,
+        //         Colors.grey
+        //       ],
+        //       ),
+        //   ),
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.end,
+        //     children: [
+        //       Container(
+        //         height: myHeight * 0.65,
+        //         width: myWidth,
+        //         decoration: const BoxDecoration(
+        //           color: Colors.white,
+        //           borderRadius: BorderRadius.only(
+        //             topLeft: Radius.circular(50),
+        //             topRight: Radius.circular(50),
+        //           )
+        //         ),
+        //       )
+        //     ],
+        //   ),
+        // ),
+      ),
+    );
+  }
 }

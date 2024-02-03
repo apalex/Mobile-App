@@ -15,15 +15,12 @@ class Coin extends StatefulWidget {
 class _CoinState extends State<Coin> {
   List<Chart>? coinChart;
   late TrackballBehavior trackballBehavior;
-  List<String> timeList = [
-    '1H', '2H', '1D', '1W', '6M', '1Y'
-  ];
-  List<bool> timeChoose = [
-    true, false, false, false, false, false
-  ];
+  List<String> timeList = ['1H', '2H', '1D', '1W', '6M', '1Y'];
+  List<bool> timeChoose = [true, false, false, false, false, false];
   bool isRefresh = true;
+  bool isChart = true;
   int timeAmt = 1;
-  
+
   @override
   void initState() {
     constructChart();
@@ -33,12 +30,15 @@ class _CoinState extends State<Coin> {
     );
     super.initState();
   }
-  
+
   Future<void> constructChart() async {
-    var response = await http.get(Uri.parse('https://api.coingecko.com/api/v3/coins/${widget.coin.id}/ohlc?vs_currency=usd&days=${timeAmt.toString()}'), headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    });
+    var response = await http.get(
+        Uri.parse(
+            'https://api.coingecko.com/api/v3/coins/${widget.coin.id}/ohlc?vs_currency=usd&days=${timeAmt.toString()}'),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        });
 
     setState(() {
       isRefresh = true;
@@ -57,37 +57,37 @@ class _CoinState extends State<Coin> {
   }
 
   setTime(String time) {
-    switch(time) {
+    switch (time) {
       case '1H':
-      setState(() {
-        timeAmt = 1;
-      });
-      break;
+        setState(() {
+          timeAmt = 1;
+        });
+        break;
       case '2H':
-      setState(() {
-        timeAmt = 7;
-      });
-      break;
+        setState(() {
+          timeAmt = 7;
+        });
+        break;
       case '1D':
-      setState(() {
-        timeAmt = 30;
-      });
-      break;
+        setState(() {
+          timeAmt = 30;
+        });
+        break;
       case '1W':
-      setState(() {
-        timeAmt = 90;
-      });
-      break;
+        setState(() {
+          timeAmt = 90;
+        });
+        break;
       case '6M':
-      setState(() {
-        timeAmt = 180;
-      });
-      break;
+        setState(() {
+          timeAmt = 180;
+        });
+        break;
       case '1Y':
-      setState(() {
-        timeAmt = 365;
-      });
-      break;
+        setState(() {
+          timeAmt = 365;
+        });
+        break;
     }
   }
 
@@ -103,14 +103,282 @@ class _CoinState extends State<Coin> {
       title: Text(widget.coin.symbol.toUpperCase()),
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.star_border, size: 28,)
-          // Icons.star
-        ),
+            onPressed: () {},
+            icon: Icon(
+              Icons.star_border,
+              size: 28,
+            )
+            // Icons.star
+            ),
         IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.notification_add_outlined, size: 28,)
-          // Icons.notifications
+            onPressed: () {},
+            icon: Icon(
+              Icons.notification_add_outlined,
+              size: 28,
+            )
+            // Icons.notifications
+            ),
+      ],
+    );
+  }
+
+  Widget _buildChartSection(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.11,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 12),
+                child: Column(
+                  children: [
+                    Text(
+                      widget.coin.currentPrice.toString(),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 72, 227, 152),
+                          fontSize: 24),
+                    ),
+                    Text(
+                      widget.coin.priceChange24H > 0
+                          ? '24h \$ Change: +${widget.coin.priceChange24H.toStringAsFixed(2)}'
+                          : '24h \$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                    Text(
+                      widget.coin.priceChangePercentage24H > 0
+                          ? '24h % Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%'
+                          : '24h % Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
+              // Coin Short Info Section
+              Container(
+                margin: const EdgeInsets.only(top: 15),
+                child: const Column(
+                  children: [
+                    Text(
+                      'Market Cap Rank',
+                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                    ),
+                    Text(
+                      "24h High",
+                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                    ),
+                    Text(
+                      "24h Low",
+                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                    ),
+                    Text(
+                      "24h Volume(USDT)",
+                      style: TextStyle(color: Colors.grey, fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(right: 4, top: 15),
+                padding: const EdgeInsets.only(left: 12, right: 12),
+                child: Column(
+                  children: [
+                    Text(
+                      '#${widget.coin.marketCapRank.toString()}',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                    Text(
+                      '\$${widget.coin.high24H.toStringAsFixed(2)}',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                    Text(
+                      '\$${widget.coin.low24H.toStringAsFixed(2)}',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                    Text(
+                      '\$${widget.coin.marketCapChange24H.toStringAsFixed(2)}',
+                      style: const TextStyle(fontSize: 13),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
+        ),
+        const Divider(),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
+        ),
+        // Time Selector
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.04,
+          child: ListView.builder(
+              itemCount: timeList.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.035,
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        timeChoose = [false, false, false, false, false, false];
+                        timeChoose[index] = true;
+                      });
+                      setTime(timeList[index]);
+                      constructChart();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: MediaQuery.of(context).size.width * 0.02,
+                        vertical: MediaQuery.of(context).size.height * 0.005,
+                      ),
+                      child: Text(
+                        timeList[index],
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: timeChoose[index] == true
+                              ? Colors.black
+                              : Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
+        ),
+        // Chart
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.45,
+          child: isRefresh
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : coinChart == null
+                  ? const Center(
+                      child: Text(
+                          "This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),
+                    )
+                  : SfCartesianChart(
+                      trackballBehavior: trackballBehavior,
+                      zoomPanBehavior: ZoomPanBehavior(
+                          enablePinching: true, zoomMode: ZoomMode.x),
+                      series: <CandleSeries>[
+                        CandleSeries<Chart, int>(
+                          enableSolidCandles: true,
+                          enableTooltip: true,
+                          bullColor: Colors.green,
+                          bearColor: Colors.red,
+                          dataSource: coinChart!,
+                          xValueMapper: (Chart price, _) => price.time,
+                          lowValueMapper: (Chart price, _) => price.low,
+                          highValueMapper: (Chart price, _) => price.high,
+                          openValueMapper: (Chart price, _) => price.open,
+                          closeValueMapper: (Chart price, _) => price.close,
+                          animationDuration: 100,
+                        ),
+                      ],
+                    ),
+        ),
+        // Buy / Sell Buttons
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.15,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.all(6),
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: MediaQuery.of(context).size.height * 0.055,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                  child: const Text(
+                    "Buy",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(6),
+                width: MediaQuery.of(context).size.width * 0.45,
+                height: MediaQuery.of(context).size.height * 0.055,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  child: const Text(
+                    "Sell",
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoSection(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(top: 10),
+          child: Row(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+                child: Image.network(widget.coin.image),
+              ),
+              SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
+              Text("${widget.coin.name} (${widget.coin.symbol.toUpperCase()})", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+            ],
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              SizedBox(width: MediaQuery.of(context).size.width * 0.013,),
+              const Text("Infrastructure", style: TextStyle(fontSize: 15, color: Colors.grey),),
+            ],
+          ),
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.15,),
+                    const Text("Ranking", style: TextStyle(color: Colors.grey, fontSize: 15),),
+                    Text(widget.coin.marketCap.toString())
+                  ]
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Text("#${widget.coin.marketCapRank.toString()}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                  ]
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -128,205 +396,67 @@ class _CoinState extends State<Coin> {
           child: Column(
             children: [
               Container(
-                decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide())
-                ),
+                decoration:
+                    const BoxDecoration(border: Border(bottom: BorderSide())),
                 child: Row(
                   children: [
                     // Chart
                     Container(
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(
                             width: 3,
-                            color: Colors.black,
+                            color: isChart ? Colors.black : Colors.white,
                           ),
                         ),
                       ),
                       child: TextButton(
-                        onPressed: () {},
-                        child: const Text(
+                        onPressed: () {
+                          setState(() {
+                            isChart = true;
+                          });
+                        },
+                        child: Text(
                           "Chart",
                           style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            letterSpacing: 1
-                          ),
+                              color: isChart ? Colors.black : Colors.grey,
+                              fontSize: 16,
+                              letterSpacing: 1),
                         ),
                       ),
                     ),
                     // Coin Info
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "Info",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16,
-                          letterSpacing: 1
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 3,
+                            color:
+                                isChart == false ? Colors.black : Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              // Chart Container will put a switch to whenever user clicks chart or info button
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.11,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 12),
-                      child: Column(
-                        children: [
-                          Text(
-                            widget.coin.currentPrice.toString(),
-                            style: const TextStyle(
-                              color: Color.fromARGB(255, 72, 227, 152),
-                              fontSize: 24
-                            ),
-                          ),
-                          Text(widget.coin.priceChange24H > 0 ? '24h \$ Change: +${widget.coin.priceChange24H.toStringAsFixed(2)}' : '24h \$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
-                          Text(widget.coin.priceChangePercentage24H > 0 ? '24h % Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%' : '24h % Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%', style: const TextStyle(fontSize: 13),),
-                        ],
-                      ),
-                    ),
-                    // Coin Short Info Section
-                    Container(
-                      margin: const EdgeInsets.only(top: 15),
-                      child: const Column(
-                        children: [
-                          Text('Market Cap Rank', style: TextStyle(color: Colors.grey, fontSize: 13),),
-                          Text("24h High", style: TextStyle(color: Colors.grey, fontSize: 13),),
-                          Text("24h Low", style: TextStyle(color: Colors.grey, fontSize: 13),),
-                          Text("24h Volume(USDT)", style: TextStyle(color: Colors.grey, fontSize: 13),),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 4, top: 15),
-                      padding: const EdgeInsets.only(left: 12, right: 12),
-                      child: Column(
-                        children: [
-                          Text('#${widget.coin.marketCapRank.toString()}', style: const TextStyle(fontSize: 13),),
-                          Text('\$${widget.coin.high24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
-                          Text('\$${widget.coin.low24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
-                          Text('\$${widget.coin.marketCapChange24H.toStringAsFixed(2)}', style: const TextStyle(fontSize: 13),),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-              const Divider(),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-              // Time Selector
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.04,
-                child: ListView.builder(
-                  itemCount: timeList.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: MediaQuery.of(context).size.width * 0.035,
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
+                      child: TextButton(
+                        onPressed: () {
                           setState(() {
-                            timeChoose = [false, false, false, false, false, false];
-                            timeChoose[index] = true;
+                            isChart = false;
                           });
-                          setTime(timeList[index]);
-                          constructChart();
                         },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: MediaQuery.of(context).size.width * 0.02,
-                            vertical: MediaQuery.of(context).size.height * 0.005,
-                          ),
-                          child: Text(
-                            timeList[index],
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: timeChoose[index] == true
-                              ? Colors.black
-                              : Colors.grey,
-                            ),
-                          ),
+                        child: Text(
+                          "Info",
+                          style: TextStyle(
+                              color:
+                                  isChart == false ? Colors.black : Colors.grey,
+                              fontSize: 16,
+                              letterSpacing: 1),
                         ),
                       ),
-                    );
-                  }
-                ),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
-              // Chart
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.45,
-                child: isRefresh
-                ? const Center(
-                  child: CircularProgressIndicator(),
-                ) : coinChart == null ? const Center(child: Text("This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),)
-                : SfCartesianChart(
-                  trackballBehavior: trackballBehavior,
-                  zoomPanBehavior: ZoomPanBehavior(
-                    enablePinching: true,
-                    zoomMode: ZoomMode.x
-                  ),
-                  series: <CandleSeries>[
-                    CandleSeries <Chart, int>(
-                      enableSolidCandles: true,
-                      enableTooltip: true,
-                      bullColor: Colors.green,
-                      bearColor: Colors.red,
-                      dataSource: coinChart!,
-                      xValueMapper: (Chart price, _) => price.time,
-                      lowValueMapper:(Chart price, _) => price.low,
-                      highValueMapper: (Chart price, _) => price.high,
-                      openValueMapper: (Chart price, _) => price.open,
-                      closeValueMapper: (Chart price, _) => price.close,
-                      animationDuration: 100,
                     ),
                   ],
                 ),
               ),
-              // Buy / Sell Buttons
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.15,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(6),
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      height: MediaQuery.of(context).size.height * 0.055,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green
-                        ),
-                      child: const Text("Buy", style: TextStyle(fontSize: 18, color: Colors.white),),
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.all(6),
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      height: MediaQuery.of(context).size.height * 0.055,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red
-                        ),
-                      child: const Text("Sell", style: TextStyle(fontSize: 18, color: Colors.white),),
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              // Main Body
+              isChart ? _buildChartSection(context) : _buildInfoSection(context),
             ],
           ),
         ),

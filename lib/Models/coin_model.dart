@@ -10,7 +10,7 @@ class CoinModel {
     String name;
     String image;
     double currentPrice;
-    // int marketCap;
+    int marketCap;
     int marketCapRank;
     // int fullyDilutedValuation;
     double totalVolume;
@@ -39,7 +39,7 @@ class CoinModel {
         required this.name,
         required this.image,
         required this.currentPrice,
-        // required this.marketCap,
+        required this.marketCap,
         required this.marketCapRank,
         // required this.fullyDilutedValuation,
         required this.totalVolume,
@@ -69,7 +69,7 @@ class CoinModel {
         name: json["name"],
         image: json["image"],
         currentPrice: json["current_price"].toDouble(),
-        // marketCap: json["market_cap"],
+        marketCap: json["market_cap"].toDouble(),
         marketCapRank: json["market_cap_rank"],
         // fullyDilutedValuation: json["fully_diluted_valuation"],
         totalVolume: json["total_volume"].toDouble(),
@@ -99,7 +99,7 @@ class CoinModel {
         "name": name,
         "image": image,
         "current_price": currentPrice,
-        // "market_cap": marketCap,
+        "market_cap": marketCap,
         "market_cap_rank": marketCapRank,
         // "fully_diluted_valuation": fullyDilutedValuation,
         "total_volume": totalVolume,
