@@ -3,6 +3,7 @@ import 'package:crypto_app/Models/chart_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:intl/intl.dart';
 
 class Coin extends StatefulWidget {
   var coin;
@@ -291,12 +292,12 @@ class _CoinState extends State<Coin> {
         ),
         // Buy / Sell Buttons
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.15,
+          height: MediaQuery.of(context).size.height * 0.09,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: const EdgeInsets.all(6),
+                margin: const EdgeInsets.only(right: 6, left: 6),
                 width: MediaQuery.of(context).size.width * 0.45,
                 height: MediaQuery.of(context).size.height * 0.055,
                 child: ElevatedButton(
@@ -310,7 +311,7 @@ class _CoinState extends State<Coin> {
                 ),
               ),
               Container(
-                margin: const EdgeInsets.all(6),
+                margin: const EdgeInsets.only(right: 6, left: 6),
                 width: MediaQuery.of(context).size.width * 0.45,
                 height: MediaQuery.of(context).size.height * 0.055,
                 child: ElevatedButton(
@@ -341,44 +342,263 @@ class _CoinState extends State<Coin> {
                 height: MediaQuery.of(context).size.height * 0.05,
                 child: Image.network(widget.coin.image),
               ),
-              SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-              Text("${widget.coin.name} (${widget.coin.symbol.toUpperCase()})", style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.02,
+              ),
+              Text(
+                "${widget.coin.name} (${widget.coin.symbol.toUpperCase()})",
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
             ],
           ),
         ),
         Container(
           padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.only(bottom: 10),
           child: Row(
             children: [
-              SizedBox(width: MediaQuery.of(context).size.width * 0.013,),
-              const Text("Infrastructure", style: TextStyle(fontSize: 15, color: Colors.grey),),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.013,
+              ),
+              const Text(
+                "Infrastructure",
+                style: TextStyle(fontSize: 16, color: Colors.black, decoration: TextDecoration.underline),
+              ),
             ],
           ),
         ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(children: [
               Container(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.15,),
-                    const Text("Ranking", style: TextStyle(color: Colors.grey, fontSize: 15),),
-                    Text(widget.coin.marketCap.toString())
-                  ]
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: const Text(
+                    "Ranking",
+                    style: TextStyle(color: Colors.grey, fontSize: 15),
+                  )),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "Total Supply",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Text("#${widget.coin.marketCapRank.toString()}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
-                  ]
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: const Text(
+                    "Max Supply",
+                    style: TextStyle(color: Colors.grey, fontSize: 15),
+                  )),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "Circulating Supply",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
                 ),
               ),
-            ],
-          ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  'Market Cap',
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, left: 6),
+                child: const Text(
+                  "Fully Diluted Valution (FDV)",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "Total Volume",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "All Time High (ATH)",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "ATH Percentage Change",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "ATH Date",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "All Time Low (ATL)",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "ATL Percentage Change",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "ATL Date",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                child: const Text(
+                  "Last Updated",
+                  style: TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              )
+            ]),
+            Column(children: [
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  "#${widget.coin.marketCapRank.toString()}",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 15),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  widget.coin.totalSupply.toStringAsFixed(0),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  widget.coin.maxSupply != null
+                  ? widget.coin.maxSupply.toStringAsFixed(0)
+                  : "None",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  widget.coin.circulatingSupply.toStringAsFixed(0),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  widget.coin.marketCap.toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  widget.coin.fullyDilutedValuation.toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  widget.coin.totalVolume.toStringAsFixed(0),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  "\$${widget.coin.ath.toStringAsFixed(2)}",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  "${widget.coin.athChangePercentage.toStringAsFixed(2)}%",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.athDate),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  "\$${widget.coin.atl.toString()}",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  "+${widget.coin.atlChangePercentage.toStringAsFixed(2)}%",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.atlDate),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 12, right: 12),
+                child: Text(
+                  DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.lastUpdated),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 15
+                  ),
+                ),
+              ),
+            ]),
+          ],
         ),
       ],
     );
@@ -456,7 +676,9 @@ class _CoinState extends State<Coin> {
                 ),
               ),
               // Main Body
-              isChart ? _buildChartSection(context) : _buildInfoSection(context),
+              isChart
+                  ? _buildChartSection(context)
+                  : _buildInfoSection(context),
             ],
           ),
         ),

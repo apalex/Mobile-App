@@ -36,6 +36,8 @@ class DatabaseHelper {
     }
   }
 
+  // Future<void>
+
   // CRUD
   // Create
   Future<int> insertUser(User user) async {
