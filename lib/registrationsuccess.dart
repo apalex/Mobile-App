@@ -1,5 +1,5 @@
-import 'package:crypto_app/navigation_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:crypto_app/welcome.dart';
 
 class RegistrationSuccess extends StatelessWidget {
   const RegistrationSuccess({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class RegistrationSuccess extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const NavigationMenu(),
+                  builder: (context) => const Welcome(),
                 ),
               );
             },
@@ -24,12 +24,12 @@ class RegistrationSuccess extends StatelessWidget {
           ),
         ),
         body: Container(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(30),
           child: const Center(
             child: Text(
               "Congratulations! You have successfully made an account with Mintless.",
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 18,
               ),
             ),
           ),

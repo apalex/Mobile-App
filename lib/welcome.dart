@@ -24,8 +24,12 @@ class _WelcomeState extends State<Welcome> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              "Welcome to Mintless",
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              "Welcome to",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const Text(
+              "Mintless",
+              style: TextStyle(fontSize: 38, fontWeight: FontWeight.bold),
             ),
             Container(
               padding: const EdgeInsets.all(8),

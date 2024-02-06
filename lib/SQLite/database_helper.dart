@@ -36,6 +36,12 @@ class DatabaseHelper {
     }
   }
 
+  Future<User> getUser(String username) async {
+    final Database db = await open();
+    var result = await db.query("User_Info", where: "username = ?", whereArgs: [username]);
+    return User.fromMap(result.first);
+  }
+
   // Future<void>
 
   // CRUD

@@ -3,15 +3,16 @@ import 'package:crypto_app/home_recommended.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto_app/main.dart';
-import 'package:crypto_app/login.dart';
 import 'package:crypto_app/notifications.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/Models/coin_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:crypto_app/profile.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final User? user;
+  const Home({super.key, this.user});
 
   @override
   State<Home> createState() => _HomeState();
@@ -104,12 +105,12 @@ class _HomeState extends State<Home> {
         IconButton(
             onPressed: () {
               Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Login()))
+                      MaterialPageRoute(builder: (context) => Profile(user: widget.user,)))
                   .then((value) => {
                         if (value) {_refresh()}
                       });
             },
-            icon: const Icon(Icons.account_circle))
+            icon: const Icon(Icons.account_circle)),
       ],
     );
   }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:crypto_app/welcome.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -15,7 +18,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 // Search Feature in Home()
 class CustomSearchDelegate extends SearchDelegate {
@@ -40,7 +42,7 @@ class CustomSearchDelegate extends SearchDelegate {
         close(context, null);
       },
       icon: const Icon(Icons.arrow_back),
-      );
+    );
   }
 
   @override
@@ -57,7 +59,7 @@ class CustomSearchDelegate extends SearchDelegate {
         var result = matchQuery[index];
         return ListTile(
           title: Text(result),
-          );
+        );
       },
     );
   }
@@ -76,7 +78,7 @@ class CustomSearchDelegate extends SearchDelegate {
         var result = matchQuery[index];
         return ListTile(
           title: Text(result),
-          );
+        );
       },
     );
   }
