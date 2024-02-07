@@ -1,5 +1,7 @@
+import 'package:crypto_app/Models/user_activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/SQLite/database_helper.dart';
 
 class Profile extends StatefulWidget {
   final User? user;
@@ -10,6 +12,11 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final db = DatabaseHelper();
+
+  activity() async {
+    UserActivity uact = await db.getUserActivity(1);
+  }
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
@@ -48,6 +55,7 @@ class _ProfileState extends State<Profile> {
                   children: [
                     Text(widget.user!.username, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
                     Text("UID : ${widget.user!.userId.toString()}")
+
                   ],
                 ),
               ],

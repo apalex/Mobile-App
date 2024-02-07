@@ -1,3 +1,4 @@
+import 'package:crypto_app/Models/user_activity_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:crypto_app/Models/user_model.dart';
@@ -17,7 +18,7 @@ class DatabaseHelper {
       // User Portfolio
       await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userId INTEGER, overallBal REAL DEFAULT 0, fundingBal REAL DEFAULT 0, tradingBal REAL DEFAULT 0, marginBal REAL DEFAULT 0, futureBal REAL DEFAULT 0, botBal REAL DEFAULT 0, financeBal REAL DEFAULT 0, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Activity
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp DATETIME DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp TEXT DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Transfers
       await db.execute("CREATE TABLE IF NOT EXISTS User_Transfers (userTransferId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, coinName TEXT, transferAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Payments
@@ -25,7 +26,7 @@ class DatabaseHelper {
     });
   }
 
-  // Login Method
+  // User_Info
   Future<bool> login(String username, String password) async {
     final Database db = await open();
     var result = await db.rawQuery("SELECT * FROM User_Info WHERE username = '$username' AND userPassword = '$password';");
@@ -42,17 +43,11 @@ class DatabaseHelper {
     return User.fromMap(result.first);
   }
 
-  // Future<void>
-
-  // CRUD
-  // Create
   Future<int> insertUser(User user) async {
     final Database db = await open();
-    // Make insert more secure in future by implementing SQL Injection preventions
     return db.insert('User_Info', user.toMap());
   }
 
-  // Read
   Future<bool> checkUsername(String username) async {
     final Database db = await open();
     var result = await db.rawQuery("SELECT * FROM User_Info WHERE username = '$username';");
@@ -79,10 +74,21 @@ class DatabaseHelper {
     return result.map((e) => User.fromMap(e)).toList();
   }
  
-  // Update
   Future<int> deleteUser(int userId) async {
     final Database db = await open();
     return db.rawUpdate('UPDATE User_Info SET isActive = ? WHERE userId = ?', [0, userId]);
+  }
+
+  // User_Activity
+  Future<int> insertUserLoginDate(String username, String activityTimeStamp)async {
+    final Database db = await open();
+    return db.rawInsert("INSERT INTO User_Activity (userId, activityTimeStamp) SELECT userId, $activityTimeStamp FROM User_Info WHERE username = '$username';"); 
+  }
+
+  Future<UserActivity> getUserActivity(int userId) async {
+    final Database db = await open();
+    var result = await db.query("User_Activity", where: "userId = ?", whereArgs: [userId]);
+    return UserActivity.fromMap(result.first);
   }
 
 }
