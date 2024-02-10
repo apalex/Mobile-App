@@ -46,6 +46,7 @@ dependencies:
   chart_sparkline:
   carousel_slider:
   syncfusion_flutter_charts: ^24.1.47+2
+  clipboard:
 
 dev_dependencies:
   flutter_test:
