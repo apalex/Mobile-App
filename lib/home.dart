@@ -122,6 +122,29 @@ class _HomeState extends State<Home> {
             MediaQuery.of(context).padding.bottom,
         child: Column(
           children: [
+    // FutureBuilder<List<User>>(
+    //   future: users,
+    //   builder: (BuildContext context, AsyncSnapshot <List<User>> snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return const CircularProgressIndicator();
+    //     } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+    //       return const Center(child: Text("No data"));
+    //     } else if (snapshot.hasError) {
+    //       return Text(snapshot.error.toString());
+    //     } else {
+    //       final items = snapshot.data ?? <User>[];
+    //       return ListView.builder(
+    //         itemCount: items.length,
+    //         itemBuilder: (context, index) {
+    //         return ListTile(
+    //           title: Center(
+    //             child: Text('${items[index].username}'),
+    //           ),
+    //         );
+    //       });
+    //     }
+    //   }
+    // );
             // Carousel
             CarouselSlider(
                 items: imgList
@@ -240,36 +263,6 @@ class _HomeState extends State<Home> {
         backgroundColor: const Color.fromARGB(255, 246, 244, 244),
         appBar: _buildAppBar(context),
         body: _buildBody(context),
-        // body: Container(
-        //   height: myHeight,
-        //   width: myWidth,
-        //   decoration: const BoxDecoration(
-        //     gradient: LinearGradient(
-        //       begin: Alignment.topLeft,
-        //       end: Alignment.bottomRight,
-        //       colors: [
-        //         Colors.blue,
-        //         Colors.grey
-        //       ],
-        //       ),
-        //   ),
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.end,
-        //     children: [
-        //       Container(
-        //         height: myHeight * 0.65,
-        //         width: myWidth,
-        //         decoration: const BoxDecoration(
-        //           color: Colors.white,
-        //           borderRadius: BorderRadius.only(
-        //             topLeft: Radius.circular(50),
-        //             topRight: Radius.circular(50),
-        //           )
-        //         ),
-        //       )
-        //     ],
-        //   ),
-        // ),
       ),
     );
   }

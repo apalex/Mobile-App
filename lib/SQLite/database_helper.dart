@@ -80,15 +80,26 @@ class DatabaseHelper {
   }
 
   // User_Activity
-  Future<int> insertUserLoginDate(String username, String activityTimeStamp)async {
+  Future<int> insertUserLoginDate(String username)async {
     final Database db = await open();
-    return db.rawInsert("INSERT INTO User_Activity (userId, activityTimeStamp) SELECT userId, $activityTimeStamp FROM User_Info WHERE username = '$username';"); 
+    return db.rawInsert('''
+      INSERT INTO User_Activity (userId, activityTimeStamp)
+      SELECT userId, strftime('%Y-%m-%d %H:%M:%S', 'now')
+      FROM User_Info 
+      WHERE username = ?
+    ''', [username]); 
   }
 
   Future<UserActivity> getUserActivity(int userId) async {
     final Database db = await open();
     var result = await db.query("User_Activity", where: "userId = ?", whereArgs: [userId]);
     return UserActivity.fromMap(result.first);
+  }
+
+  Future<List<UserActivity>> getUserActivities() async {
+    final Database db = await open();
+    List<Map<String, Object?>> result = await db.query('User_Activity');
+    return result.map((e) => UserActivity.fromMap(e)).toList();
   }
 
 }

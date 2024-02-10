@@ -26,13 +26,16 @@ class _LoginState extends State<Login> {
     var response = await db.login(username.text, password.text);
     if (response == true) {
       if (!mounted) return;
+      await db.insertUserLoginDate(username.text).whenComplete(() {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NavigationMenu(user: user,)));
+      }); 
       // await db.insertUserLoginDate(username.text, DateTime.now().toIso8601String());
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NavigationMenu(user: user,)
-        ),
-      );
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => NavigationMenu(user: user,)
+      //   ),
+      // );
     } else {
       setState(() {
         isWrong = true;
