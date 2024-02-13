@@ -5,6 +5,27 @@ class ForgotPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(Icons.arrow_back_sharp),
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Enter Email Address linked to account:"),
+              
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
