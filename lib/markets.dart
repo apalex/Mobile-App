@@ -49,7 +49,7 @@ class _MarketsState extends State<Markets> {
       appBar: AppBar(
         title: OutlinedButton.icon(
             onPressed: () {
-              showSearch(context: context, delegate: CustomSearchDelegate());
+              showSearch(context: context, delegate: SearchFeature());
             },
             style: OutlinedButton.styleFrom(
               minimumSize: const Size(380, 35),

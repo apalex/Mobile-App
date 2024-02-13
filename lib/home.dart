@@ -82,7 +82,7 @@ class _HomeState extends State<Home> {
           onPressed: () {
             showSearch(
               context: context,
-              delegate: CustomSearchDelegate(),
+              delegate: SearchFeature(),
             );
           },
           style: OutlinedButton.styleFrom(

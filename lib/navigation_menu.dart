@@ -17,17 +17,19 @@ class NavigationMenu extends StatefulWidget {
 class _NavigationMenuState extends State<NavigationMenu> {
   int currentIndex = 0;
   late Home homeScreen = Home(user: widget.user,);
+  late Futures futuresScreen = Futures(user: widget.user,);
   late final screens = [
     homeScreen,
     Markets(),
     Trade(),
-    Futures(),
+    futuresScreen,
     Portfolio()
   ];
 
   @override
   void initState() {
     homeScreen = Home(user: widget.user,);
+    futuresScreen = Futures(user: widget.user,);
     super.initState();
   }
 

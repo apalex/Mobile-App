@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Search Feature in Home()
-class CustomSearchDelegate extends SearchDelegate {
+// Search Crypto Feature
+class SearchFeature extends SearchDelegate {
   List<String> searchTerms = ["Bitcoin", "Ethereum", "Solana", "Avalanche"];
 
   @override
@@ -77,7 +77,7 @@ class CustomSearchDelegate extends SearchDelegate {
       itemBuilder: (context, index) {
         var result = matchQuery[index];
         return ListTile(
-          title: Text(result),
+          title: TextButton(child: Text(result), onPressed: () {},),
         );
       },
     );

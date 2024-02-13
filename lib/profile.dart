@@ -1,9 +1,9 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:crypto_app/Models/user_activity_model.dart';
+import 'package:crypto_app/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
-import 'package:crypto_app/profile_limits.dart';
 
 class Profile extends StatefulWidget {
   final User? user;
@@ -60,6 +60,7 @@ class _ProfileState extends State<Profile> {
         appBar: _buildAppBar(context),
         body: Column(
           children: [
+            SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
             Row(
               children: [
                 Icon(Icons.account_circle, size: MediaQuery.of(context).size.width * 0.2, color: Colors.black54,),
@@ -98,43 +99,47 @@ class _ProfileState extends State<Profile> {
                 ),
               ],
             ),
-            // Last Login
-    // FutureBuilder<List<UserActivity>>(
-    //   future: userAct,
-    //   builder: (BuildContext context, AsyncSnapshot <List<UserActivity>> snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return const CircularProgressIndicator();
-    //     } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-    //       return const Center(child: Text("No data"));
-    //     } else if (snapshot.hasError) {
-    //       return Text(snapshot.error.toString());
-    //     } else {
-    //       final items = snapshot.data ?? <UserActivity>[];
-    //       return ListView.builder(
-    //         itemCount: items.length,
-    //         itemBuilder: (context, index) {
-    //         return ListTile(
-    //           title: Center(
-    //             child: Text('${items[index].userActivityId}'),
-    //           ),
-    //         );
-    //       });
-    //     }
-    //   }
-    // ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.08,),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
             // Limits
-            Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.017),
-              child: Row(
-                children: [
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-                  const Icon(Icons.vertical_align_top_sharp, size: 48,),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-                  const Text("Limits", style: TextStyle(fontSize: 20, letterSpacing: 2),)
-                ],
-              ),
+            const Text("User Daily Limits", style: TextStyle(fontSize: 24,),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.01),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Withdrawals", style: TextStyle(color: Colors.grey, fontSize: 15),),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+                      const Text("Fiat Purchases", style: TextStyle(color: Colors.grey, fontSize: 15),),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+                      const Text("Crypto Deposits", style: TextStyle(color: Colors.grey, fontSize: 15),),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+                      const Text("Futures Leverage", style: TextStyle(color: Colors.grey, fontSize: 15),)
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.02),
+                  child: Column(
+                    children: [
+                      const Text("999,999 USDT"),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+                      const Text("999,999 USDT"),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+                      const Icon(Icons.check),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+                      const Text("Up to 100x")
+                    ],
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
             Container(
               decoration: const BoxDecoration(
                 border: Border(
@@ -145,9 +150,10 @@ class _ProfileState extends State<Profile> {
                 )
               ),
             ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
             // History
             Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.017, top: MediaQuery.of(context).size.height * 0.018),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02, top: MediaQuery.of(context).size.height * 0.016),
               child: Row(
                 children: [
                   SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
@@ -169,7 +175,7 @@ class _ProfileState extends State<Profile> {
             ),
             // Security
             Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.017, top: MediaQuery.of(context).size.height * 0.018),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02, top: MediaQuery.of(context).size.height * 0.018),
               child: Row(
                 children: [
                   SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
@@ -191,7 +197,7 @@ class _ProfileState extends State<Profile> {
             ),
             // Settings
             Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.017, top: MediaQuery.of(context).size.height * 0.018),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02, top: MediaQuery.of(context).size.height * 0.018),
               child: Row(
                 children: [
                   SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
@@ -213,7 +219,7 @@ class _ProfileState extends State<Profile> {
             ),
             // Support
             Container(
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.017, top: MediaQuery.of(context).size.height * 0.018),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.02, top: MediaQuery.of(context).size.height * 0.018),
               child: Row(
                 children: [
                   SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
@@ -234,15 +240,25 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             // Logout
-            Container(
-              margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.018),
-              child: Row(
-                children: [
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-                  const Icon(Icons.logout_sharp, size: 46,),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-                  const Text("Logout", style: TextStyle(fontSize: 20, letterSpacing: 2),)
-                ],
+            InkWell(
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Welcome()
+                  )
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.018),
+                child: Row(
+                  children: [
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
+                    const Icon(Icons.logout_sharp, size: 46,),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
+                    const Text("Logout", style: TextStyle(fontSize: 20, letterSpacing: 2),)
+                  ],
+                ),
               ),
             ),
           ],

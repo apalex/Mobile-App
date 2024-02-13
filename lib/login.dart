@@ -1,4 +1,5 @@
 import 'package:crypto_app/SQLite/database_helper.dart';
+import 'package:crypto_app/forgot_password.dart';
 import 'package:crypto_app/navigation_menu.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -26,21 +27,24 @@ class _LoginState extends State<Login> {
     var response = await db.login(username.text, password.text);
     if (response == true) {
       if (!mounted) return;
-      await db.insertUserLoginDate(username.text).whenComplete(() {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NavigationMenu(user: user,)));
-      }); 
-      // await db.insertUserLoginDate(username.text, DateTime.now().toIso8601String());
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => NavigationMenu(user: user,)
-      //   ),
-      // );
+      insertUserLoginDate();
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => NavigationMenu(
+                    user: user,
+                  )));
     } else {
       setState(() {
         isWrong = true;
       });
     }
+  }
+
+  insertUserLoginDate() async {
+    User user = await db.getUser(username.text);
+    return await db.insertUserLoginDate(
+        user.userId, DateTime.now().toIso8601String());
   }
 
   @override
@@ -86,18 +90,19 @@ class _LoginState extends State<Login> {
                               style: TextStyle(fontSize: 20),
                             ),
                             Expanded(
-                              child: Divider(
-                                thickness: 0.5,
-                                color: Colors.grey[400],
-                              )
-                            ),
+                                child: Divider(
+                              thickness: 0.5,
+                              color: Colors.grey[400],
+                            )),
                           ],
                         ),
                       ),
                       // Username Input Box
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, bottom: 10, top: 40),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin: const EdgeInsets.only(
+                            left: 4, right: 4, bottom: 10, top: 40),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
@@ -114,8 +119,9 @@ class _LoginState extends State<Login> {
                           decoration: InputDecoration(
                             label: const Text("Username"),
                             labelStyle: TextStyle(
-                              color: focusNodeUser.hasFocus ? Colors.black : Colors.black
-                            ),
+                                color: focusNodeUser.hasFocus
+                                    ? Colors.black
+                                    : Colors.black),
                             border: InputBorder.none,
                             icon: const Icon(Icons.person),
                           ),
@@ -123,8 +129,10 @@ class _LoginState extends State<Login> {
                       ),
                       // Password Input Box
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
@@ -142,20 +150,20 @@ class _LoginState extends State<Login> {
                           decoration: InputDecoration(
                             label: const Text("Password"),
                             labelStyle: TextStyle(
-                              color: focusNodePass.hasFocus ? Colors.black : Colors.black
-                            ),
+                                color: focusNodePass.hasFocus
+                                    ? Colors.black
+                                    : Colors.black),
                             border: InputBorder.none,
                             icon: const Icon(Icons.lock),
                             suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  isVisible = !isVisible;
-                                });
-                              },
-                              icon: Icon(isVisible
-                              ? Icons.visibility_off
-                              : Icons.visibility)
-                              ),
+                                onPressed: () {
+                                  setState(() {
+                                    isVisible = !isVisible;
+                                  });
+                                },
+                                icon: Icon(isVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility)),
                           ),
                         ),
                       ),
@@ -165,15 +173,17 @@ class _LoginState extends State<Login> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              // Bring to support page
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ForgotPassword()));
                             },
                             child: const Text(
                               "Forgot Password?",
-                              style: TextStyle(
-                                  color: Colors.grey
-                                ),
-                              ),
+                              style: TextStyle(color: Colors.grey),
                             ),
+                          ),
                         ],
                       ),
                       // Login Button
@@ -211,7 +221,9 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 100,),
+                      const SizedBox(
+                        height: 100,
+                      ),
                       // Not a member? Register now
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -222,13 +234,13 @@ class _LoginState extends State<Login> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Registration()
-                                ),
+                                    builder: (context) => const Registration()),
                               );
                             },
                             child: const Text(
                               "Register now",
-                              style: TextStyle(color: Colors.grey, fontSize: 15),
+                              style:
+                                  TextStyle(color: Colors.grey, fontSize: 15),
                             ),
                           ),
                         ],
