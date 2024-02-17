@@ -29,7 +29,7 @@ class DatabaseHelper {
   // User_Info
   Future<bool> login(String username, String password) async {
     final Database db = await open();
-    var result = await db.rawQuery("SELECT * FROM User_Info WHERE username = '$username' AND userPassword = '$password';");
+    var result = await db.rawQuery("SELECT * FROM User_Info WHERE username = '$username' AND userPassword = '$password' AND isActive = 1;");
     if (result.isNotEmpty) {
       return true;
     } else {
@@ -74,7 +74,7 @@ class DatabaseHelper {
     return result.map((e) => User.fromMap(e)).toList();
   }
  
-  Future<int> deleteUser(int userId) async {
+  Future<int> deleteUser(int? userId) async {
     final Database db = await open();
     return db.rawUpdate('UPDATE User_Info SET isActive = ? WHERE userId = ?', [0, userId]);
   }
