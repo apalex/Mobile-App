@@ -79,17 +79,32 @@ class DatabaseHelper {
     return db.rawUpdate('UPDATE User_Info SET isActive = ? WHERE userId = ?', [0, userId]);
   }
 
+  Future<int> changeEmail(String email, int? userId) async {
+    final Database db = await open();
+    return db.rawUpdate('UPDATE User_Info SET email = ? WHERE userId = ?', [email, userId]);
+  }
+
+  Future<int> changePassword(String password, int? userId) async {
+    final Database db = await open();
+    return db.rawUpdate('UPDATE User_Info SET userPassword = ? WHERE userId = ?', [password, userId]);
+  }
+
+  Future<int> changePhone(String phone, int? userId) async {
+    final Database db = await open();
+    return db.rawUpdate('UPDATE User_Info SET phoneNum = ? WHERE userId = ?', [phone, userId]);
+  }
+
   // User_Activity
   Future<int> insertUserLoginDate(int? userId, String activityTimeStamp)async {
     final Database db = await open();
     return db.rawInsert("INSERT INTO User_Activity (userId, activityTimeStamp) VALUES ($userId, '$activityTimeStamp');");
   }
 
-  Future<UserActivity> getUserActivity(int? userId) async {
-    final Database db = await open();
-    var result = await db.query("User_Activity", where: "userId = ?", whereArgs: [userId]);
-    return UserActivity.fromMap(result.first);
-  }
+  // Future<UserActivity> getUserActivity(int? userId) async {
+  //   final Database db = await open();
+  //   var result = await db.query("User_Activity", where: "userId = ?", whereArgs: [userId]);
+  //   return UserActivity.fromMap(result.first);
+  // }
 
   Future<List<UserActivity>> getUserActivities() async {
     final Database db = await open();

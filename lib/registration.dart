@@ -495,6 +495,7 @@ class _RegistrationState extends State<Registration> {
                           child: TextButton(
                             onPressed: () async {
                               checkUsername();
+                              checkEmail();
                               if (isAgree == true) {
                                 setState(() {
                                   isAgreeColor = false;
