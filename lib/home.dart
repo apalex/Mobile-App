@@ -1,5 +1,6 @@
 import 'package:crypto_app/home_featured.dart';
 import 'package:crypto_app/home_recommended.dart';
+import 'package:crypto_app/search.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto_app/main.dart';
@@ -80,10 +81,16 @@ class _HomeState extends State<Home> {
       actions: <Widget>[
         OutlinedButton.icon(
           onPressed: () {
-            showSearch(
-              context: context,
-              delegate: SearchFeature(),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchPage(user: widget.user,)
+              )
             );
+            // showSearch(
+            //   context: context,
+            //   delegate: SearchFeature(),
+            // );
           },
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(199, 20),

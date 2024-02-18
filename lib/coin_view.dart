@@ -1,3 +1,4 @@
+import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/Models/chart_model.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +8,8 @@ import 'package:intl/intl.dart';
 
 class Coin extends StatefulWidget {
   var coin;
-  Coin({this.coin});
+  final User? user;
+  Coin({this.coin, this.user});
 
   @override
   State<Coin> createState() => _CoinState();

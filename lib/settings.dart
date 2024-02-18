@@ -1,8 +1,10 @@
 import 'package:crypto_app/welcome.dart';
+import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class UserSettings extends StatelessWidget {
-  const UserSettings({super.key});
+  final User? user;
+  const UserSettings({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
