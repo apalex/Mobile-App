@@ -1,11 +1,14 @@
+import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/main.dart';
+import 'package:crypto_app/search.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:crypto_app/coin_view.dart';
 import 'package:crypto_app/Models/coin_model.dart';
 
 class Markets extends StatefulWidget {
-  const Markets({Key? key}) : super(key: key);
+  final User? user;
+  const Markets({super.key, this.user});
 
   @override
   State<Markets> createState() => _MarketsState();
@@ -49,7 +52,7 @@ class _MarketsState extends State<Markets> {
       appBar: AppBar(
         title: OutlinedButton.icon(
             onPressed: () {
-              showSearch(context: context, delegate: SearchFeature());
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage(user: widget.user,)));
             },
             style: OutlinedButton.styleFrom(
               minimumSize: const Size(380, 35),

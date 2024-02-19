@@ -3,7 +3,6 @@ import 'package:crypto_app/home_recommended.dart';
 import 'package:crypto_app/search.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:crypto_app/main.dart';
 import 'package:crypto_app/notifications.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
@@ -53,6 +52,7 @@ class _HomeState extends State<Home> {
 
   List? coinMarket = [];
   var coinMarketList;
+  // ignore: body_might_complete_normally_nullable
   Future<List<CoinModel>?> getCoinData() async {
     var response = await http.get(
         Uri.parse(
@@ -87,10 +87,6 @@ class _HomeState extends State<Home> {
                 builder: (context) => SearchPage(user: widget.user,)
               )
             );
-            // showSearch(
-            //   context: context,
-            //   delegate: SearchFeature(),
-            // );
           },
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(199, 20),

@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'package:crypto_app/Models/user_model.dart';
-import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/coin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -15,42 +15,45 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   FocusNode focus = FocusNode();
-  List? queryCoin = [];
+  List? queryList = [];
 
   @override
   void initState() {
     getCoinData();
-    queryCoin = coinMarket;
+    queryList = coinList;
     super.initState();
   }
 
-  List? coinMarket = [];
-  var coinMarketList;
-  Future<List<CoinModel>?> getCoinData() async {
+  var data = [];
+  List<CoinModel> coinList = [];
+  Future<List<CoinModel>> getCoinData() async {
     var response = await http.get(
-        Uri.parse(
-            "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"),
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        });
+      Uri.parse(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"
+      ),
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      }
+    );
     if (response.statusCode == 200) {
-      var x = response.body;
-      coinMarketList = coinModelFromJson(x);
-      setState(() {
-        coinMarket = coinMarketList;
-      });
+      data = json.decode(response.body);
+      coinList = data.map((e) => CoinModel.fromJson(e)).toList();
     } else {
       print(response.statusCode);
     }
+    return coinList;
   }
 
   void searchFunction(String queryKeyword) {
-    List? results = [];
     if (queryKeyword.isEmpty) {
-      results = coinMarket;
+      setState(() {
+        queryList = coinList;
+      });
     } else {
-      results = coinMarket![0].where((element) => element["name"].toLowerCase().contains(queryKeyword.toLowerCase())).toList();
+      setState(() {
+        queryList = coinList.where((element) => element.name.toLowerCase().contains(queryKeyword.toLowerCase())).toList();
+      });
     }
   }
 
@@ -96,24 +99,30 @@ class _SearchPageState extends State<SearchPage> {
           child: Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  itemCount: coinMarket!.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      textColor: Colors.black,
-                      leading: Image.network(coinMarket![index].image),
-                      title: Text('${coinMarket![index].symbol.toUpperCase()}'),
-                      trailing: Text('\$${coinMarket![index].currentPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 15),),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Coin(coin: coinMarket![index], user: widget.user,)
-                          )
-                        );
-                      },
-                    );
-                  }
+                child: FutureBuilder<List<CoinModel>>(
+                  future: getCoinData(),
+                  builder: (context, snapshot) {
+                  return ListView.builder(
+                    itemCount: queryList!.isEmpty ? coinList.length : queryList!.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        key: ValueKey(queryList!.isEmpty ? coinList[index].name : queryList![index].name),
+                        textColor: Colors.black,
+                        leading: Image.network(queryList!.isEmpty ? coinList[index].image : queryList![index].image),
+                        title: Text(queryList!.isEmpty ? coinList[index].symbol.toUpperCase() : queryList![index].symbol.toUpperCase()),
+                        trailing: Text('\$${queryList!.isEmpty ? coinList[index].currentPrice.toStringAsFixed(2) : queryList![index].currentPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 15),),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Coin(coin: queryList!.isEmpty ? coinList[index] : queryList![index], user: widget.user,)
+                            )
+                          );
+                        },
+                      );
+                    }
+                  );
+                  },
                 )
               ),
             ],
