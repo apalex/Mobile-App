@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const Notifications()));
+                      builder: (context) => Notifications(user: widget.user,)));
             },
             icon: const Icon(Icons.notifications)),
         IconButton(

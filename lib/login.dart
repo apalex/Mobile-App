@@ -4,6 +4,7 @@ import 'package:crypto_app/navigation_menu.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/registration.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _LoginState extends State<Login> {
   FocusNode focusNodeUser = FocusNode();
   FocusNode focusNodePass = FocusNode();
   final db = DatabaseHelper();
+  late String userIp;
 
   login() async {
     User user = await db.getUser(username.text);
@@ -41,10 +43,24 @@ class _LoginState extends State<Login> {
     }
   }
 
+  Future<String> getLoginIp() async {
+    var response = await http.get(Uri.parse("https://api.ipify.org/"));
+    return response.toString();
+  }
+
   insertUserLoginDate() async {
     User user = await db.getUser(username.text);
     return await db.insertUserLoginDate(
-        user.userId, DateTime.now().toIso8601String());
+        user.userId, DateTime.now().toIso8601String(), userIp
+      );
+  }
+
+  @override
+  void initState() {
+    getLoginIp().then((value) {
+      userIp = value;
+    });
+    super.initState();
   }
 
   @override

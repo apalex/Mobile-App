@@ -32,7 +32,7 @@ class _FuturesState extends State<Futures> {
 
   @override
   Widget build(BuildContext context) {
-return FutureBuilder<List<UserActivity>>(
+    return FutureBuilder<List<UserActivity>>(
       future: ua,
       builder: (BuildContext context, AsyncSnapshot <List<UserActivity>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

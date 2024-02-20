@@ -18,7 +18,7 @@ class DatabaseHelper {
       // User Portfolio
       await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userId INTEGER, overallBal REAL DEFAULT 0, fundingBal REAL DEFAULT 0, tradingBal REAL DEFAULT 0, marginBal REAL DEFAULT 0, futureBal REAL DEFAULT 0, botBal REAL DEFAULT 0, financeBal REAL DEFAULT 0, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Activity
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp TEXT DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp TEXT DEFAULT CURRENT_TIMESTAMP, ip_address TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Transfers
       await db.execute("CREATE TABLE IF NOT EXISTS User_Transfers (userTransferId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, coinName TEXT, transferAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Payments
@@ -95,9 +95,15 @@ class DatabaseHelper {
   }
 
   // User_Activity
-  Future<int> insertUserLoginDate(int? userId, String activityTimeStamp)async {
+  Future<int> insertUserLoginDate(int? userId, String activityTimeStamp, String loginIP)async {
     final Database db = await open();
-    return db.rawInsert("INSERT INTO User_Activity (userId, activityTimeStamp) VALUES ($userId, '$activityTimeStamp');");
+    return db.rawInsert("INSERT INTO User_Activity (userId, activityTimeStamp, ip_address) VALUES ($userId, '$activityTimeStamp', '$loginIP');");
+  }
+
+  Future<List<UserActivity>> getUserActivity(int? userId) async {
+    final Database db = await open();
+    List<Map<String, Object?>> result = await db.rawQuery("SELECT * FROM User_Activity WHERE userId = $userId");
+    return result.map((e) => UserActivity.fromMap(e)).toList();
   }
 
   // Future<UserActivity> getUserActivity(int? userId) async {

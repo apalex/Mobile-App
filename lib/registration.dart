@@ -1,6 +1,6 @@
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
-import 'package:crypto_app/registrationsuccess.dart';
+import 'package:crypto_app/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
@@ -522,12 +522,24 @@ class _RegistrationState extends State<Registration> {
                                         isActive: 1,
                                         permissions: "User"))
                                     .whenComplete(() {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const RegistrationSuccess()),
-                                  );
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: const Text("Account Created", style: TextStyle(fontSize: 20),),
+                                          content: const Text("Congralutions! You have successfully created an account with\nMintless.", style: TextStyle(color: Colors.grey),),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(builder: (context) => const Welcome())
+                                                );
+                                              },
+                                              child: const Text("OK", style: TextStyle(color: Colors.black),)
+                                            )
+                                          ],
+                                        )
+                                      );
                                 });
                               }
                             },

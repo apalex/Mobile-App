@@ -110,6 +110,7 @@ class _SearchPageState extends State<SearchPage> {
                         textColor: Colors.black,
                         leading: Image.network(queryList!.isEmpty ? coinList[index].image : queryList![index].image),
                         title: Text(queryList!.isEmpty ? coinList[index].symbol.toUpperCase() : queryList![index].symbol.toUpperCase()),
+                        subtitle: Text(queryList!.isEmpty ? coinList[index].name : queryList![index].name),
                         trailing: Text('\$${queryList!.isEmpty ? coinList[index].currentPrice.toStringAsFixed(2) : queryList![index].currentPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 15),),
                         onTap: () {
                           Navigator.push(
