@@ -522,24 +522,34 @@ class _RegistrationState extends State<Registration> {
                                         isActive: 1,
                                         permissions: "User"))
                                     .whenComplete(() {
-                                      showDialog(
-                                        context: context,
-                                        builder: (ctx) => AlertDialog(
-                                          title: const Text("Account Created", style: TextStyle(fontSize: 20),),
-                                          content: const Text("Congralutions! You have successfully created an account with\nMintless.", style: TextStyle(color: Colors.grey),),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => const Welcome())
-                                                );
-                                              },
-                                              child: const Text("OK", style: TextStyle(color: Colors.black),)
-                                            )
-                                          ],
-                                        )
-                                      );
+                                  showDialog(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                            title: const Text(
+                                              "Account Created",
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                            content: const Text(
+                                              "Congralutions! You have successfully created an account with\nMintless.",
+                                              style:
+                                                  TextStyle(color: Colors.grey),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                const Welcome()));
+                                                  },
+                                                  child: const Text(
+                                                    "OK",
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ))
+                                            ],
+                                          ));
                                 });
                               }
                             },
