@@ -1,10 +1,8 @@
 import 'package:crypto_app/SQLite/database_helper.dart';
-import 'package:crypto_app/forgot_password.dart';
 import 'package:crypto_app/navigation_menu.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/registration.dart';
-import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -43,24 +41,12 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Future<String> getLoginIp() async {
-    var response = await http.get(Uri.parse("https://api.ipify.org/"));
-    return response.toString();
-  }
 
   insertUserLoginDate() async {
     User user = await db.getUser(username.text);
     return await db.insertUserLoginDate(
-        user.userId, DateTime.now().toIso8601String(), userIp
+        user.userId, DateTime.now().toIso8601String()
       );
-  }
-
-  @override
-  void initState() {
-    getLoginIp().then((value) {
-      userIp = value;
-    });
-    super.initState();
   }
 
   @override
@@ -183,28 +169,10 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      // Forgot Password
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ForgotPassword()));
-                            },
-                            child: const Text(
-                              "Forgot Password?",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        ],
-                      ),
                       // Login Button
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
+                        margin: const EdgeInsets.only(top: 30),
                         height: 55,
                         decoration: BoxDecoration(
                           color: Colors.black,
