@@ -1,4 +1,5 @@
 import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/buy_or_sell.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/Models/chart_model.dart';
 import 'package:http/http.dart' as http;
@@ -303,7 +304,14 @@ class _CoinState extends State<Coin> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 height: MediaQuery.of(context).size.height * 0.055,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BuyOrSell(user: widget.user, action: "Buy", coin: widget.coin,)
+                      )
+                    );
+                  },
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   child: const Text(
@@ -317,7 +325,14 @@ class _CoinState extends State<Coin> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 height: MediaQuery.of(context).size.height * 0.055,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BuyOrSell(user: widget.user, action: "Sell", coin: widget.coin,)
+                      )
+                    );
+                  },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   child: const Text(
                     "Sell",

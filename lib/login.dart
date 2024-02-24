@@ -20,7 +20,6 @@ class _LoginState extends State<Login> {
   FocusNode focusNodeUser = FocusNode();
   FocusNode focusNodePass = FocusNode();
   final db = DatabaseHelper();
-  late String userIp;
 
   login() async {
     User user = await db.getUser(username.text);
@@ -41,12 +40,10 @@ class _LoginState extends State<Login> {
     }
   }
 
-
   insertUserLoginDate() async {
     User user = await db.getUser(username.text);
     return await db.insertUserLoginDate(
-        user.userId, DateTime.now().toIso8601String()
-      );
+        user.userId, DateTime.now().toIso8601String());
   }
 
   @override

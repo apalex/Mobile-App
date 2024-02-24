@@ -19,12 +19,13 @@ class _NavigationMenuState extends State<NavigationMenu> {
   late Home homeScreen = Home(user: widget.user,);
   late Futures futuresScreen = Futures(user: widget.user,);
   late Markets marketsScreen = Markets(user: widget.user,);
+  late Portfolio portfolioScreen = Portfolio(user: widget.user,);
   late final screens = [
     homeScreen,
     marketsScreen,
     Trade(),
     futuresScreen,
-    Portfolio()
+    portfolioScreen
   ];
 
   @override

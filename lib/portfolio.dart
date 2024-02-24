@@ -1,7 +1,10 @@
+import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/deposit_or_withdraw.dart';
 import 'package:flutter/material.dart';
 
 class Portfolio extends StatefulWidget {
-  const Portfolio({Key? key}) : super(key: key);
+  final User? user;
+  const Portfolio({super.key, this.user});
 
   @override
   State<Portfolio> createState() => _PortfolioState();
@@ -9,7 +12,7 @@ class Portfolio extends StatefulWidget {
 
 class _PortfolioState extends State<Portfolio> {
   bool isVisibleBal = true;
-  var bal = "111.11";
+  var bal = "\$111.11";
   showBalance() {
     if (isVisibleBal) {
       setState(() {
@@ -29,7 +32,7 @@ class _PortfolioState extends State<Portfolio> {
       home: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: const Text("Portfolio"),
+          title: const Text("Portfolio",),
         ),
         body: Container(
           padding: const EdgeInsets.all(8),
@@ -38,6 +41,16 @@ class _PortfolioState extends State<Portfolio> {
               _buildCreditCard(
                 color: Colors.black87,
               ),
+              Container(
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.04,),
+                    const Text("Total Assets", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,),),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -129,28 +142,84 @@ class _PortfolioState extends State<Portfolio> {
               ),
             ),
             // Extra Decoration of Credit Card
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.only(bottom: 12),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Text(
-                        "CARDHOLDER",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => DepositOrWithdraw(user: widget.user, action: "Deposit",))
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.account_balance_wallet_sharp, size: 20, color: Colors.white60,),
+                              SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
+                              const Text(
+                                "DEPOSIT",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              )
+                            ],
+                          )
                         ),
                       ),
-                      Text(
-                        "VALID THRU",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => DepositOrWithdraw(user: widget.user, action: "Withdraw",))
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.vertical_align_top_sharp, size: 20, color: Colors.white60,),
+                              SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
+                              const Text(
+                                "WITHDRAW",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              )
+                            ],
+                          )
+                        ),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        child: TextButton(
+                          onPressed: () {
+                        
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.history_sharp, size: 20, color: Colors.white60,),
+                              SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
+                              const Text(
+                                "HISTORY",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold
+                                ),
+                              )
+                            ],
+                          )
                         ),
                       ),
                     ],

@@ -16,13 +16,13 @@ class DatabaseHelper {
       // User_Address
       await db.execute("CREATE TABLE IF NOT EXISTS User_Address (userId INTEGER PRIMARY KEY, address1 TEXT, address2 TEXT, country TEXT, province TEXT, city TEXT, zipCode TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Portfolio
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userId INTEGER, overallBal REAL DEFAULT 0, fundingBal REAL DEFAULT 0, tradingBal REAL DEFAULT 0, marginBal REAL DEFAULT 0, futureBal REAL DEFAULT 0, botBal REAL DEFAULT 0, financeBal REAL DEFAULT 0, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userId INTEGER, coinName TEXT, coinAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Activity
       await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp TEXT DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Transfers
       await db.execute("CREATE TABLE IF NOT EXISTS User_Transfers (userTransferId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, coinName TEXT, transferAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Payments
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Payments (userPaymentId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, paymentMethod TEXT, paymentAmt REAL, paymentDate DATETIME DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Payments (userPaymentId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, paymentMethod TEXT, paymentAmt REAL, paymentDate TEXT DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
     });
   }
 
@@ -102,20 +102,18 @@ class DatabaseHelper {
 
   Future<List<UserActivity>> getUserActivity(int? userId) async {
     final Database db = await open();
-    List<Map<String, Object?>> result = await db.rawQuery("SELECT * FROM User_Activity WHERE userId = $userId");
+    List<Map<String, Object?>> result = await db.rawQuery("SELECT * FROM User_Activity WHERE userId = $userId ORDER BY activityTimeStamp DESC;");
     return result.map((e) => UserActivity.fromMap(e)).toList();
   }
-
-  // Future<UserActivity> getUserActivity(int? userId) async {
-  //   final Database db = await open();
-  //   var result = await db.query("User_Activity", where: "userId = ?", whereArgs: [userId]);
-  //   return UserActivity.fromMap(result.first);
-  // }
 
   Future<List<UserActivity>> getUserActivities() async {
     final Database db = await open();
     List<Map<String, Object?>> result = await db.query('User_Activity');
     return result.map((e) => UserActivity.fromMap(e)).toList();
   }
+
+  // User Address
+  // User Payments
+  // User Transfers
 
 }
