@@ -1,4 +1,7 @@
+import 'package:crypto_app/Models/portfolio_model.dart';
 import 'package:crypto_app/Models/user_activity_model.dart';
+import 'package:crypto_app/Models/user_address_model.dart';
+import 'package:crypto_app/Models/user_payment_mode.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:crypto_app/Models/user_model.dart';
@@ -112,8 +115,25 @@ class DatabaseHelper {
     return result.map((e) => UserActivity.fromMap(e)).toList();
   }
 
+  // Portfolio
+  Future<List<PortfolioModel>> getPortolio(int? userId) async {
+    final Database db = await open();
+    List<Map<String, Object?>> result = await db.query("User_Portfolio", where: "userId = ?", whereArgs: [userId]);
+    return result.map((e) => PortfolioModel.fromMap(e)).toList();
+  }
+
   // User Address
+    Future<int> insertUserAddress(UserAddress address) async {
+    final Database db = await open();
+    return db.insert('User_Address', address.toMap());
+  }
+
   // User Payments
+    Future<int> insertUserPayment(UserPayment receipt) async {
+    final Database db = await open();
+    return db.insert('User_Payments', receipt.toMap());
+  }
+
   // User Transfers
 
 }

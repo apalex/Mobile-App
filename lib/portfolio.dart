@@ -1,5 +1,8 @@
+import 'package:crypto_app/Models/portfolio_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
-import 'package:crypto_app/deposit_or_withdraw.dart';
+import 'package:crypto_app/SQLite/database_helper.dart';
+import 'package:crypto_app/deposit.dart';
+import 'package:crypto_app/withdraw.dart';
 import 'package:flutter/material.dart';
 
 class Portfolio extends StatefulWidget {
@@ -11,20 +14,27 @@ class Portfolio extends StatefulWidget {
 }
 
 class _PortfolioState extends State<Portfolio> {
-  bool isVisibleBal = true;
+  bool isVisibleBal = false;
   var bal = "\$111.11";
-  showBalance() {
-    if (isVisibleBal) {
-      setState(() {
-        bal = "\$111.11";
-      });
-      } else {
-      setState(() {
-        bal = "**** **** **** ****";
-      });
-    }
+  var hidden = "**** **** **** ****";
+  late DatabaseHelper handler;
+  late Future<List<PortfolioModel>> pm;
+  final db = DatabaseHelper();
+
+  @override
+  void initState() {
+    handler = DatabaseHelper();
+    pm = handler.getPortolio(widget.user?.userId);
+    handler.open().whenComplete(() {
+      pm = getPortfolio();
+    });
+    super.initState();
   }
 
+  Future<List<PortfolioModel>> getPortfolio() {
+    return handler.getPortolio(widget.user?.userId);
+  }
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,6 +59,33 @@ class _PortfolioState extends State<Portfolio> {
                     SizedBox(width: MediaQuery.of(context).size.width * 0.04,),
                     const Text("Total Assets", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,),),
                   ],
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+              SingleChildScrollView(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4545,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: 12,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              textColor: Colors.black,
+                              leading: Image.network("https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"),
+                              title: Text("Bitcoin"),
+                              subtitle: Text("1 BTC"),
+                              trailing: Text("60000 USDT"),
+                              onTap: () {
+                                // portfolio_coin_view.dart
+                              },
+                            );
+                          }
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],
@@ -112,7 +149,9 @@ class _PortfolioState extends State<Portfolio> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        bal,
+                        isVisibleBal ?
+                        bal :
+                        hidden,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -128,7 +167,6 @@ class _PortfolioState extends State<Portfolio> {
                         onPressed: () {
                           setState(() {
                             isVisibleBal = !isVisibleBal;
-                            showBalance();
                           });
                         },
                         icon: Icon(isVisibleBal
@@ -156,7 +194,7 @@ class _PortfolioState extends State<Portfolio> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => DepositOrWithdraw(user: widget.user, action: "Deposit",))
+                              MaterialPageRoute(builder: (context) => Deposit(user: widget.user,))
                             );
                           },
                           child: Row(
@@ -181,7 +219,7 @@ class _PortfolioState extends State<Portfolio> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => DepositOrWithdraw(user: widget.user, action: "Withdraw",))
+                              MaterialPageRoute(builder: (context) => Withdraw(user: widget.user,))
                             );
                           },
                           child: Row(

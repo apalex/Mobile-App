@@ -1,16 +1,20 @@
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
 
-class DepositOrWithdraw extends StatefulWidget {
+class Withdraw extends StatefulWidget {
   final User? user;
-  final String? action;
-  const DepositOrWithdraw({super.key, this.user, this.action});
+  const Withdraw({super.key, this.user});
 
   @override
-  State<DepositOrWithdraw> createState() => _DepositOrWithdrawState();
+  State<Withdraw> createState() => _WithdrawState();
 }
 
-class _DepositOrWithdrawState extends State<DepositOrWithdraw> {
+class _WithdrawState extends State<Withdraw> {
+
+  Widget buildDeposit(BuildContext context) {
+    return Placeholder();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,7 +27,7 @@ class _DepositOrWithdrawState extends State<DepositOrWithdraw> {
             },
             child: const Icon(Icons.arrow_back_sharp),
           ),
-          title: Text(widget.action.toString()),
+          title: const Text("Withdraw"),
           centerTitle: true,
         ),
       ),
