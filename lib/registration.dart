@@ -1,3 +1,4 @@
+import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/welcome.dart';
@@ -42,11 +43,15 @@ class _RegistrationState extends State<Registration> {
       r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$");
   RegExp regExpUsername = RegExp(r"^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+){1,}$");
   final db = DatabaseHelper();
+  late DatabaseHelper handler;
+  late int? count;
 
   @override
   void initState() {
     super.initState();
     db.open();
+    handler = DatabaseHelper();
+    getUserCount();
   }
 
   checkUsername() async {
@@ -73,6 +78,12 @@ class _RegistrationState extends State<Registration> {
         isEmailInUse = true;
       });
     }
+  }
+
+  getUserCount() async {
+    setState(() async {
+      count = await db.getUserCount();
+    });
   }
 
   @override
@@ -521,7 +532,11 @@ class _RegistrationState extends State<Registration> {
                                             DateTime.now().toIso8601String(),
                                         isActive: 1,
                                         permissions: "User"))
-                                    .whenComplete(() {
+                                    .whenComplete(() async {
+                                      await db.createBalance(UserBalance(
+                                        userId: count! + 1,
+                                        userBalance: 0
+                                      )).whenComplete(() {
                                   showDialog(
                                       context: context,
                                       builder: (ctx) => AlertDialog(
@@ -530,7 +545,7 @@ class _RegistrationState extends State<Registration> {
                                               style: TextStyle(fontSize: 20),
                                             ),
                                             content: const Text(
-                                              "Congralutions! You have successfully created an account with\nMintless.",
+                                              "Congratulations! You have successfully created an account with Mintless.",
                                               style:
                                                   TextStyle(color: Colors.grey),
                                             ),
@@ -542,6 +557,7 @@ class _RegistrationState extends State<Registration> {
                                                         MaterialPageRoute(
                                                             builder: (context) =>
                                                                 const Welcome()));
+                                                                Navigator.pop(ctx);
                                                   },
                                                   child: const Text(
                                                     "OK",
@@ -550,6 +566,7 @@ class _RegistrationState extends State<Registration> {
                                                   ))
                                             ],
                                           ));
+                                      });
                                 });
                               }
                             },
