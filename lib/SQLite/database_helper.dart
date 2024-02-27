@@ -1,7 +1,8 @@
 import 'package:crypto_app/Models/portfolio_model.dart';
 import 'package:crypto_app/Models/user_activity_model.dart';
 import 'package:crypto_app/Models/user_address_model.dart';
-import 'package:crypto_app/Models/user_payment_mode.dart';
+import 'package:crypto_app/Models/user_balance_model.dart';
+import 'package:crypto_app/Models/user_payment_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:crypto_app/Models/user_model.dart';
@@ -18,8 +19,10 @@ class DatabaseHelper {
       await db.execute("CREATE TABLE IF NOT EXISTS User_Info (userId INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT NOT NULL, lastName TEXT NOT NULL, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL UNIQUE, userPassword TEXT NOT NULL, phoneNum TEXT NOT NULL, createdOn TEXT DEFAULT CURRENT_TIMESTAMP, isActive INTEGER DEFAULT 1, permissions TEXT DEFAULT 'User');");
       // User_Address
       await db.execute("CREATE TABLE IF NOT EXISTS User_Address (userId INTEGER PRIMARY KEY, address1 TEXT, address2 TEXT, country TEXT, province TEXT, city TEXT, zipCode TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      // User Balance
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Balance (userId INTEGER PRIMARY KEY, userBalance REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Portfolio
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userId INTEGER, coinName TEXT, coinAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userId INTEGER PRIMARY KEY, coinName TEXT, coinAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Activity
       await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp TEXT DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Transfers
@@ -49,6 +52,13 @@ class DatabaseHelper {
   Future<int> insertUser(User user) async {
     final Database db = await open();
     return db.insert('User_Info', user.toMap());
+  }
+
+  Future<int?> getUserCount() async {
+    final Database db = await open();
+    var response = await db.rawQuery("SELECT COUNT(*) FROM User_Info;");
+    int? count = Sqflite.firstIntValue(response);
+    return count;
   }
 
   Future<bool> checkUsername(String username) async {
@@ -116,6 +126,17 @@ class DatabaseHelper {
   }
 
   // Portfolio
+  Future<int> insertIntoPortfolio(PortfolioModel portfolio) async {
+    final Database db = await open();
+    return db.insert('User_Portfolio', portfolio.toMap());
+  }
+
+  Future<List<PortfolioModel>> getAllPortfolios() async {
+    final Database db = await open();
+    List<Map<String, Object?>> result = await db.query('User_Portfolio');
+    return result.map((e) => PortfolioModel.fromMap(e)).toList();
+  }
+
   Future<List<PortfolioModel>> getPortolio(int? userId) async {
     final Database db = await open();
     List<Map<String, Object?>> result = await db.query("User_Portfolio", where: "userId = ?", whereArgs: [userId]);
@@ -128,12 +149,47 @@ class DatabaseHelper {
     return db.insert('User_Address', address.toMap());
   }
 
+  Future<List<UserAddress>> getUserAddresses() async {
+    final Database db = await open();
+    List<Map<String, Object?>> result = await db.query('User_Address');
+    return result.map((e) => UserAddress.fromMap(e)).toList();
+  }
+
   // User Payments
     Future<int> insertUserPayment(UserPayment receipt) async {
     final Database db = await open();
     return db.insert('User_Payments', receipt.toMap());
   }
 
+  Future<List<UserPayment>> getAllPayments() async {
+    final Database db = await open();
+    List<Map<String, Object?>> result = await db.query('User_Payments');
+    return result.map((e) => UserPayment.fromMap(e)).toList();
+  }
+
   // User Transfers
+
+  // User Balance
+  Future<int> createBalance(UserBalance userBalance) async {
+    final Database db = await open();
+    return db.insert('User_Balance', userBalance.toMap());
+  }
+
+  Future<List<UserBalance>> getAllBalances() async {
+    final Database db = await open();
+    List<Map<String, Object?>> result = await db.query('User_Balance');
+    return result.map((e) => UserBalance.fromMap(e)).toList();
+  }
+
+  Future<UserBalance> getUserBalance(int? userId) async {
+    final Database db = await open();
+    var result = await db.query("User_Balance", where: "userId = ?", whereArgs: [userId]);
+    return UserBalance.fromMap(result.first);
+  }
+
+  Future<int> insertDepositBalance(int? userId, double deposit) async {
+    final Database db = await open();
+    return db.rawUpdate('UPDATE User_Balance SET userBalance = ? WHERE userId = ?', [deposit, userId]);
+  }
 
 }

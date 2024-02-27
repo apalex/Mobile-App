@@ -1,8 +1,8 @@
+import 'package:crypto_app/Models/portfolio_model.dart';
 import 'package:crypto_app/Models/user_address_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
-import 'package:crypto_app/Models/user_payment_mode.dart';
+import 'package:crypto_app/Models/user_payment_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
-import 'package:crypto_app/portfolio.dart';
 import 'package:flutter/material.dart';
 
 class Deposit extends StatefulWidget {
@@ -283,8 +283,8 @@ class _DepositState extends State<Deposit> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "Please enter a value!";
-                            } else if (double.parse(value) == 0 || double.parse(value) <= 0) {
-                              return "Please enter a valid number";
+                            } else if (double.parse(value) < 10) {
+                              return "Minimum Payment Amount is \$10!";
                             }
                             return null;
                           },
@@ -327,27 +327,29 @@ class _DepositState extends State<Deposit> {
                                 paymentMethod: paymentMethod,
                                 paymentAmt: double.parse(paymentAmt.text.replaceAll(",", "")),
                                 paymentDate: DateTime.now().toIso8601String()
-                              )).whenComplete(() {
-                                showDialog(
-                                  context: context,
-                                  builder: (ctx) => AlertDialog(
-                                    title: const Text("Payment Notification", style: TextStyle(fontSize: 20),),
-                                    content: Text("Payment was successfully placed! ${double.parse(paymentAmt.text.replaceAll(",", ""))} USDT to your account!", style: const TextStyle(color: Colors.grey),),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => Portfolio(user: widget.user,)
-                                            )
-                                          );
-                                        },
-                                        child: const Text("OK", style: TextStyle(color: Colors.black),)
+                              )).whenComplete(() async {
+                                await db.insertIntoPortfolio(PortfolioModel(
+                                  userId: widget.user?.userId,
+                                  coinName: "tether",
+                                  coinAmt: double.parse(paymentAmt.text.replaceAll(",", ""))
+                                )).whenComplete(() {
+                                    showDialog(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: const Text("Payment Notification", style: TextStyle(fontSize: 20),),
+                                        content: Text("Payment was successfully placed! ${double.parse(paymentAmt.text.replaceAll(",", ""))} USDT has been added to your account!", style: const TextStyle(color: Colors.grey),),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(ctx);
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text("OK", style: TextStyle(color: Colors.black),)
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                );
+                                    );
+                                });
                               });
                             });
                           }

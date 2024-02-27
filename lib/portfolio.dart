@@ -1,4 +1,5 @@
 import 'package:crypto_app/Models/portfolio_model.dart';
+import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/deposit.dart';
@@ -16,20 +17,28 @@ class Portfolio extends StatefulWidget {
 class _PortfolioState extends State<Portfolio> {
   bool isVisibleBal = false;
   var bal = "\$111.11";
-  var hidden = "**** **** **** ****";
+  String hidden = "**** **** **** ****";
   late DatabaseHelper handler;
   late Future<List<PortfolioModel>> pm;
   final db = DatabaseHelper();
+  late UserBalance userBal;
 
   @override
   void initState() {
     handler = DatabaseHelper();
     pm = handler.getPortolio(widget.user?.userId);
+    getBalance();
     handler.open().whenComplete(() {
       pm = getPortfolio();
     });
     super.initState();
   }
+
+  getBalance() async {
+    setState(() async {
+      userBal = await db.getUserBalance(widget.user?.userId);
+    });
+  }  
 
   Future<List<PortfolioModel>> getPortfolio() {
     return handler.getPortolio(widget.user?.userId);
@@ -150,7 +159,7 @@ class _PortfolioState extends State<Portfolio> {
                     children: [
                       Text(
                         isVisibleBal ?
-                        bal :
+                        userBal.userBalance.toString() :
                         hidden,
                         style: const TextStyle(
                           color: Colors.white,
