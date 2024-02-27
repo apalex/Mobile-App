@@ -16,12 +16,11 @@ class Portfolio extends StatefulWidget {
 
 class _PortfolioState extends State<Portfolio> {
   bool isVisibleBal = false;
-  var bal = "\$111.11";
   String hidden = "**** **** **** ****";
   late DatabaseHelper handler;
   late Future<List<PortfolioModel>> pm;
   final db = DatabaseHelper();
-  late UserBalance userBal;
+  late UserBalance bal;
 
   @override
   void initState() {
@@ -36,7 +35,7 @@ class _PortfolioState extends State<Portfolio> {
 
   getBalance() async {
     setState(() async {
-      userBal = await db.getUserBalance(widget.user?.userId);
+      bal = await db.getUserBalance(widget.user?.userId);
     });
   }  
 
@@ -159,7 +158,7 @@ class _PortfolioState extends State<Portfolio> {
                     children: [
                       Text(
                         isVisibleBal ?
-                        userBal.userBalance.toString() :
+                        bal.userBalance.toString() :
                         hidden,
                         style: const TextStyle(
                           color: Colors.white,

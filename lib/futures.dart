@@ -69,7 +69,7 @@ class _FuturesState extends State<Futures> {
             itemBuilder: (context, index) {
             return ListTile(
               title: Center(
-                child: Text(items[index].userId.toString()),
+                child: Text(items[index].userBalance.toString()),
               ),
             );
           });

@@ -1,8 +1,10 @@
 import 'package:crypto_app/Models/portfolio_model.dart';
 import 'package:crypto_app/Models/user_address_model.dart';
+import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/Models/user_payment_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
+import 'package:crypto_app/navigation_menu.dart';
 import 'package:flutter/material.dart';
 
 class Deposit extends StatefulWidget {
@@ -29,11 +31,19 @@ class _DepositState extends State<Deposit> {
   FocusNode focusNodePaymentAmt = FocusNode();
   final db = DatabaseHelper();
   String paymentMethod = "Visa";
+  late UserBalance balance;
 
   @override
   void initState() {
     super.initState();
     db.open();
+    getBalance();
+  }
+
+  getBalance() async {
+    setState(() async {
+      balance = await db.getUserBalance(widget.user?.userId);
+    });
   }
 
   @override
@@ -63,12 +73,13 @@ class _DepositState extends State<Deposit> {
                     children: [
                       // Address 1
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 10),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 10),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: TextFormField(
                           controller: address1,
                           validator: (value) {
@@ -79,24 +90,23 @@ class _DepositState extends State<Deposit> {
                           },
                           focusNode: focusNodeA1,
                           decoration: InputDecoration(
-                            label: const Text("Address 1"),
-                            labelStyle: TextStyle(
-                              color: focusNodeA1.hasFocus
-                              ? Colors.black
-                              : Colors.black
-                            ),
-                            border: InputBorder.none
-                          ),
+                              label: const Text("Address 1"),
+                              labelStyle: TextStyle(
+                                  color: focusNodeA1.hasFocus
+                                      ? Colors.black
+                                      : Colors.black),
+                              border: InputBorder.none),
                         ),
                       ),
                       // Address 2
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 25),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: TextFormField(
                           controller: address2,
                           validator: (value) {
@@ -109,51 +119,48 @@ class _DepositState extends State<Deposit> {
                           },
                           focusNode: focusNodeA2,
                           decoration: InputDecoration(
-                            label: const Text("Address 2"),
-                            labelStyle: TextStyle(
-                              color: focusNodeA2.hasFocus
-                              ? Colors.black
-                              : Colors.black
-                            ),
-                            border: InputBorder.none
-                          ),
+                              label: const Text("Address 2"),
+                              labelStyle: TextStyle(
+                                  color: focusNodeA2.hasFocus
+                                      ? Colors.black
+                                      : Colors.black),
+                              border: InputBorder.none),
                         ),
                       ),
                       // Country
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 25),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton<String>(
-                            value: "Canada",
-                            underline: Container(
-                              height: 2,
-                              color: Colors.grey,
-                            ),
-                            items: const [
-                              DropdownMenuItem<String>(
-                                value: "Canada",
-                                child: Text("Canada")
+                            alignedDropdown: true,
+                            child: DropdownButton<String>(
+                              value: "Canada",
+                              underline: Container(
+                                height: 2,
+                                color: Colors.grey,
                               ),
-                            ],
-                            onChanged: (String? dummy) {},
-                          )
-                        ),
+                              items: const [
+                                DropdownMenuItem<String>(
+                                    value: "Canada", child: Text("Canada")),
+                              ],
+                              onChanged: (String? dummy) {},
+                            )),
                       ),
                       // Province
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 25),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: TextFormField(
                           controller: province,
                           validator: (value) {
@@ -164,24 +171,23 @@ class _DepositState extends State<Deposit> {
                           },
                           focusNode: focusNodeProvince,
                           decoration: InputDecoration(
-                            label: const Text("Province"),
-                            labelStyle: TextStyle(
-                              color: focusNodeProvince.hasFocus
-                              ? Colors.black
-                              : Colors.black
-                            ),
-                            border: InputBorder.none
-                          ),
+                              label: const Text("Province"),
+                              labelStyle: TextStyle(
+                                  color: focusNodeProvince.hasFocus
+                                      ? Colors.black
+                                      : Colors.black),
+                              border: InputBorder.none),
                         ),
                       ),
                       // City
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 25),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: TextFormField(
                           controller: city,
                           validator: (value) {
@@ -192,24 +198,23 @@ class _DepositState extends State<Deposit> {
                           },
                           focusNode: focusNodeCity,
                           decoration: InputDecoration(
-                            label: const Text("City"),
-                            labelStyle: TextStyle(
-                              color: focusNodeCity.hasFocus
-                              ? Colors.black
-                              : Colors.black
-                            ),
-                            border: InputBorder.none
-                          ),
+                              label: const Text("City"),
+                              labelStyle: TextStyle(
+                                  color: focusNodeCity.hasFocus
+                                      ? Colors.black
+                                      : Colors.black),
+                              border: InputBorder.none),
                         ),
                       ),
                       // Zip Code
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 25),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: TextFormField(
                           controller: zipCode,
                           validator: (value) {
@@ -220,63 +225,57 @@ class _DepositState extends State<Deposit> {
                           },
                           focusNode: focusNodeZipCode,
                           decoration: InputDecoration(
-                            label: const Text("Zip Code"),
-                            labelStyle: TextStyle(
-                              color: focusNodeZipCode.hasFocus
-                              ? Colors.black
-                              : Colors.black
-                            ),
-                            border: InputBorder.none
-                          ),
+                              label: const Text("Zip Code"),
+                              labelStyle: TextStyle(
+                                  color: focusNodeZipCode.hasFocus
+                                      ? Colors.black
+                                      : Colors.black),
+                              border: InputBorder.none),
                         ),
                       ),
                       // Payment Method
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 25),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButton<String>(
-                            value: paymentMethod,
-                            underline: Container(
-                              height: 2,
-                              color: Colors.grey,
-                            ),
-                            items: const [
-                              DropdownMenuItem<String>(
-                                value: "Visa",
-                                child: Text("Visa")
+                            alignedDropdown: true,
+                            child: DropdownButton<String>(
+                              value: paymentMethod,
+                              underline: Container(
+                                height: 2,
+                                color: Colors.grey,
                               ),
-                              DropdownMenuItem<String>(
-                                value: "Mastercard",
-                                child: Text("Mastercard")
-                              ),
-                              DropdownMenuItem<String>(
-                                value: "Debit",
-                                child: Text("Debit")
-                              ),
-                            ],
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                paymentMethod = newValue!;
-                              });
-                            },
-                          )
-                        ),
+                              items: const [
+                                DropdownMenuItem<String>(
+                                    value: "Visa", child: Text("Visa")),
+                                DropdownMenuItem<String>(
+                                    value: "Mastercard",
+                                    child: Text("Mastercard")),
+                                DropdownMenuItem<String>(
+                                    value: "Debit", child: Text("Debit")),
+                              ],
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  paymentMethod = newValue!;
+                                });
+                              },
+                            )),
                       ),
                       // Payment Amount
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 25),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white),
                         child: TextFormField(
                           keyboardType: TextInputType.number,
                           controller: paymentAmt,
@@ -290,72 +289,106 @@ class _DepositState extends State<Deposit> {
                           },
                           focusNode: focusNodePaymentAmt,
                           decoration: InputDecoration(
-                            label: const Text("Payment Amount"),
-                            labelStyle: TextStyle(
-                              color: focusNodePaymentAmt.hasFocus
-                              ? Colors.black
-                              : Colors.black
-                            ),
-                            border: InputBorder.none
-                          ),
+                              label: const Text("Payment Amount"),
+                              labelStyle: TextStyle(
+                                  color: focusNodePaymentAmt.hasFocus
+                                      ? Colors.black
+                                      : Colors.black),
+                              border: InputBorder.none),
                         ),
                       ),
                       // Confirm Button
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        margin: const EdgeInsets.only(left: 4, right: 4, top: 25),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        margin:
+                            const EdgeInsets.only(left: 4, right: 4, top: 25),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.black
-                        ),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black),
                         child: TextButton(
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              await db.insertUserAddress(UserAddress(
-                                userId: widget.user?.userId,
-                                address1: address1.text,
-                                address2: address2.text,
-                                country: "Canada",
-                                province: province.text,
-                                city: city.text,
-                                zipCode: zipCode.text
-                              )
-                            ).whenComplete(() async{
-                              await db.insertUserPayment(UserPayment(
-                                userId: widget.user?.userId,
-                                paymentMethod: paymentMethod,
-                                paymentAmt: double.parse(paymentAmt.text.replaceAll(",", "")),
-                                paymentDate: DateTime.now().toIso8601String()
-                              )).whenComplete(() async {
-                                await db.insertIntoPortfolio(PortfolioModel(
-                                  userId: widget.user?.userId,
-                                  coinName: "tether",
-                                  coinAmt: double.parse(paymentAmt.text.replaceAll(",", ""))
-                                )).whenComplete(() {
-                                    showDialog(
-                                      context: context,
-                                      builder: (ctx) => AlertDialog(
-                                        title: const Text("Payment Notification", style: TextStyle(fontSize: 20),),
-                                        content: Text("Payment was successfully placed! ${double.parse(paymentAmt.text.replaceAll(",", ""))} USDT has been added to your account!", style: const TextStyle(color: Colors.grey),),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(ctx);
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text("OK", style: TextStyle(color: Colors.black),)
+                            onPressed: () async {
+                              getBalance();
+                              if (formKey.currentState!.validate()) {
+                                await db
+                                    .insertUserAddress(UserAddress(
+                                        userId: widget.user?.userId,
+                                        address1: address1.text,
+                                        address2: address2.text,
+                                        country: "Canada",
+                                        province: province.text,
+                                        city: city.text,
+                                        zipCode: zipCode.text))
+                                    .whenComplete(() async {
+                                  await db
+                                      .insertUserPayment(UserPayment(
+                                          userId: widget.user?.userId,
+                                          paymentMethod: paymentMethod,
+                                          paymentAmt: double.parse(paymentAmt
+                                              .text
+                                              .replaceAll(",", "")),
+                                          paymentDate:
+                                              DateTime.now().toIso8601String()))
+                                      .whenComplete(() async {
+                                    await db
+                                        .insertIntoPortfolio(PortfolioModel(
+                                            userId: widget.user?.userId,
+                                            coinName: "tether",
+                                            coinAmt: double.parse(paymentAmt
+                                                .text
+                                                .replaceAll(",", ""))))
+                                        .whenComplete(() {
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                          title: const Text(
+                                            "Payment Notification",
+                                            style: TextStyle(fontSize: 20),
                                           ),
-                                        ],
-                                      ),
-                                    );
+                                          content: Text(
+                                            "Payment was successfully placed! ${double.parse(paymentAmt.text.replaceAll(",", ""))} USDT has been added to your account!",
+                                            style: const TextStyle(
+                                                color: Colors.grey),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(ctx).pop();
+                                                  db.insertDepositBalance(
+                                                      widget.user?.userId,
+                                                      balance.userBalance +
+                                                          double.parse(
+                                                              paymentAmt.text
+                                                                  .replaceAll(
+                                                                      ",",
+                                                                      "")));
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              NavigationMenu(
+                                                                user:
+                                                                    widget.user,
+                                                              )));
+                                                },
+                                                child: const Text(
+                                                  "OK",
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                )),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                                  });
                                 });
-                              });
-                            });
-                          }
-                        },
-                          child: const Text("Confirm", style: TextStyle(color: Colors.white),)
-                        ),
+                              }
+                            },
+                            child: const Text(
+                              "Confirm",
+                              style: TextStyle(color: Colors.white),
+                            )),
                       ),
                     ],
                   ),

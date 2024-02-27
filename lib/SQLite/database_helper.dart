@@ -143,6 +143,12 @@ class DatabaseHelper {
     return result.map((e) => PortfolioModel.fromMap(e)).toList();
   }
 
+  Future<List<PortfolioModel>> getSumTether(int? userId) async {
+    final Database db = await open();
+    List<Map<String, Object?>> result = await db.rawQuery("SELECT coinName, SUM(coinAmt) AS totalAmt FROM User_Balance WHERE coinName = 'tether' GROUP BY coinName;");
+    return result.map((e) => PortfolioModel.fromMap(e)).toList();
+  }
+
   // User Address
     Future<int> insertUserAddress(UserAddress address) async {
     final Database db = await open();
