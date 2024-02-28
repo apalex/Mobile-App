@@ -533,40 +533,40 @@ class _RegistrationState extends State<Registration> {
                                         isActive: 1,
                                         permissions: "User"))
                                     .whenComplete(() async {
-                                      await db.createBalance(UserBalance(
-                                        userId: count! + 1,
-                                        userBalance: 0
-                                      )).whenComplete(() {
-                                  showDialog(
-                                      context: context,
-                                      builder: (ctx) => AlertDialog(
-                                            title: const Text(
-                                              "Account Created",
-                                              style: TextStyle(fontSize: 20),
-                                            ),
-                                            content: const Text(
-                                              "Congratulations! You have successfully created an account with Mintless.",
-                                              style:
-                                                  TextStyle(color: Colors.grey),
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () {
-                                                    Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                const Welcome()));
-                                                                Navigator.pop(ctx);
-                                                  },
-                                                  child: const Text(
-                                                    "OK",
-                                                    style: TextStyle(
-                                                        color: Colors.black),
-                                                  ))
-                                            ],
-                                          ));
-                                      });
+                                  await db
+                                      .createBalance(UserBalance(
+                                          userId: count! + 1, userBalance: 0))
+                                      .whenComplete(() {
+                                    showDialog(
+                                        context: context,
+                                        builder: (ctx) => AlertDialog(
+                                              title: const Text(
+                                                "Account Created",
+                                                style: TextStyle(fontSize: 20),
+                                              ),
+                                              content: const Text(
+                                                "Congratulations! You have successfully created an account with Mintless.",
+                                                style: TextStyle(
+                                                    color: Colors.grey),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(ctx).pop();
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  const Welcome()));
+                                                    },
+                                                    child: const Text(
+                                                      "OK",
+                                                      style: TextStyle(
+                                                          color: Colors.black),
+                                                    ))
+                                              ],
+                                            ));
+                                  });
                                 });
                               }
                             },

@@ -37,7 +37,7 @@ class _PortfolioState extends State<Portfolio> {
     setState(() async {
       bal = await db.getUserBalance(widget.user?.userId);
     });
-  }  
+  }
 
   Future<List<PortfolioModel>> getPortfolio() {
     return handler.getPortolio(widget.user?.userId);
@@ -76,21 +76,30 @@ class _PortfolioState extends State<Portfolio> {
                   child: Column(
                     children: [
                       Expanded(
-                        child: ListView.builder(
-                          itemCount: 12,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              textColor: Colors.black,
-                              leading: Image.network("https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1696501400"),
-                              title: Text("Bitcoin"),
-                              subtitle: Text("1 BTC"),
-                              trailing: Text("60000 USDT"),
-                              onTap: () {
-                                // portfolio_coin_view.dart
-                              },
-                            );
-                          }
-                        ),
+                        child: FutureBuilder<List<PortfolioModel>>(
+                          future: pm,
+                          builder: (BuildContext context, AsyncSnapshot <List<PortfolioModel>> snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                              return const Center(child: Text("None"),);
+                            } else if (snapshot.hasError) {
+                              return Text(snapshot.hasError.toString());
+                            } else {
+                              final coins = snapshot.data ?? <PortfolioModel>[];
+                              return ListView.builder(
+                                itemCount: coins.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    textColor: Colors.black,
+                                    title: Text(coins[index].coinName.capitalize(), style: const TextStyle(fontSize: 18),),
+                                    trailing: Text(coins[index].coinAmt.toString(), style: const TextStyle(fontSize: 18),),
+                                  );
+                                },
+                              );
+                            }
+                          },
+                        )
                       ),
                     ],
                   ),
@@ -277,5 +286,11 @@ class _PortfolioState extends State<Portfolio> {
         ),
       ),
     );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
 }

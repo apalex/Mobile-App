@@ -35,15 +35,51 @@ class _DepositState extends State<Deposit> {
 
   @override
   void initState() {
-    super.initState();
     db.open();
     getBalance();
+    super.initState();
   }
 
   getBalance() async {
     setState(() async {
       balance = await db.getUserBalance(widget.user?.userId);
     });
+  }
+
+  Future<dynamic> successPopup(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          "Payment Notification",
+          style: TextStyle(fontSize: 20),
+        ),
+        content: Text(
+          "Payment was successfully placed! ${double.parse(paymentAmt.text.replaceAll(",", ""))} USDT has been added to your account!",
+          style: const TextStyle(color: Colors.grey),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                db.insertDepositBalance(
+                    widget.user?.userId,
+                    balance.userBalance +
+                        double.parse(paymentAmt.text.replaceAll(",", "")));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NavigationMenu(
+                              user: widget.user,
+                            )));
+              },
+              child: const Text(
+                "OK",
+                style: TextStyle(color: Colors.black),
+              )),
+        ],
+      ),
+    );
   }
 
   @override
@@ -331,56 +367,35 @@ class _DepositState extends State<Deposit> {
                                           paymentDate:
                                               DateTime.now().toIso8601String()))
                                       .whenComplete(() async {
-                                    await db
-                                        .insertIntoPortfolio(PortfolioModel(
-                                            userId: widget.user?.userId,
-                                            coinName: "tether",
-                                            coinAmt: double.parse(paymentAmt
-                                                .text
-                                                .replaceAll(",", ""))))
-                                        .whenComplete(() {
-                                      showDialog(
-                                        context: context,
-                                        builder: (ctx) => AlertDialog(
-                                          title: const Text(
-                                            "Payment Notification",
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                          content: Text(
-                                            "Payment was successfully placed! ${double.parse(paymentAmt.text.replaceAll(",", ""))} USDT has been added to your account!",
-                                            style: const TextStyle(
-                                                color: Colors.grey),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(ctx).pop();
-                                                  db.insertDepositBalance(
-                                                      widget.user?.userId,
-                                                      balance.userBalance +
-                                                          double.parse(
-                                                              paymentAmt.text
-                                                                  .replaceAll(
-                                                                      ",",
-                                                                      "")));
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              NavigationMenu(
-                                                                user:
-                                                                    widget.user,
-                                                              )));
-                                                },
-                                                child: const Text(
-                                                  "OK",
-                                                  style: TextStyle(
-                                                      color: Colors.black),
-                                                )),
-                                          ],
-                                        ),
-                                      );
-                                    });
+                                    var response = await db.isCoinOwned(
+                                        widget.user?.userId, 'tether');
+                                    if (response == true) {
+                                      PortfolioModel pm = await db.getCoinAmt(
+                                          widget.user?.userId, 'tether');
+                                      await db
+                                          .editCoinPortfolio(
+                                              widget.user?.userId,
+                                              'tether',
+                                              pm.coinAmt +
+                                                  double.parse(paymentAmt.text
+                                                      .replaceAll(',', "")))
+                                          .whenComplete(() {
+                                        successPopup(context);
+                                      });
+                                    } else {
+                                      await db
+                                          .insertNewCoinPortfolio(
+                                              PortfolioModel(
+                                                  coinName: 'tether',
+                                                  coinAmt: double.parse(
+                                                      paymentAmt
+                                                          .text
+                                                          .replaceAll(
+                                                              ',', ""))))
+                                          .whenComplete(() {
+                                        successPopup(context);
+                                      });
+                                    }
                                   });
                                 });
                               }

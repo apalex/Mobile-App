@@ -126,9 +126,30 @@ class DatabaseHelper {
   }
 
   // Portfolio
-  Future<int> insertIntoPortfolio(PortfolioModel portfolio) async {
+  Future<int> insertNewCoinPortfolio(PortfolioModel portfolio) async {
     final Database db = await open();
     return db.insert('User_Portfolio', portfolio.toMap());
+  }
+
+  Future<int> editCoinPortfolio(int? userId, String coinName, double coinAmt) async {
+    final Database db = await open();
+    return db.rawUpdate('UPDATE User_Portfolio SET coinAmt = ? WHERE userId = ? AND coinName = ?', [coinAmt, userId, coinName]);
+  }
+
+  Future<bool> isCoinOwned(int? userId, String coinName) async {
+    final Database db = await open();
+    var result = await db.rawQuery("SELECT * FROM User_Portfolio WHERE coinName = '$coinName' AND userId = $userId;");
+    if (result.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future<PortfolioModel> getCoinAmt(int? userId, String coinName) async {
+    final Database db = await open();
+    var result = await db.rawQuery("SELECT * FROM User_Portfolio WHERE userId = $userId AND coinName = '$coinName';");
+    return PortfolioModel.fromMap(result.first);
   }
 
   Future<List<PortfolioModel>> getAllPortfolios() async {
@@ -140,12 +161,6 @@ class DatabaseHelper {
   Future<List<PortfolioModel>> getPortolio(int? userId) async {
     final Database db = await open();
     List<Map<String, Object?>> result = await db.query("User_Portfolio", where: "userId = ?", whereArgs: [userId]);
-    return result.map((e) => PortfolioModel.fromMap(e)).toList();
-  }
-
-  Future<List<PortfolioModel>> getSumTether(int? userId) async {
-    final Database db = await open();
-    List<Map<String, Object?>> result = await db.rawQuery("SELECT coinName, SUM(coinAmt) AS totalAmt FROM User_Balance WHERE coinName = 'tether' GROUP BY coinName;");
     return result.map((e) => PortfolioModel.fromMap(e)).toList();
   }
 

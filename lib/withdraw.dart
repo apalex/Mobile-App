@@ -2,6 +2,7 @@ import 'package:crypto_app/Models/portfolio_model.dart';
 import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
+import 'package:crypto_app/navigation_menu.dart';
 import 'package:flutter/material.dart';
 
 class Withdraw extends StatefulWidget {
@@ -16,31 +17,44 @@ class _WithdrawState extends State<Withdraw> {
   final withdrawalAmt = TextEditingController();
   FocusNode focusNodeWithdraw = FocusNode();
   final formKey = GlobalKey<FormState>();
+  bool isVisible = false;
   final db = DatabaseHelper();
-  late DatabaseHelper handler;
-  late UserBalance balance;
-  late PortfolioModel portfolio;
-  late Future<List<PortfolioModel>> currentTether;
 
   @override
   void initState() {
-    handler = DatabaseHelper();
-    currentTether = handler.getSumTether(widget.user?.userId);
-    getBalance();
-    handler.open().whenComplete(() {
-      currentTether = getSumTether();
-    });
     super.initState();
   }
 
-  getBalance() async {
-    setState(() async {
-      balance = await db.getUserBalance(widget.user?.userId);
-    });
-  }
-
-  Future<List<PortfolioModel>> getSumTether() {
-    return handler.getSumTether(widget.user?.userId);
+  Future<dynamic> successPopup(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          "Withdrawal Notification",
+          style: TextStyle(fontSize: 20),
+        ),
+        content: Text(
+          "Withdrawal was successfully made! ${double.parse(withdrawalAmt.text.replaceAll(",", ""))} USDT has been withdrawed from your account!",
+          style: const TextStyle(color: Colors.grey),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NavigationMenu(
+                              user: widget.user,
+                            )));
+              },
+              child: const Text(
+                "OK",
+                style: TextStyle(color: Colors.black),
+              )),
+        ],
+      ),
+    );
   }
 
   @override
@@ -68,8 +82,8 @@ class _WithdrawState extends State<Withdraw> {
                   key: formKey,
                   child: Column(
                     children: [
-                      const Text("Minimum Withdrawable amount is \$10 USDT", style: TextStyle(fontSize: 15),),
-                      Text(""),
+                      const Text("Minimum Withdrawable amount is 10 USDT", style: TextStyle(fontSize: 15),),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         margin: const EdgeInsets.only(left: 4, right: 4, top: 10),
@@ -100,6 +114,15 @@ class _WithdrawState extends State<Withdraw> {
                           ),
                         ),
                       ),
+                      // If not enough USDT
+                      Visibility(
+                        visible: isVisible,
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          child: const Text("Not enough USDT owned", style: TextStyle(color: Colors.red),),
+                        )
+                      ),
+                      // Confirm Button
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 4),
@@ -111,9 +134,20 @@ class _WithdrawState extends State<Withdraw> {
                             color: Colors.black),
                         child: TextButton(
                             onPressed: () async {
-                              getBalance();
                               if (formKey.currentState!.validate()) {
-
+                                PortfolioModel usdt = await db.getCoinAmt(widget.user?.userId, 'tether');
+                                if (double.parse(withdrawalAmt.text.replaceAll(",", "")) > usdt.coinAmt) {
+                                  setState(() {
+                                    isVisible = true;
+                                  });
+                                } else {
+                                  await db.editCoinPortfolio(widget.user?.userId, 'tether', usdt.coinAmt - double.parse(withdrawalAmt.text.replaceAll(",", ""))).whenComplete(() async {
+                                    UserBalance balance = await db.getUserBalance(widget.user?.userId);
+                                    await db.insertDepositBalance(widget.user?.userId, balance.userBalance - double.parse(withdrawalAmt.text.replaceAll(",", ""))).whenComplete(() {
+                                      successPopup(context);
+                                    });
+                                  });
+                                }
                               }
                             },
                             child: const Text(

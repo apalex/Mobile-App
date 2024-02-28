@@ -1,3 +1,4 @@
+import 'package:http/http.dart' as http;
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/Models/user_activity_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
@@ -21,6 +22,7 @@ class _NotificationsState extends State<Notifications> {
   void initState() {
     handler = DatabaseHelper();
     ua = handler.getUserActivity(widget.user?.userId);
+    getIP();
     handler.open().whenComplete(() {
       ua = getUserActivity();
     });
@@ -29,6 +31,14 @@ class _NotificationsState extends State<Notifications> {
 
   Future<List<UserActivity>> getUserActivity() {
     return handler.getUserActivity(widget.user?.userId);
+  }
+
+  var ip;
+  Future getIP() async {
+    var response = await http.get(Uri.parse("https://api.ipify.org/"));
+    setState(() {
+      ip = response.body;
+    });
   }
 
   @override

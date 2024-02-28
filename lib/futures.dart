@@ -18,26 +18,26 @@ class Futures extends StatefulWidget {
 
 class _FuturesState extends State<Futures> {
   late DatabaseHelper handler;
-  late Future<List<UserBalance>> ua;
+  late Future<List<PortfolioModel>> ua;
   final db = DatabaseHelper();
 
   @override
   void initState() {
     handler = DatabaseHelper();
-    ua = handler.getAllBalances();
+    ua = handler.getAllPortfolios();
     handler.open().whenComplete(() {
-      ua = getAllBalances();
+      ua = getAllPortfolios();
     });
     super.initState();
   }
 
-  Future<List<UserBalance>> getAllBalances() {
-    return handler.getAllBalances();
-  }
-
-  // Future<List<PortfolioModel>> getAllPortfolios() {
-  //   return handler.getAllPortfolios();
+  // Future<List<UserBalance>> getAllBalances() {
+  //   return handler.getAllBalances();
   // }
+
+  Future<List<PortfolioModel>> getAllPortfolios() {
+    return handler.getAllPortfolios();
+  }
 
   // Future<List<UserPayment>> getAllPayments() {
   //   return handler.getAllPayments();
@@ -53,9 +53,9 @@ class _FuturesState extends State<Futures> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<UserBalance>>(
+    return FutureBuilder<List<PortfolioModel>>(
       future: ua,
-      builder: (BuildContext context, AsyncSnapshot <List<UserBalance>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot <List<PortfolioModel>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.hasData && snapshot.data!.isEmpty) {
@@ -63,13 +63,13 @@ class _FuturesState extends State<Futures> {
         } else if (snapshot.hasError) {
           return Text(snapshot.error.toString());
         } else {
-          final items = snapshot.data ?? <UserBalance>[];
+          final items = snapshot.data ?? <PortfolioModel>[];
           return ListView.builder(
             itemCount: items.length,
             itemBuilder: (context, index) {
             return ListTile(
               title: Center(
-                child: Text(items[index].userBalance.toString()),
+                child: Text(items[index].coinAmt.toString()),
               ),
             );
           });
