@@ -47,14 +47,14 @@ class _ProfileState extends State<Profile> {
         child: const Icon(Icons.arrow_back_sharp),
       ),
       actions: [
-        IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.dark_mode_outlined,
-              size: 26,
-            )
-            // Icons.dark_mode_sharp
-            )
+        // IconButton(
+        //     onPressed: () {},
+        //     icon: const Icon(
+        //       Icons.dark_mode_outlined,
+        //       size: 26,
+        //     )
+        //     Icons.dark_mode_sharp
+        //     )
       ],
     );
   }

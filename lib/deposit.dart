@@ -364,8 +364,8 @@ class _DepositState extends State<Deposit> {
                                           paymentAmt: double.parse(paymentAmt
                                               .text
                                               .replaceAll(",", "")),
-                                          paymentDate:
-                                              DateTime.now().toIso8601String()))
+                                          paymentDate: DateTime.now().toIso8601String(),
+                                          action: 'Deposit'))
                                       .whenComplete(() async {
                                     var response = await db.isCoinOwned(
                                         widget.user?.userId, 'tether');

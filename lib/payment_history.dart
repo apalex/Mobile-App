@@ -1,34 +1,34 @@
 import 'package:crypto_app/Models/user_model.dart';
-import 'package:crypto_app/Models/user_activity_model.dart';
+import 'package:crypto_app/Models/user_payment_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Notifications extends StatefulWidget {
+class PaymentHistory extends StatefulWidget {
   final User? user;
-  const Notifications({super.key, this.user});
+  const PaymentHistory({super.key, this.user});
 
   @override
-  State<Notifications> createState() => _NotificationsState();
+  State<PaymentHistory> createState() => _PaymentHistoryState();
 }
 
-class _NotificationsState extends State<Notifications> {
+class _PaymentHistoryState extends State<PaymentHistory> {
   late DatabaseHelper handler;
-  late Future<List<UserActivity>> ua;
+  late Future<List<UserPayment>> up;
   final db = DatabaseHelper();
 
   @override
   void initState() {
     handler = DatabaseHelper();
-    ua = handler.getUserActivity(widget.user?.userId);
+    up = handler.getUserPayments(widget.user?.userId);
     handler.open().whenComplete(() {
-      ua = getUserActivity();
+      up = getUserPayments();
     });
     super.initState();
   }
 
-  Future<List<UserActivity>> getUserActivity() {
-    return handler.getUserActivity(widget.user?.userId);
+  Future<List<UserPayment>> getUserPayments() {
+    return handler.getUserPayments(widget.user?.userId);
   }
 
   @override
@@ -43,21 +43,21 @@ class _NotificationsState extends State<Notifications> {
             },
             child: const Icon(Icons.arrow_back_sharp),
           ),
-          title: const Text("Notifications"),
+          title: const Text("Transaction History"),
           centerTitle: true,
         ),
-        body: FutureBuilder<List<UserActivity>>(
-            future: ua,
+        body: FutureBuilder<List<UserPayment>>(
+            future: up,
             builder: (BuildContext context,
-                AsyncSnapshot<List<UserActivity>> snapshot) {
+                AsyncSnapshot<List<UserPayment>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-                return const Center(child: Text("No data"));
+                return const Center(child: Text("Nothing to see here..."));
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               } else {
-                final items = snapshot.data ?? <UserActivity>[];
+                final items = snapshot.data ?? <UserPayment>[];
                 return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
@@ -65,7 +65,7 @@ class _NotificationsState extends State<Notifications> {
                         title: Center(
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.65,
-                            height: MediaQuery.of(context).size.height * 0.13,
+                            height: MediaQuery.of(context).size.height * 0.16,
                             margin: EdgeInsets.only(
                                 bottom:
                                     MediaQuery.of(context).size.height * 0.02),
@@ -77,24 +77,29 @@ class _NotificationsState extends State<Notifications> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
-                                const Text(
-                                  "New User Login",
-                                  style: TextStyle(
+                                Text(
+                                  items[index].action,
+                                  style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
                                 ),
                                 SizedBox(
                                   height:
-                                      MediaQuery.of(context).size.width * 0.02,
+                                      MediaQuery.of(context).size.height * 0.01,
                                 ),
-                                Text(DateFormat('yyyy-MM-dd hh:mm').format(
-                                    DateTime.parse(
-                                        items[index].activityTimeStamp))),
+                                Text(items[index].paymentMethod),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
-                                Text("IP: ${items[index].ipAddress}")
+                                Text(
+                                    "${items[index].paymentAmt.toString()} USDT"),
+                                SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                                Text(DateFormat('yyyy-MM-dd hh:mm').format(
+                                    DateTime.parse(items[index].paymentDate))),
                               ],
                             ),
                           ),

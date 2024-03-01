@@ -3,6 +3,7 @@ import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/deposit.dart';
+import 'package:crypto_app/payment_history.dart';
 import 'package:crypto_app/withdraw.dart';
 import 'package:flutter/material.dart';
 
@@ -72,7 +73,7 @@ class _PortfolioState extends State<Portfolio> {
               SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
               SingleChildScrollView(
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.4545,
+                  height: MediaQuery.of(context).size.height * 0.45,
                   child: Column(
                     children: [
                       Expanded(
@@ -259,7 +260,12 @@ class _PortfolioState extends State<Portfolio> {
                         height: MediaQuery.of(context).size.height * 0.04,
                         child: TextButton(
                           onPressed: () {
-                        
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PaymentHistory(user: widget.user,)
+                              )
+                            );
                           },
                           child: Row(
                             children: [

@@ -4,6 +4,7 @@ class UserPayment {
   final String paymentMethod;
   final double paymentAmt;
   final String paymentDate;
+  final String action;
 
   const UserPayment({
     this.userPaymentId,
@@ -11,6 +12,7 @@ class UserPayment {
     required this.paymentMethod,
     required this.paymentAmt,
     required this.paymentDate,
+    required this.action
   });
 
   factory UserPayment.fromMap(Map<String, dynamic> json) => UserPayment(
@@ -18,7 +20,8 @@ class UserPayment {
     userId: json['userId'],
     paymentMethod: json['paymentMethod'],
     paymentAmt: json['paymentAmt'],
-    paymentDate: json['paymentDate']
+    paymentDate: json['paymentDate'],
+    action: json['action']
   );
   
   Map<String, dynamic> toMap() => {
@@ -26,7 +29,8 @@ class UserPayment {
     'userId': userId,
     'paymentMethod': paymentMethod,
     'paymentAmt': paymentAmt,
-    'paymentDate': paymentDate
+    'paymentDate': paymentDate,
+    'action': action
   };  
 
 }

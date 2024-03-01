@@ -1,6 +1,7 @@
 import 'package:crypto_app/Models/portfolio_model.dart';
 import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/Models/user_payment_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/navigation_menu.dart';
 import 'package:flutter/material.dart';
@@ -143,8 +144,16 @@ class _WithdrawState extends State<Withdraw> {
                                 } else {
                                   await db.editCoinPortfolio(widget.user?.userId, 'tether', usdt.coinAmt - double.parse(withdrawalAmt.text.replaceAll(",", ""))).whenComplete(() async {
                                     UserBalance balance = await db.getUserBalance(widget.user?.userId);
-                                    await db.insertDepositBalance(widget.user?.userId, balance.userBalance - double.parse(withdrawalAmt.text.replaceAll(",", ""))).whenComplete(() {
-                                      successPopup(context);
+                                    await db.insertDepositBalance(widget.user?.userId, balance.userBalance - double.parse(withdrawalAmt.text.replaceAll(",", ""))).whenComplete(() async {
+                                      await db.insertUserPayment(UserPayment(
+                                        userId: widget.user?.userId,
+                                        paymentMethod: 'Bank',
+                                        paymentAmt: double.parse(withdrawalAmt.text.replaceAll(",", "")),
+                                        paymentDate: DateTime.now().toIso8601String(),
+                                        action: 'Withdrawal')
+                                        ).whenComplete(() {
+                                          successPopup(context);
+                                        });
                                     });
                                   });
                                 }

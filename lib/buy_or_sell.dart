@@ -36,15 +36,15 @@ class _BuyOrSellState extends State<BuyOrSell> {
         body: Container(
           color: const Color.fromARGB(255, 246, 244, 244),
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(widget.coin?.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 1),),
-                Text("Current ${widget.coin.name} Owned: 0"),
-                Text("USDT Available: 0.00", style: TextStyle(fontSize: 16, color: Colors.grey),),
-                Form(
-                  key: formKey,
-                  child: Container(
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(widget.coin?.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 1),),
+                  Text("Current ${widget.coin.name} Owned: 0"),
+                  Text("USDT Available: 0.00", style: TextStyle(fontSize: 16, color: Colors.grey),),
+                  Container(
                     height: MediaQuery.of(context).size.height * 0.07,
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, right: MediaQuery.of(context).size.width * 0.05, bottom: 10, top: 20),
@@ -72,9 +72,25 @@ class _BuyOrSellState extends State<BuyOrSell> {
                         icon: const Icon(Icons.attach_money_sharp, color: Colors.black, size: 30,)
                       ),
                     ),
+                  ),
+                  // Button
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, right: MediaQuery.of(context).size.width * 0.05, bottom: 10, top: 20),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.black
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        
+                      },
+                      child: Text(widget.action.toString(), style: const  TextStyle(color: Colors.white),)
+                    ),
                   )
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

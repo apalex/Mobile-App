@@ -106,22 +106,22 @@ class _CoinState extends State<Coin> {
       ),
       title: Text(widget.coin.symbol.toUpperCase()),
       actions: [
-        IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.star_border,
-              size: 28,
-            )
-            // Icons.star
-            ),
-        IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.notification_add_outlined,
-              size: 28,
-            )
-            // Icons.notifications
-            ),
+        // IconButton(
+        //     onPressed: () {},
+        //     icon: Icon(
+        //       Icons.star_border,
+        //       size: 28,
+        //     )
+        //     Icons.star
+        //     ),
+        // IconButton(
+        //     onPressed: () {},
+        //     icon: Icon(
+        //       Icons.notification_add_outlined,
+        //       size: 28,
+        //     )
+        //     Icons.notifications
+        //     ),
       ],
     );
   }
