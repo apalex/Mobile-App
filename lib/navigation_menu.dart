@@ -1,6 +1,5 @@
 import 'package:crypto_app/home.dart';
 import 'package:crypto_app/markets.dart';
-import 'package:crypto_app/trade.dart';
 import 'package:crypto_app/futures.dart';
 import 'package:crypto_app/portfolio.dart';
 import 'package:crypto_app/Models/user_model.dart';
@@ -17,13 +16,12 @@ class NavigationMenu extends StatefulWidget {
 class _NavigationMenuState extends State<NavigationMenu> {
   int currentIndex = 0;
   late Home homeScreen = Home(user: widget.user,);
-  late Futures futuresScreen = Futures(user: widget.user,);
   late Markets marketsScreen = Markets(user: widget.user,);
+  late Futures futuresScreen = Futures(user: widget.user,);
   late Portfolio portfolioScreen = Portfolio(user: widget.user,);
   late final screens = [
     homeScreen,
     marketsScreen,
-    Trade(),
     futuresScreen,
     portfolioScreen
   ];
@@ -31,7 +29,9 @@ class _NavigationMenuState extends State<NavigationMenu> {
   @override
   void initState() {
     homeScreen = Home(user: widget.user,);
+    marketsScreen = Markets(user: widget.user,);
     futuresScreen = Futures(user: widget.user,);
+    portfolioScreen = Portfolio(user: widget.user,);
     super.initState();
   }
 
@@ -58,11 +58,6 @@ class _NavigationMenuState extends State<NavigationMenu> {
             NavigationDestination(
               icon: Icon(Icons.bar_chart_sharp),
               label: "Markets"
-            ),
-            // Trade
-            NavigationDestination(
-              icon: Icon(Icons.compare_arrows_sharp),
-              label: "Trade"
             ),
             // Futures
             NavigationDestination(

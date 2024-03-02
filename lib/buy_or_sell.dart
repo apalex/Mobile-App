@@ -1,12 +1,16 @@
+import 'package:crypto_app/Models/portfolio_model.dart';
+import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class BuyOrSell extends StatefulWidget {
   final User? user;
   final String? action;
+  // ignore: prefer_typing_uninitialized_variables
   var coin;
-  BuyOrSell({this.user, this.action, this.coin});
+  BuyOrSell({super.key, this.user, this.action, this.coin});
 
   @override
   State<BuyOrSell> createState() => _BuyOrSellState();
@@ -17,6 +21,14 @@ class _BuyOrSellState extends State<BuyOrSell> {
   final formKey = GlobalKey<FormState>();
   final focusNodeSelect = FocusNode();
   final db = DatabaseHelper();
+  late PortfolioModel pm;
+  bool isVisible = false;
+
+  @override
+  void initState() {
+    db.open();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +53,15 @@ class _BuyOrSellState extends State<BuyOrSell> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(widget.coin?.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 1),),
-                  Text("Current ${widget.coin.name} Owned: 0"),
-                  Text("USDT Available: 0.00", style: TextStyle(fontSize: 16, color: Colors.grey),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.05, child: Image.network("${widget.coin.image}")),
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
+                      Text(widget.coin?.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 1),),
+                    ],
+                  ),
+                  // User Input
                   Container(
                     height: MediaQuery.of(context).size.height * 0.07,
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -58,6 +76,8 @@ class _BuyOrSellState extends State<BuyOrSell> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Please Select a valid amount";
+                        } else if (double.parse(value) <= 0) {
+                          return "Please enter an amount greater than 0";
                         }
                         return null;
                       },
@@ -73,6 +93,14 @@ class _BuyOrSellState extends State<BuyOrSell> {
                       ),
                     ),
                   ),
+                  // If not enough USDT
+                  Visibility(
+                    visible: isVisible,
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: Text(widget.action == "Buy" ? "Insufficient USDT in balance" : "Insufficient ${widget.coin.name.toString()} in portfolio", style: const TextStyle(color: Colors.red),),
+                    )
+                  ),
                   // Button
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -83,8 +111,24 @@ class _BuyOrSellState extends State<BuyOrSell> {
                       color: Colors.black
                     ),
                     child: TextButton(
-                      onPressed: () {
-                        
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          PortfolioModel usdt = await db.getCoinAmt(widget.user?.userId, 'tether');
+                          // Buy
+                          if (widget.action.toString() == "Buy") {
+                            if (double.parse(amount.text.replaceAll(",", "")) > usdt.coinAmt) {
+                              setState(() {
+                                isVisible = true;
+                              });
+                            } else {
+
+                            }
+                          }
+                          // Sell
+                          else {
+
+                          }
+                        }
                       },
                       child: Text(widget.action.toString(), style: const  TextStyle(color: Colors.white),)
                     ),

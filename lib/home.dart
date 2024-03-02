@@ -125,29 +125,6 @@ class _HomeState extends State<Home> {
             MediaQuery.of(context).padding.bottom,
         child: Column(
           children: [
-    // FutureBuilder<List<User>>(
-    //   future: users,
-    //   builder: (BuildContext context, AsyncSnapshot <List<User>> snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return const CircularProgressIndicator();
-    //     } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-    //       return const Center(child: Text("No data"));
-    //     } else if (snapshot.hasError) {
-    //       return Text(snapshot.error.toString());
-    //     } else {
-    //       final items = snapshot.data ?? <User>[];
-    //       return ListView.builder(
-    //         itemCount: items.length,
-    //         itemBuilder: (context, index) {
-    //         return ListTile(
-    //           title: Center(
-    //             child: Text('${items[index].username}'),
-    //           ),
-    //         );
-    //       });
-    //     }
-    //   }
-    // );
             // Carousel
             CarouselSlider(
                 items: imgList
@@ -233,29 +210,6 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-    // FutureBuilder<List<User>>(
-    //   future: users,
-    //   builder: (BuildContext context, AsyncSnapshot <List<User>> snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.waiting) {
-    //       return const CircularProgressIndicator();
-    //     } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-    //       return const Center(child: Text("No data"));
-    //     } else if (snapshot.hasError) {
-    //       return Text(snapshot.error.toString());
-    //     } else {
-    //       final items = snapshot.data ?? <User>[];
-    //       return ListView.builder(
-    //         itemCount: items.length,
-    //         itemBuilder: (context, index) {
-    //         return ListTile(
-    //           title: Center(
-    //             child: Text('${items[index].username}'),
-    //           ),
-    //         );
-    //       });
-    //     }
-    //   }
-    // );
   }
 
   @override

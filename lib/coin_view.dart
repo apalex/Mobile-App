@@ -7,10 +7,12 @@ import 'dart:convert';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class Coin extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   var coin;
   final User? user;
-  Coin({this.coin, this.user});
+  Coin({super.key, this.coin, this.user});
 
   @override
   State<Coin> createState() => _CoinState();
