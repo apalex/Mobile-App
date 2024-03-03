@@ -116,7 +116,7 @@ class _MarketsState extends State<Markets> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Coin(coin: coinMarket![index],)
+                        builder: (context) => Coin(coin: coinMarket![index], user: widget.user,)
                       )
                     );
                   },

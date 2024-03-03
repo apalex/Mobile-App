@@ -1,10 +1,12 @@
 import 'package:chart_sparkline/chart_sparkline.dart';
+import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/coin_view.dart';
 import 'package:flutter/material.dart';
 
 class RecommendedCoin extends StatelessWidget {
   var coin;
-  RecommendedCoin({this.coin});
+  final User? user;
+  RecommendedCoin({this.coin, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,7 @@ class RecommendedCoin extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Coin(coin: coin)
+            builder: (context) => Coin(coin: coin, user: user,)
           )
         );
       },

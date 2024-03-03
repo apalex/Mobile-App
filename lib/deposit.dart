@@ -386,6 +386,7 @@ class _DepositState extends State<Deposit> {
                                       await db
                                           .insertNewCoinPortfolio(
                                               PortfolioModel(
+                                                userId: widget.user?.userId,
                                                   coinName: 'tether',
                                                   coinAmt: double.parse(
                                                       paymentAmt

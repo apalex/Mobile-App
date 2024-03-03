@@ -3,6 +3,7 @@ import 'package:crypto_app/Models/user_activity_model.dart';
 import 'package:crypto_app/Models/user_address_model.dart';
 import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_payment_model.dart';
+import 'package:crypto_app/Models/user_transfers.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:crypto_app/Models/user_model.dart';
@@ -195,6 +196,10 @@ class DatabaseHelper {
   }
 
   // User Transfers
+  Future<int> insertUserTransfer(UserTransfers userTransfer) async {
+    final Database db = await open();
+    return db.insert('User_Transfers', userTransfer.toMap());
+  }
 
   // User Balance
   Future<int> createBalance(UserBalance userBalance) async {

@@ -170,7 +170,7 @@ class _HomeState extends State<Home> {
                           scrollDirection: Axis.horizontal,
                           itemCount: 12,
                           itemBuilder: (context, index) {
-                            return FeaturedCoin(coin: coinMarket![index]);
+                            return FeaturedCoin(coin: coinMarket![index], user: widget.user);
                           }),
             ),
             const Row(
@@ -203,6 +203,7 @@ class _HomeState extends State<Home> {
                           itemBuilder: (context, index) {
                             return RecommendedCoin(
                               coin: coinMarket![index],
+                              user: widget.user,
                             );
                           }),
             ),

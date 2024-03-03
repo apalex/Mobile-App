@@ -1,9 +1,11 @@
+import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/coin_view.dart';
 
 class FeaturedCoin extends StatelessWidget {
   var coin;
-  FeaturedCoin({this.coin});
+  final User? user;
+  FeaturedCoin({this.coin, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +14,7 @@ class FeaturedCoin extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Coin(coin: coin,)
+            builder: (context) => Coin(coin: coin, user: user,)
           ),
         );
       },

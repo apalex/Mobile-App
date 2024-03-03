@@ -1,6 +1,7 @@
 import 'package:crypto_app/Models/portfolio_model.dart';
 import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/Models/user_transfers.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +11,8 @@ class BuyOrSell extends StatefulWidget {
   final String? action;
   // ignore: prefer_typing_uninitialized_variables
   var coin;
-  BuyOrSell({super.key, this.user, this.action, this.coin});
+  // ignore: use_key_in_widget_constructors
+  BuyOrSell({this.user, this.action, this.coin});
 
   @override
   State<BuyOrSell> createState() => _BuyOrSellState();
@@ -19,7 +21,7 @@ class BuyOrSell extends StatefulWidget {
 class _BuyOrSellState extends State<BuyOrSell> {
   final amount = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  final focusNodeSelect = FocusNode();
+  FocusNode focusNodeSelect = FocusNode();
   final db = DatabaseHelper();
   late PortfolioModel pm;
   bool isVisible = false;
@@ -28,6 +30,32 @@ class _BuyOrSellState extends State<BuyOrSell> {
   void initState() {
     db.open();
     super.initState();
+  }
+
+  Future<dynamic> successPopup(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text(
+          "Payment Notification",
+          style: TextStyle(fontSize: 20),
+        ),
+        content: const Text(
+          "Order was successfully placed!",
+          style: TextStyle(color: Colors.grey),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: const Text(
+                "OK",
+                style: TextStyle(color: Colors.black),
+              )),
+        ],
+      ),
+    );
   }
 
   @override
@@ -115,13 +143,41 @@ class _BuyOrSellState extends State<BuyOrSell> {
                         if (formKey.currentState!.validate()) {
                           PortfolioModel usdt = await db.getCoinAmt(widget.user?.userId, 'tether');
                           // Buy
-                          if (widget.action.toString() == "Buy") {
-                            if (double.parse(amount.text.replaceAll(",", "")) > usdt.coinAmt) {
+                          if (widget.action == "Buy") {
+                            if (usdt.coinAmt < widget.coin.currentPrice * double.parse(amount.text.replaceAll(",", ""))) {
                               setState(() {
                                 isVisible = true;
                               });
                             } else {
-
+                              // Remove Tether
+                              await db.editCoinPortfolio(widget.user?.userId, 'tether', usdt.coinAmt - widget.coin.currentPrice * double.parse(amount.text.replaceAll(",", ""))).whenComplete(() async {
+                                  // Add/Edit Coin to Portfolio
+                                  var response = await db.isCoinOwned(widget.user?.userId, widget.coin.id);
+                                  if (response == true) {
+                                    // If Coin is Owned
+                                    PortfolioModel pm = await db.getCoinAmt(widget.user?.userId, widget.coin.id);
+                                    await db.editCoinPortfolio(widget.user?.userId, widget.coin.id, pm.coinAmt + double.parse(amount.text.replaceAll(",", ""))).whenComplete(() {
+                                      // Add Transfer History (Forgot)
+                                      // Fix Insert INTO PORTFOLIO NOT WORKING
+                                      successPopup(context);
+                                    });
+                                  } else {
+                                    // If Coin is not in Portfolio, insert new Coin
+                                    await db.insertNewCoinPortfolio(PortfolioModel(
+                                      userId: widget.user?.userId,
+                                      coinName: widget.coin.id,
+                                      coinAmt: double.parse(amount.text.replaceAll(",", "")))
+                                    ).whenComplete(() async {
+                                      // Add Transfer History
+                                      await db.insertUserTransfer(UserTransfers(
+                                        userId: widget.user?.userId,
+                                        coinName: widget.coin.id,
+                                        transferAmt: double.parse(amount.text.replaceAll(",", "")) * widget.coin.currentPrice)).whenComplete(() {
+                                          successPopup(context);
+                                        });
+                                    });
+                                  }
+                              });
                             }
                           }
                           // Sell
