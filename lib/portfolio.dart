@@ -43,7 +43,7 @@ class _PortfolioState extends State<Portfolio> {
   Future<List<PortfolioModel>> getPortfolio() {
     return handler.getPortolio(widget.user?.userId);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,7 +51,9 @@ class _PortfolioState extends State<Portfolio> {
       home: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: const Text("Portfolio",),
+          title: const Text(
+            "Portfolio",
+          ),
         ),
         body: Container(
           padding: const EdgeInsets.all(8),
@@ -61,47 +63,68 @@ class _PortfolioState extends State<Portfolio> {
                 color: Colors.black87,
               ),
               Container(
-                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.04),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.04,),
-                    const Text("Total Assets", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,),),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.04,
+                    ),
+                    const Text(
+                      "Total Assets",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
               SingleChildScrollView(
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.45,
                   child: Column(
                     children: [
                       Expanded(
-                        child: FutureBuilder<List<PortfolioModel>>(
-                          future: pm,
-                          builder: (BuildContext context, AsyncSnapshot <List<PortfolioModel>> snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-                              return const Center(child: Text("None"),);
-                            } else if (snapshot.hasError) {
-                              return Text(snapshot.hasError.toString());
-                            } else {
-                              final coins = snapshot.data ?? <PortfolioModel>[];
-                              return ListView.builder(
-                                itemCount: coins.length,
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    textColor: Colors.black,
-                                    title: Text(coins[index].coinName.capitalize(), style: const TextStyle(fontSize: 18),),
-                                    trailing: Text(coins[index].coinAmt.toString(), style: const TextStyle(fontSize: 18),),
-                                  );
-                                },
-                              );
-                            }
-                          },
-                        )
-                      ),
+                          child: FutureBuilder<List<PortfolioModel>>(
+                        future: pm,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<PortfolioModel>> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasData &&
+                              snapshot.data!.isEmpty) {
+                            return const Center(
+                              child: Text("None"),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text(snapshot.hasError.toString());
+                          } else {
+                            final coins = snapshot.data ?? <PortfolioModel>[];
+                            return ListView.builder(
+                              itemCount: coins.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  textColor: Colors.black,
+                                  title: Text(
+                                    coins[index].coinName.capitalize(),
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                  trailing: Text(
+                                    coins[index].coinAmt.toString(),
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        },
+                      )),
                     ],
                   ),
                 ),
@@ -113,13 +136,11 @@ class _PortfolioState extends State<Portfolio> {
     );
   }
 
-  Widget _buildCreditCard({@required color})  {
+  Widget _buildCreditCard({@required color}) {
     return Card(
       elevation: 4,
       color: color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Container(
         height: 200,
         padding: const EdgeInsets.only(left: 16, right: 16),
@@ -167,9 +188,7 @@ class _PortfolioState extends State<Portfolio> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        isVisibleBal ?
-                        bal.userBalance.toString() :
-                        hidden,
+                        isVisibleBal ? bal.userBalance.toString() : hidden,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,
@@ -188,9 +207,8 @@ class _PortfolioState extends State<Portfolio> {
                           });
                         },
                         icon: Icon(isVisibleBal
-                        ? Icons.visibility
-                        : Icons.visibility_off
-                      ),
+                            ? Icons.visibility
+                            : Icons.visibility_off),
                       ),
                     ],
                   ),
@@ -209,79 +227,98 @@ class _PortfolioState extends State<Portfolio> {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.04,
                         child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Deposit(user: widget.user,))
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              const Icon(Icons.account_balance_wallet_sharp, size: 20, color: Colors.white60,),
-                              SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                              const Text(
-                                "DEPOSIT",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Deposit(
+                                            user: widget.user,
+                                          )));
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.account_balance_wallet_sharp,
+                                  size: 20,
+                                  color: Colors.white60,
                                 ),
-                              )
-                            ],
-                          )
-                        ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                ),
+                                const Text(
+                                  "DEPOSIT",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            )),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.04,
                         child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Withdraw(user: widget.user,))
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              const Icon(Icons.vertical_align_top_sharp, size: 20, color: Colors.white60,),
-                              SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                              const Text(
-                                "WITHDRAW",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Withdraw(
+                                            user: widget.user,
+                                          )));
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.vertical_align_top_sharp,
+                                  size: 20,
+                                  color: Colors.white60,
                                 ),
-                              )
-                            ],
-                          )
-                        ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                ),
+                                const Text(
+                                  "WITHDRAW",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            )),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.04,
                         child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PaymentHistory(user: widget.user,)
-                              )
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              const Icon(Icons.history_sharp, size: 20, color: Colors.white60,),
-                              SizedBox(width: MediaQuery.of(context).size.width * 0.01,),
-                              const Text(
-                                "HISTORY",
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PaymentHistory(
+                                            user: widget.user,
+                                          )));
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.history_sharp,
+                                  size: 20,
+                                  color: Colors.white60,
                                 ),
-                              )
-                            ],
-                          )
-                        ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                ),
+                                const Text(
+                                  "HISTORY",
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            )),
                       ),
                     ],
                   ),

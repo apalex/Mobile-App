@@ -19,11 +19,11 @@ class DatabaseHelper {
       // User_Info
       await db.execute("CREATE TABLE IF NOT EXISTS User_Info (userId INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT NOT NULL, lastName TEXT NOT NULL, username TEXT NOT NULL UNIQUE, email TEXT NOT NULL UNIQUE, userPassword TEXT NOT NULL, phoneNum TEXT NOT NULL, createdOn TEXT DEFAULT CURRENT_TIMESTAMP, isActive INTEGER DEFAULT 1, permissions TEXT DEFAULT 'User');");
       // User_Address
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Address (userId INTEGER PRIMARY KEY, address1 TEXT, address2 TEXT, country TEXT, province TEXT, city TEXT, zipCode TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Address (userAddressId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, address1 TEXT, address2 TEXT, country TEXT, province TEXT, city TEXT, zipCode TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Balance
       await db.execute("CREATE TABLE IF NOT EXISTS User_Balance (userId INTEGER PRIMARY KEY, userBalance REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Portfolio
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userId INTEGER PRIMARY KEY, coinName TEXT, coinAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userPortfolioId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, coinName TEXT, coinAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Activity
       await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp TEXT DEFAULT CURRENT_TIMESTAMP, ipAddress TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Transfers

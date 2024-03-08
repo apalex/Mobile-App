@@ -1,4 +1,5 @@
 class UserAddress {
+  final int? userAddressId;
   final int? userId;
   final String address1;
   final String address2;
@@ -8,6 +9,7 @@ class UserAddress {
   final String zipCode;
 
   const UserAddress({
+    this.userAddressId,
     this.userId,
     required this.address1,
     required this.address2,
@@ -18,6 +20,7 @@ class UserAddress {
   });
 
   factory UserAddress.fromMap(Map<String, dynamic> json) => UserAddress(
+    userAddressId: json['userAddressId'],
     userId: json['userId'],
     address1: json['address1'],
     address2: json['address2'],
@@ -28,6 +31,7 @@ class UserAddress {
   );
   
   Map<String, dynamic> toMap() => {
+    'userAddressId': userAddressId,
     'userId': userId,
     'address1': address1,
     'address2': address2,

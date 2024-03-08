@@ -82,11 +82,11 @@ class _HomeState extends State<Home> {
         OutlinedButton.icon(
           onPressed: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SearchPage(user: widget.user,)
-              )
-            );
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SearchPage(
+                          user: widget.user,
+                        )));
           },
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(199, 20),
@@ -102,16 +102,21 @@ class _HomeState extends State<Home> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Notifications(user: widget.user,)));
+                      builder: (context) => Notifications(
+                            user: widget.user,
+                          )));
             },
             icon: const Icon(Icons.notifications)),
         IconButton(
             onPressed: () {
-              Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Profile(user: widget.user,)))
-                  .then((value) => {
-                        if (value) {_refresh()}
-                      });
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Profile(
+                            user: widget.user,
+                          ))).then((value) => {
+                    if (value) {_refresh()}
+                  });
             },
             icon: const Icon(Icons.account_circle)),
       ],
@@ -170,7 +175,8 @@ class _HomeState extends State<Home> {
                           scrollDirection: Axis.horizontal,
                           itemCount: 12,
                           itemBuilder: (context, index) {
-                            return FeaturedCoin(coin: coinMarket![index], user: widget.user);
+                            return FeaturedCoin(
+                                coin: coinMarket![index], user: widget.user);
                           }),
             ),
             const Row(

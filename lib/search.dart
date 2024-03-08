@@ -28,14 +28,12 @@ class _SearchPageState extends State<SearchPage> {
   List<CoinModel> coinList = [];
   Future<List<CoinModel>> getCoinData() async {
     var response = await http.get(
-      Uri.parse(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"
-      ),
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      }
-    );
+        Uri.parse(
+            "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        });
     if (response.statusCode == 200) {
       data = json.decode(response.body);
       coinList = data.map((e) => CoinModel.fromJson(e)).toList();
@@ -52,7 +50,10 @@ class _SearchPageState extends State<SearchPage> {
       });
     } else {
       setState(() {
-        queryList = coinList.where((element) => element.name.toLowerCase().contains(queryKeyword.toLowerCase())).toList();
+        queryList = coinList
+            .where((element) =>
+                element.name.toLowerCase().contains(queryKeyword.toLowerCase()))
+            .toList();
       });
     }
   }
@@ -78,54 +79,64 @@ class _SearchPageState extends State<SearchPage> {
           ),
           textInputAction: TextInputAction.search,
           decoration: InputDecoration(
-            labelStyle: TextStyle(
-              color: focus.hasFocus ? Colors.black : Colors.black
-            ),
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.black)
-            ),
-            hintText: "Search",
-            hintStyle: const TextStyle(
-              color: Colors.grey,
-              fontSize: 20
-            )
-          ),
+              labelStyle: TextStyle(
+                  color: focus.hasFocus ? Colors.black : Colors.black),
+              enabledBorder: const UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black)),
+              hintText: "Search",
+              hintStyle: const TextStyle(color: Colors.grey, fontSize: 20)),
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
+        padding:
+            EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.bottom,
+          height: MediaQuery.of(context).size.height -
+              MediaQuery.of(context).padding.bottom,
           child: Column(
             children: [
               Expanded(
-                child: FutureBuilder<List<CoinModel>>(
-                  future: getCoinData(),
-                  builder: (context, snapshot) {
+                  child: FutureBuilder<List<CoinModel>>(
+                future: getCoinData(),
+                builder: (context, snapshot) {
                   return ListView.builder(
-                    itemCount: queryList!.isEmpty ? coinList.length : queryList!.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        key: ValueKey(queryList!.isEmpty ? coinList[index].name : queryList![index].name),
-                        textColor: Colors.black,
-                        leading: Image.network(queryList!.isEmpty ? coinList[index].image : queryList![index].image),
-                        title: Text(queryList!.isEmpty ? coinList[index].symbol.toUpperCase() : queryList![index].symbol.toUpperCase()),
-                        subtitle: Text(queryList!.isEmpty ? coinList[index].name : queryList![index].name),
-                        trailing: Text('\$${queryList!.isEmpty ? coinList[index].currentPrice.toStringAsFixed(2) : queryList![index].currentPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 15),),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Coin(coin: queryList!.isEmpty ? coinList[index] : queryList![index], user: widget.user,)
-                            )
-                          );
-                        },
-                      );
-                    }
-                  );
-                  },
-                )
-              ),
+                      itemCount: queryList!.isEmpty
+                          ? coinList.length
+                          : queryList!.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          key: ValueKey(queryList!.isEmpty
+                              ? coinList[index].name
+                              : queryList![index].name),
+                          textColor: Colors.black,
+                          leading: Image.network(queryList!.isEmpty
+                              ? coinList[index].image
+                              : queryList![index].image),
+                          title: Text(queryList!.isEmpty
+                              ? coinList[index].symbol.toUpperCase()
+                              : queryList![index].symbol.toUpperCase()),
+                          subtitle: Text(queryList!.isEmpty
+                              ? coinList[index].name
+                              : queryList![index].name),
+                          trailing: Text(
+                            '\$${queryList!.isEmpty ? coinList[index].currentPrice.toStringAsFixed(2) : queryList![index].currentPrice.toStringAsFixed(2)}',
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Coin(
+                                          coin: queryList!.isEmpty
+                                              ? coinList[index]
+                                              : queryList![index],
+                                          user: widget.user,
+                                        )));
+                          },
+                        );
+                      });
+                },
+              )),
             ],
           ),
         ),

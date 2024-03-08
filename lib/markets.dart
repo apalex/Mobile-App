@@ -1,5 +1,4 @@
 import 'package:crypto_app/Models/user_model.dart';
-import 'package:crypto_app/main.dart';
 import 'package:crypto_app/search.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -24,12 +23,17 @@ class _MarketsState extends State<Markets> {
   }
 
   List? coinMarket = [];
+  // ignore: prefer_typing_uninitialized_variables
   var coinMarketList;
-  Future<List<CoinModel>?>  getCoinData() async {
-    var response = await http.get(Uri.parse("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"), headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-    });
+  // ignore: body_might_complete_normally_nullable
+  Future<List<CoinModel>?> getCoinData() async {
+    var response = await http.get(
+        Uri.parse(
+            "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&sparkline=true"),
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        });
     setState(() {
       isRefreshing = false;
     });
@@ -47,12 +51,17 @@ class _MarketsState extends State<Markets> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: Scaffold(
-      appBar: AppBar(
-        title: OutlinedButton.icon(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: OutlinedButton.icon(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage(user: widget.user,)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SearchPage(
+                            user: widget.user,
+                          )));
             },
             style: OutlinedButton.styleFrom(
               minimumSize: const Size(380, 35),
@@ -60,73 +69,93 @@ class _MarketsState extends State<Markets> {
               padding: const EdgeInsets.all(6),
               alignment: Alignment.centerLeft,
             ),
-            icon: const Icon(Icons.search), 
+            icon: const Icon(Icons.search),
             label: const Text("Search"),
-            ),
+          ),
           centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 40,
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 230),
-                  child: const Text("Name",
-                  style: TextStyle(fontSize: 19),),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 20),
-                  child: const Text("Price",
-                  style: TextStyle(fontSize: 19),),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: isRefreshing == true
-            ? const Center(
-              child: CircularProgressIndicator(),
-            ) : coinMarket == null || coinMarket!.isEmpty ? const Center(child: Padding(
-              padding: EdgeInsets.all(20),
-              child: Text("This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),
-            ),)
-            : ListView.builder(
-              itemCount: coinMarket!.length,
-              itemBuilder: (context, index) {
-                var priceChange;
-                var priceChangePercentage;
-                if (coinMarket![index].priceChange24H > 0) {
-                  priceChange = "+${coinMarket![index].priceChange24H.toStringAsFixed(2)}";
-                  priceChangePercentage = "+${coinMarket![index].priceChangePercentage24H.toStringAsFixed(2)}";
-                } else {
-                  priceChange = "${coinMarket![index].priceChange24H.toStringAsFixed(2)}";
-                  priceChangePercentage = "${coinMarket![index].priceChangePercentage24H.toStringAsFixed(2)}";
-                }
-                return ListTile(
-                  textColor: Colors.black,
-                  leading: Image.network(coinMarket![index].image),
-                  title: Text('${coinMarket![index].name} - ${coinMarket![index].symbol.toUpperCase()}'),
-                  subtitle: Text('24h Change: $priceChange | $priceChangePercentage%'),
-                  trailing: Text('\$${coinMarket![index].currentPrice.toStringAsFixed(2)}', style: const TextStyle(fontSize: 15),),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Coin(coin: coinMarket![index], user: widget.user,)
-                      )
-                    );
-                  },
-                );
-              }
+        ),
+        body: Column(
+          children: [
+            SizedBox(
+              height: 40,
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 230),
+                    child: const Text(
+                      "Name",
+                      style: TextStyle(fontSize: 19),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: const Text(
+                      "Price",
+                      style: TextStyle(fontSize: 19),
+                    ),
+                  ),
+                ],
               ),
-          ),
-        ],
+            ),
+            Expanded(
+              child: isRefreshing == true
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : coinMarket == null || coinMarket!.isEmpty
+                      ? const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                                "This App is using a free API, so you cannot send many requests in a short amount of time. Please wait a few minutes"),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: coinMarket!.length,
+                          itemBuilder: (context, index) {
+                            // ignore: prefer_typing_uninitialized_variables
+                            var priceChange;
+                            // ignore: prefer_typing_uninitialized_variables
+                            var priceChangePercentage;
+                            if (coinMarket![index].priceChange24H > 0) {
+                              priceChange =
+                                  "+${coinMarket![index].priceChange24H.toStringAsFixed(2)}";
+                              priceChangePercentage =
+                                  "+${coinMarket![index].priceChangePercentage24H.toStringAsFixed(2)}";
+                            } else {
+                              priceChange =
+                                  "${coinMarket![index].priceChange24H.toStringAsFixed(2)}";
+                              priceChangePercentage =
+                                  "${coinMarket![index].priceChangePercentage24H.toStringAsFixed(2)}";
+                            }
+                            return ListTile(
+                              textColor: Colors.black,
+                              leading: Image.network(coinMarket![index].image),
+                              title: Text(
+                                  '${coinMarket![index].name} - ${coinMarket![index].symbol.toUpperCase()}'),
+                              subtitle: Text(
+                                  '24h Change: $priceChange | $priceChangePercentage%'),
+                              trailing: Text(
+                                '\$${coinMarket![index].currentPrice.toStringAsFixed(2)}',
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Coin(
+                                              coin: coinMarket![index],
+                                              user: widget.user,
+                                            )));
+                              },
+                            );
+                          }),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

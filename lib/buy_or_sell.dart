@@ -1,5 +1,4 @@
 import 'package:crypto_app/Models/portfolio_model.dart';
-import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/Models/user_transfers.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
@@ -25,6 +24,7 @@ class _BuyOrSellState extends State<BuyOrSell> {
   final db = DatabaseHelper();
   late PortfolioModel pm;
   bool isVisible = false;
+  bool errorMsg = false;
 
   @override
   void initState() {
@@ -84,20 +84,34 @@ class _BuyOrSellState extends State<BuyOrSell> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.05, child: Image.network("${widget.coin.image}")),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.02,),
-                      Text(widget.coin?.name, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 1),),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.05,
+                          child: Image.network("${widget.coin.image}")),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.02,
+                      ),
+                      Text(
+                        widget.coin?.name,
+                        style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1),
+                      ),
                     ],
                   ),
                   // User Input
                   Container(
                     height: MediaQuery.of(context).size.height * 0.07,
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, right: MediaQuery.of(context).size.width * 0.05, bottom: 10, top: 20),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    margin: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.05,
+                        right: MediaQuery.of(context).size.width * 0.05,
+                        bottom: 10,
+                        top: 20),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white
-                    ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white),
                     child: TextFormField(
                       keyboardType: TextInputType.number,
                       controller: amount,
@@ -111,83 +125,177 @@ class _BuyOrSellState extends State<BuyOrSell> {
                       },
                       focusNode: focusNodeSelect,
                       decoration: InputDecoration(
-                        labelStyle: TextStyle(
-                          color: focusNodeSelect.hasFocus
-                          ? Colors.black
-                          : Colors.black
-                        ),
-                        border: InputBorder.none,
-                        icon: const Icon(Icons.attach_money_sharp, color: Colors.black, size: 30,)
-                      ),
+                          labelStyle: TextStyle(
+                              color: focusNodeSelect.hasFocus
+                                  ? Colors.black
+                                  : Colors.black),
+                          border: InputBorder.none,
+                          icon: const Icon(
+                            Icons.attach_money_sharp,
+                            color: Colors.black,
+                            size: 30,
+                          )),
                     ),
                   ),
                   // If not enough USDT
                   Visibility(
-                    visible: isVisible,
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: Text(widget.action == "Buy" ? "Insufficient USDT in balance" : "Insufficient ${widget.coin.name.toString()} in portfolio", style: const TextStyle(color: Colors.red),),
-                    )
-                  ),
+                      visible: isVisible,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          widget.action == "Buy"
+                              ? "Insufficient USDT in balance"
+                              : "Insufficient ${widget.coin.name.toString()} in portfolio",
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      )),
+                  // If User tries selling Coin but is not in Portfolio
+                  Visibility(
+                      visible: errorMsg,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          "${widget.coin.name.toString()} is not owned in portfolio, cannot sell",
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      )),
                   // Button
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                    margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05, right: MediaQuery.of(context).size.width * 0.05, bottom: 10, top: 20),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    margin: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.05,
+                        right: MediaQuery.of(context).size.width * 0.05,
+                        bottom: 10,
+                        top: 20),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.black
-                    ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.black),
                     child: TextButton(
-                      onPressed: () async {
-                        if (formKey.currentState!.validate()) {
-                          PortfolioModel usdt = await db.getCoinAmt(widget.user?.userId, 'tether');
-                          // Buy
-                          if (widget.action == "Buy") {
-                            if (usdt.coinAmt < widget.coin.currentPrice * double.parse(amount.text.replaceAll(",", ""))) {
-                              setState(() {
-                                isVisible = true;
-                              });
-                            } else {
-                              // Remove Tether
-                              await db.editCoinPortfolio(widget.user?.userId, 'tether', usdt.coinAmt - widget.coin.currentPrice * double.parse(amount.text.replaceAll(",", ""))).whenComplete(() async {
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            PortfolioModel usdt = await db.getCoinAmt(
+                                widget.user?.userId, 'tether');
+                            // Buy
+                            if (widget.action == "Buy") {
+                              // Check if User has enough USDT available
+                              if (usdt.coinAmt <
+                                  widget.coin.currentPrice *
+                                      double.parse(
+                                          amount.text.replaceAll(",", ""))) {
+                                // If False
+                                setState(() {
+                                  isVisible = true;
+                                });
+                              } else {
+                                // If True -> Remove Tether from Portfolio
+                                await db
+                                    .editCoinPortfolio(
+                                        widget.user?.userId,
+                                        'tether',
+                                        usdt.coinAmt -
+                                            widget.coin.currentPrice *
+                                                double.parse(amount.text
+                                                    .replaceAll(",", "")))
+                                    .whenComplete(() async {
                                   // Add/Edit Coin to Portfolio
-                                  var response = await db.isCoinOwned(widget.user?.userId, widget.coin.id);
+                                  var response = await db.isCoinOwned(
+                                      widget.user?.userId, widget.coin.id);
                                   if (response == true) {
-                                    // If Coin is Owned
-                                    PortfolioModel pm = await db.getCoinAmt(widget.user?.userId, widget.coin.id);
-                                    await db.editCoinPortfolio(widget.user?.userId, widget.coin.id, pm.coinAmt + double.parse(amount.text.replaceAll(",", ""))).whenComplete(() {
-                                      // Add Transfer History (Forgot)
-                                      // Fix Insert INTO PORTFOLIO NOT WORKING
-                                      successPopup(context);
+                                    // If Coin is already in Portfolio, edit Coin Portfolio Info
+                                    PortfolioModel pm = await db.getCoinAmt(
+                                        widget.user?.userId, widget.coin.id);
+                                    await db
+                                        .editCoinPortfolio(
+                                            widget.user?.userId,
+                                            widget.coin.id,
+                                            pm.coinAmt +
+                                                double.parse(amount.text
+                                                    .replaceAll(",", "")))
+                                        .whenComplete(() async {
+                                      await db
+                                          .insertUserTransfer(UserTransfers(
+                                              userId: widget.user?.userId,
+                                              coinName: widget.coin.id,
+                                              transferAmt: widget
+                                                      .coin.currentPrice *
+                                                  double.parse(amount.text
+                                                      .replaceAll(",", ""))))
+                                          .whenComplete(() {
+                                        successPopup(context);
+                                      });
                                     });
                                   } else {
-                                    // If Coin is not in Portfolio, insert new Coin
-                                    await db.insertNewCoinPortfolio(PortfolioModel(
-                                      userId: widget.user?.userId,
-                                      coinName: widget.coin.id,
-                                      coinAmt: double.parse(amount.text.replaceAll(",", "")))
-                                    ).whenComplete(() async {
+                                    // If Coin is not in Portfolio, insert the new Coin
+                                    await db
+                                        .insertNewCoinPortfolio(PortfolioModel(
+                                            userId: widget.user?.userId,
+                                            coinName: widget.coin.id,
+                                            coinAmt: double.parse(amount.text
+                                                .replaceAll(",", ""))))
+                                        .whenComplete(() async {
                                       // Add Transfer History
-                                      await db.insertUserTransfer(UserTransfers(
-                                        userId: widget.user?.userId,
-                                        coinName: widget.coin.id,
-                                        transferAmt: double.parse(amount.text.replaceAll(",", "")) * widget.coin.currentPrice)).whenComplete(() {
-                                          successPopup(context);
-                                        });
+                                      await db
+                                          .insertUserTransfer(UserTransfers(
+                                              userId: widget.user?.userId,
+                                              coinName: widget.coin.id,
+                                              transferAmt: widget
+                                                      .coin.currentPrice *
+                                                  double.parse(amount.text
+                                                      .replaceAll(",", "")) *
+                                                  widget.coin.currentPrice))
+                                          .whenComplete(() {
+                                        successPopup(context);
+                                      });
                                     });
                                   }
-                              });
+                                });
+                              }
+                            }
+                            // Sell
+                            else {
+                              // Check if Coin is Owned
+                              var response = await db.isCoinOwned(
+                                  widget.user?.userId, widget.coin.id);
+                              if (response == true) {
+                                // If Coin is owned, add to USDT
+                                await db
+                                    .editCoinPortfolio(
+                                        widget.user?.userId,
+                                        'tether',
+                                        widget.coin.currentPrice *
+                                            double.parse(amount.text
+                                                .replaceAll(",", "")))
+                                    .whenComplete(() async {
+                                  // Remove Coin amount sold from Portfolio
+                                  PortfolioModel pm = await db.getCoinAmt(
+                                      widget.user?.userId, widget.coin.id);
+                                  await db
+                                      .editCoinPortfolio(
+                                          widget.user?.userId,
+                                          widget.coin.id,
+                                          pm.coinAmt -
+                                              double.parse(amount.text
+                                                  .replaceAll(",", "")))
+                                      .whenComplete(() {
+                                        successPopup(context);
+                                    // Edit Balance
+                                  });
+                                });
+                              } else {
+                                // If Coin is not owned, show error message
+                                setState(() {
+                                  errorMsg = true;
+                                });
+                              }
                             }
                           }
-                          // Sell
-                          else {
-
-                          }
-                        }
-                      },
-                      child: Text(widget.action.toString(), style: const  TextStyle(color: Colors.white),)
-                    ),
+                        },
+                        child: Text(
+                          widget.action.toString(),
+                          style: const TextStyle(color: Colors.white),
+                        )),
                   )
                 ],
               ),

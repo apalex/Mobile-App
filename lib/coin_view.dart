@@ -308,11 +308,13 @@ class _CoinState extends State<Coin> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BuyOrSell(user: widget.user, action: "Buy", coin: widget.coin,)
-                      )
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BuyOrSell(
+                                  user: widget.user,
+                                  action: "Buy",
+                                  coin: widget.coin,
+                                )));
                   },
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.green),
@@ -329,11 +331,13 @@ class _CoinState extends State<Coin> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BuyOrSell(user: widget.user, action: "Sell", coin: widget.coin,)
-                      )
-                    );
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BuyOrSell(
+                                  user: widget.user,
+                                  action: "Sell",
+                                  coin: widget.coin,
+                                )));
                   },
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   child: const Text(
@@ -382,7 +386,10 @@ class _CoinState extends State<Coin> {
               ),
               const Text(
                 "Infrastructure",
-                style: TextStyle(fontSize: 16, color: Colors.black, decoration: TextDecoration.underline),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    decoration: TextDecoration.underline),
               ),
             ],
           ),
@@ -502,19 +509,17 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   widget.coin.totalSupply.toStringAsFixed(0),
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(bottom: 12, right: 12),
                 child: Text(
                   widget.coin.maxSupply != null
-                  ? widget.coin.maxSupply.toStringAsFixed(0)
-                  : "None",
+                      ? widget.coin.maxSupply.toStringAsFixed(0)
+                      : "None",
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -522,8 +527,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   widget.coin.circulatingSupply.toStringAsFixed(0),
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -531,8 +535,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   widget.coin.marketCap.toString(),
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -540,8 +543,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   widget.coin.fullyDilutedValuation.toString(),
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -549,8 +551,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   widget.coin.totalVolume.toStringAsFixed(0),
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -558,8 +559,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   "\$${widget.coin.ath.toStringAsFixed(2)}",
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -567,8 +567,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   "${widget.coin.athChangePercentage.toStringAsFixed(2)}%",
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -576,8 +575,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.athDate),
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -585,8 +583,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   "\$${widget.coin.atl.toString()}",
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -594,8 +591,7 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   "+${widget.coin.atlChangePercentage.toStringAsFixed(2)}%",
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
@@ -603,17 +599,16 @@ class _CoinState extends State<Coin> {
                 child: Text(
                   DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.atlDate),
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(bottom: 12, right: 12),
                 child: Text(
-                  DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.lastUpdated),
+                  DateFormat('yyy-MM-dd - kk:mm')
+                      .format(widget.coin.lastUpdated),
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 15
-                  ),
+                      fontWeight: FontWeight.bold, fontSize: 15),
                 ),
               ),
             ]),

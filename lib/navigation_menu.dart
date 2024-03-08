@@ -1,6 +1,5 @@
 import 'package:crypto_app/home.dart';
 import 'package:crypto_app/markets.dart';
-import 'package:crypto_app/futures.dart';
 import 'package:crypto_app/portfolio.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +16,10 @@ class _NavigationMenuState extends State<NavigationMenu> {
   int currentIndex = 0;
   late Home homeScreen = Home(user: widget.user,);
   late Markets marketsScreen = Markets(user: widget.user,);
-  late Futures futuresScreen = Futures(user: widget.user,);
   late Portfolio portfolioScreen = Portfolio(user: widget.user,);
   late final screens = [
     homeScreen,
     marketsScreen,
-    futuresScreen,
     portfolioScreen
   ];
 
@@ -30,7 +27,6 @@ class _NavigationMenuState extends State<NavigationMenu> {
   void initState() {
     homeScreen = Home(user: widget.user,);
     marketsScreen = Markets(user: widget.user,);
-    futuresScreen = Futures(user: widget.user,);
     portfolioScreen = Portfolio(user: widget.user,);
     super.initState();
   }
@@ -58,11 +54,6 @@ class _NavigationMenuState extends State<NavigationMenu> {
             NavigationDestination(
               icon: Icon(Icons.bar_chart_sharp),
               label: "Markets"
-            ),
-            // Futures
-            NavigationDestination(
-              icon: Icon(Icons.keyboard_double_arrow_up_sharp),
-              label: "Futures"
             ),
             // Portfolio
             NavigationDestination(

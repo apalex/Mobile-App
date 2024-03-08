@@ -1,6 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:crypto_app/Models/user_activity_model.dart';
-import 'package:crypto_app/history.dart';
+import 'package:crypto_app/payment_history.dart';
 import 'package:crypto_app/security.dart';
 import 'package:crypto_app/settings.dart';
 import 'package:crypto_app/support.dart';
@@ -226,7 +226,7 @@ class _ProfileState extends State<Profile> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => History(
+                            builder: (context) => PaymentHistory(
                                   user: widget.user,
                                 )));
                   },

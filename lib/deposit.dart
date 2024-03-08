@@ -364,7 +364,8 @@ class _DepositState extends State<Deposit> {
                                           paymentAmt: double.parse(paymentAmt
                                               .text
                                               .replaceAll(",", "")),
-                                          paymentDate: DateTime.now().toIso8601String(),
+                                          paymentDate:
+                                              DateTime.now().toIso8601String(),
                                           action: 'Deposit'))
                                       .whenComplete(() async {
                                     var response = await db.isCoinOwned(
@@ -386,7 +387,7 @@ class _DepositState extends State<Deposit> {
                                       await db
                                           .insertNewCoinPortfolio(
                                               PortfolioModel(
-                                                userId: widget.user?.userId,
+                                                  userId: widget.user?.userId,
                                                   coinName: 'tether',
                                                   coinAmt: double.parse(
                                                       paymentAmt
