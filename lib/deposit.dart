@@ -389,11 +389,8 @@ class _DepositState extends State<Deposit> {
                                               PortfolioModel(
                                                   userId: widget.user?.userId,
                                                   coinName: 'tether',
-                                                  coinAmt: double.parse(
-                                                      paymentAmt
-                                                          .text
-                                                          .replaceAll(
-                                                              ',', ""))))
+                                                  coinAmt: double.parse(paymentAmt.text.replaceAll(',', "")),
+                                                  averageBuyPrice: 1))
                                           .whenComplete(() {
                                         successPopup(context);
                                       });

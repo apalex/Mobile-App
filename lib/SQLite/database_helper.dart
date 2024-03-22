@@ -23,7 +23,7 @@ class DatabaseHelper {
       // User Balance
       await db.execute("CREATE TABLE IF NOT EXISTS User_Balance (userId INTEGER PRIMARY KEY, userBalance REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Portfolio
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userPortfolioId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, coinName TEXT, coinAmt REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Portfolio (userPortfolioId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, coinName TEXT, coinAmt REAL, averageBuyPrice REAL, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Activity
       await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp TEXT DEFAULT CURRENT_TIMESTAMP, ipAddress TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Transfers
@@ -137,6 +137,11 @@ class DatabaseHelper {
     return db.rawUpdate('UPDATE User_Portfolio SET coinAmt = ? WHERE userId = ? AND coinName = ?', [coinAmt, userId, coinName]);
   }
 
+  Future<int> editCoinBuyAverage(int? userId, String coinName, double averageBuyPrice) async {
+    final Database db = await open();
+    return db.rawUpdate('UPDATE User_Portfolio SET averageBuyPrice = ? WHERE userId = ? and coinName = ?', [averageBuyPrice, userId, coinName]);
+  }
+
   Future<bool> isCoinOwned(int? userId, String coinName) async {
     final Database db = await open();
     var result = await db.rawQuery("SELECT * FROM User_Portfolio WHERE coinName = '$coinName' AND userId = $userId;");
@@ -148,6 +153,12 @@ class DatabaseHelper {
   }
 
   Future<PortfolioModel> getCoinAmt(int? userId, String coinName) async {
+    final Database db = await open();
+    var result = await db.rawQuery("SELECT * FROM User_Portfolio WHERE userId = $userId AND coinName = '$coinName';");
+    return PortfolioModel.fromMap(result.first);
+  }
+
+  Future<PortfolioModel> getCoinBuyAverage(int? userId, String coinName) async {
     final Database db = await open();
     var result = await db.rawQuery("SELECT * FROM User_Portfolio WHERE userId = $userId AND coinName = '$coinName';");
     return PortfolioModel.fromMap(result.first);

@@ -1,4 +1,5 @@
 import 'package:crypto_app/Models/portfolio_model.dart';
+import 'package:crypto_app/Models/user_balance_model.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/Models/user_transfers.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
@@ -222,8 +223,17 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                                       .coin.currentPrice *
                                                   double.parse(amount.text
                                                       .replaceAll(",", ""))))
-                                          .whenComplete(() {
-                                        successPopup(context);
+                                          .whenComplete(() async {
+                                            PortfolioModel userAverage = await db.getCoinBuyAverage(widget.user?.userId, widget.coin.id);
+                                            if (pm.averageBuyPrice <= 0) {
+                                              await db.editCoinBuyAverage(widget.user?.userId, widget.coin.id, widget.coin.currentPrice).whenComplete(() {
+                                                successPopup(context);
+                                              });
+                                            } else {
+                                              await db.editCoinBuyAverage(widget.user?.userId, widget.coin.id, (userAverage.averageBuyPrice + widget.coin.currentPrice)/2).whenComplete(() {
+                                                successPopup(context);
+                                              });
+                                            }
                                       });
                                     });
                                   } else {
@@ -233,7 +243,8 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                             userId: widget.user?.userId,
                                             coinName: widget.coin.id,
                                             coinAmt: double.parse(amount.text
-                                                .replaceAll(",", ""))))
+                                                .replaceAll(",", "")),
+                                              averageBuyPrice: widget.coin.currentPrice))
                                         .whenComplete(() async {
                                       // Add Transfer History
                                       await db
@@ -258,15 +269,14 @@ class _BuyOrSellState extends State<BuyOrSell> {
                               // Check if Coin is Owned
                               var response = await db.isCoinOwned(
                                   widget.user?.userId, widget.coin.id);
+                              PortfolioModel usdt = await db.getCoinAmt(widget.user?.userId, 'tether');
                               if (response == true) {
                                 // If Coin is owned, add to USDT
                                 await db
                                     .editCoinPortfolio(
                                         widget.user?.userId,
                                         'tether',
-                                        widget.coin.currentPrice *
-                                            double.parse(amount.text
-                                                .replaceAll(",", "")))
+                                        usdt.coinAmt + (widget.coin.currentPrice * double.parse(amount.text.replaceAll(",", ""))))
                                     .whenComplete(() async {
                                   // Remove Coin amount sold from Portfolio
                                   PortfolioModel pm = await db.getCoinAmt(
@@ -278,9 +288,11 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                           pm.coinAmt -
                                               double.parse(amount.text
                                                   .replaceAll(",", "")))
-                                      .whenComplete(() {
-                                        successPopup(context);
-                                    // Edit Balance
+                                      .whenComplete(() async {
+                                        UserBalance userBalance = await db.getUserBalance(widget.user?.userId);
+                                        await db.insertDepositBalance(widget.user?.userId, (userBalance.userBalance - pm.averageBuyPrice) + ((double.parse(amount.text.replaceAll(",", "")) * pm.averageBuyPrice) * (widget.coin.currentPrice / pm.averageBuyPrice))).whenComplete(() {
+                                          successPopup(context);
+                                        });
                                   });
                                 });
                               } else {
