@@ -88,8 +88,8 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       // Welcome
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.045,),
                       Container(
-                        margin: const EdgeInsets.only(top: 20),
                         padding: const EdgeInsets.all(12),
                         child: Row(
                           children: [
@@ -182,10 +182,10 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       // Login Button
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.045,),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        margin: const EdgeInsets.only(top: 30),
-                        height: 55,
+                        height: MediaQuery.of(context).size.height * 0.066,
                         decoration: BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.circular(10),
@@ -217,8 +217,8 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 100,
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.125,
                       ),
                       // Not a member? Register now
                       Row(

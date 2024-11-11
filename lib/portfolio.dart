@@ -142,7 +142,7 @@ class _PortfolioState extends State<Portfolio> {
       color: color,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: Container(
-        height: 200,
+        height: MediaQuery.of(context).size.height * 0.2357,
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,9 +237,9 @@ class _PortfolioState extends State<Portfolio> {
                             },
                             child: Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.account_balance_wallet_sharp,
-                                  size: 20,
+                                  size: MediaQuery.of(context).size.width * 0.048,
                                   color: Colors.white60,
                                 ),
                                 SizedBox(
@@ -269,9 +269,9 @@ class _PortfolioState extends State<Portfolio> {
                             },
                             child: Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.vertical_align_top_sharp,
-                                  size: 20,
+                                  size: MediaQuery.of(context).size.width * 0.0525,
                                   color: Colors.white60,
                                 ),
                                 SizedBox(
@@ -301,9 +301,9 @@ class _PortfolioState extends State<Portfolio> {
                             },
                             child: Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.history_sharp,
-                                  size: 20,
+                                  size: MediaQuery.of(context).size.width * 0.052,
                                   color: Colors.white60,
                                 ),
                                 SizedBox(

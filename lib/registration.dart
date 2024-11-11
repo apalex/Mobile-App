@@ -389,14 +389,14 @@ class _RegistrationState extends State<Registration> {
                                     fontSize: 16,
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 5,
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.005,
                                 ),
                                 Icon(
                                   isVisibleReferral
                                       ? Icons.keyboard_arrow_up_sharp
                                       : Icons.keyboard_arrow_down_sharp,
-                                  size: 20,
+                                  size: MediaQuery.of(context).size.width * 0.06,
                                 ),
                               ],
                             ),
@@ -449,7 +449,7 @@ class _RegistrationState extends State<Registration> {
                                   isAgree
                                       ? Icons.radio_button_off_sharp
                                       : Icons.radio_button_on_sharp,
-                                  size: 20,
+                                  size: MediaQuery.of(context).size.width * 0.045,
                                 ),
                                 RichText(
                                   text: TextSpan(
@@ -498,7 +498,7 @@ class _RegistrationState extends State<Registration> {
                         Container(
                           margin: const EdgeInsets.only(top: 5),
                           width: MediaQuery.of(context).size.width,
-                          height: 55,
+                          height: MediaQuery.of(context).size.height * 0.066,
                           decoration: BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.circular(10),

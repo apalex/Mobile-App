@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   final List<String> imgList = [
     'https://assets.bitdegree.org/crypto/storage/media/Future-of-Bitcoin.o.jpg',
     'https://academy.moralis.io/wp-content/uploads/2022/09/22_09_Ethereum-Post-Merge-Future-of-Ethereum-1-1.jpg',
-    'https://www.analyticsinsight.net/wp-content/uploads/2022/10/Solana-SOL-Spirals-Out-Of-Control-The-Hideaways-HDWY-Skyrockets-To-Second-Presale.jpg'
+    'https://upload.wikimedia.org/wikipedia/commons/b/b8/Cryptocurrency_logos.jpg'
   ];
 
   @override
@@ -51,6 +51,7 @@ class _HomeState extends State<Home> {
   }
 
   List? coinMarket = [];
+  // ignore: prefer_typing_uninitialized_variables
   var coinMarketList;
   // ignore: body_might_complete_normally_nullable
   Future<List<CoinModel>?> getCoinData() async {
@@ -71,6 +72,7 @@ class _HomeState extends State<Home> {
         coinMarket = coinMarketList;
       });
     } else {
+      // ignore: avoid_print
       print(response.statusCode);
     }
   }
@@ -89,7 +91,7 @@ class _HomeState extends State<Home> {
                         )));
           },
           style: OutlinedButton.styleFrom(
-            minimumSize: const Size(199, 20),
+            minimumSize: Size(MediaQuery.of(context).size.width * 0.485, MediaQuery.of(context).size.height * 0.045),
             foregroundColor: Colors.grey,
             padding: const EdgeInsets.all(6),
             alignment: Alignment.centerLeft,
@@ -142,18 +144,16 @@ class _HomeState extends State<Home> {
                         ))
                     .toList(),
                 options: CarouselOptions(
-                    height: 250, autoPlay: true, viewportFraction: 1)),
-            Container(
-              margin: const EdgeInsets.only(top: 8),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Featured Coins",
-                    style: TextStyle(fontSize: 23),
-                  ),
-                ],
-              ),
+                    height: MediaQuery.of(context).size.height * 0.3, autoPlay: true, viewportFraction: 1)),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Featured Coins",
+                  style: TextStyle(fontSize: 23),
+                ),
+              ],
             ),
             Container(
               height: MediaQuery.of(context).size.height * 0.14,

@@ -120,14 +120,12 @@ class _WithdrawState extends State<Withdraw> {
                           ),
                         ),
                         // If not enough USDT
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.01,),
                         Visibility(
                             visible: isVisible,
-                            child: Container(
-                              margin: const EdgeInsets.only(top: 10),
-                              child: const Text(
-                                "Not enough USDT owned",
-                                style: TextStyle(color: Colors.red),
-                              ),
+                            child: const Text(
+                              "Not enough USDT owned",
+                              style: TextStyle(color: Colors.red),
                             )),
                         // Confirm Button
                         Container(

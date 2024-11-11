@@ -136,54 +136,54 @@ class _CoinState extends State<Coin> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: const EdgeInsets.only(top: 12),
-                child: Column(
-                  children: [
-                    Text(
-                      widget.coin.currentPrice.toString(),
-                      style: const TextStyle(
-                          color: Color.fromARGB(255, 72, 227, 152),
-                          fontSize: 24),
-                    ),
-                    Text(
-                      widget.coin.priceChange24H > 0
-                          ? '24h \$ Change: +${widget.coin.priceChange24H.toStringAsFixed(2)}'
-                          : '24h \$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                    Text(
-                      widget.coin.priceChangePercentage24H > 0
-                          ? '24h % Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%'
-                          : '24h % Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%',
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                  ],
-                ),
+              Column(
+                children: [
+                                    SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.015,
+                  ),
+                  Text(
+                    widget.coin.currentPrice.toString(),
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 72, 227, 152),
+                        fontSize: 24),
+                  ),
+                  Text(
+                    widget.coin.priceChange24H > 0
+                        ? '24h \$ Change: +${widget.coin.priceChange24H.toStringAsFixed(2)}'
+                        : '24h \$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                  Text(
+                    widget.coin.priceChangePercentage24H > 0
+                        ? '24h % Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%'
+                        : '24h % Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%',
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                ],
               ),
               // Coin Short Info Section
-              Container(
-                margin: const EdgeInsets.only(top: 15),
-                child: const Column(
-                  children: [
-                    Text(
-                      'Market Cap Rank',
-                      style: TextStyle(color: Colors.grey, fontSize: 13),
-                    ),
-                    Text(
-                      "24h High",
-                      style: TextStyle(color: Colors.grey, fontSize: 13),
-                    ),
-                    Text(
-                      "24h Low",
-                      style: TextStyle(color: Colors.grey, fontSize: 13),
-                    ),
-                    Text(
-                      "24h Volume(USDT)",
-                      style: TextStyle(color: Colors.grey, fontSize: 13),
-                    ),
-                  ],
-                ),
+              Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.015,
+                  ),
+                  Text(
+                    'Market Cap Rank',
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                  Text(
+                    "24h High",
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                  Text(
+                    "24h Low",
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                  Text(
+                    "24h Volume(USDT)",
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                ],
               ),
               Container(
                 margin: const EdgeInsets.only(right: 4, top: 15),
@@ -358,9 +358,11 @@ class _CoinState extends State<Coin> {
       children: [
         Container(
           padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.only(top: 10),
           child: Row(
             children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.07,
+              ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
                 child: Image.network(widget.coin.image),
@@ -378,11 +380,10 @@ class _CoinState extends State<Coin> {
         ),
         Container(
           padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.only(bottom: 10),
           child: Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.013,
+                width: MediaQuery.of(context).size.width * 0.02,
               ),
               const Text(
                 "Infrastructure",
@@ -394,222 +395,332 @@ class _CoinState extends State<Coin> {
             ],
           ),
         ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.0075,
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(children: [
-              Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: const Text(
-                    "Ranking",
+              const Text(
+                "Ranking",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              const Text(
+                "Total Supply",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              const Text(
+                "Max Supply",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              const Text(
+                "Circulating Supply",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              const Text(
+                'Market Cap',
+                style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  ),
+                  const Text(
+                    "Fully Diluted Valution (FDV)",
                     style: TextStyle(color: Colors.grey, fontSize: 15),
-                  )),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "Total Supply",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+                  ),
+                ],
               ),
-              Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: const Text(
-                    "Max Supply",
-                    style: TextStyle(color: Colors.grey, fontSize: 15),
-                  )),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "Circulating Supply",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  'Market Cap',
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              const Text(
+                "Total Volume",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, left: 6),
-                child: const Text(
-                  "Fully Diluted Valution (FDV)",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "Total Volume",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              const Text(
+                "All Time High (ATH)",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "All Time High (ATH)",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "ATH Percentage Change",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              const Text(
+                "ATH Percentage Change",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "ATH Date",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "All Time Low (ATL)",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              const Text(
+                "ATH Date",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "ATL Percentage Change",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "ATL Date",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
+              const Text(
+                "All Time Low (ATL)",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12),
-                child: const Text(
-                  "Last Updated",
-                  style: TextStyle(color: Colors.grey, fontSize: 15),
-                ),
-              )
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              const Text(
+                "ATL Percentage Change",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              const Text(
+                "ATL Date",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              const Text(
+                "Last Updated",
+                style: TextStyle(color: Colors.grey, fontSize: 15),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
             ]),
             Column(children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  "#${widget.coin.marketCapRank.toString()}",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              Row(
+                children: [
+                  Text(
+                    "#${widget.coin.marketCapRank.toString()}",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  widget.coin.totalSupply.toStringAsFixed(0),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  widget.coin.maxSupply != null
-                      ? widget.coin.maxSupply.toStringAsFixed(0)
-                      : "None",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.coin.totalSupply.toStringAsFixed(0),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  widget.coin.circulatingSupply.toStringAsFixed(0),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  widget.coin.marketCap.toString(),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.coin.maxSupply != null
+                        ? widget.coin.maxSupply.toStringAsFixed(0)
+                        : "None",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  widget.coin.fullyDilutedValuation.toString(),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  widget.coin.totalVolume.toStringAsFixed(0),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.coin.circulatingSupply.toStringAsFixed(0),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  "\$${widget.coin.ath.toStringAsFixed(2)}",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  "${widget.coin.athChangePercentage.toStringAsFixed(2)}%",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.coin.marketCap.toString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.athDate),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  "\$${widget.coin.atl.toString()}",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.coin.fullyDilutedValuation.toString(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  "+${widget.coin.atlChangePercentage.toStringAsFixed(2)}%",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.atlDate),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              Row(
+                children: [
+                  Text(
+                    widget.coin.totalVolume.toStringAsFixed(0),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 12, right: 12),
-                child: Text(
-                  DateFormat('yyy-MM-dd - kk:mm')
-                      .format(widget.coin.lastUpdated),
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 15),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "\$${widget.coin.ath.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "${widget.coin.athChangePercentage.toStringAsFixed(2)}%",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              Row(
+                children: [
+                  Text(
+                    DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.athDate),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "\$${widget.coin.atl.toString()}",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "+${widget.coin.atlChangePercentage.toStringAsFixed(2)}%",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              Row(
+                children: [
+                  Text(
+                    DateFormat('yyy-MM-dd - kk:mm').format(widget.coin.atlDate),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
+              ),
+              Row(
+                children: [
+                  Text(
+                    DateFormat('yyy-MM-dd - kk:mm')
+                        .format(widget.coin.lastUpdated),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  )
+                ],
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.015,
               ),
             ]),
           ],

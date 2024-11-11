@@ -64,7 +64,7 @@ class _MarketsState extends State<Markets> {
                           )));
             },
             style: OutlinedButton.styleFrom(
-              minimumSize: const Size(380, 35),
+              minimumSize: Size(MediaQuery.of(context).size.height * 0.5, MediaQuery.of(context).size.height * 0.045),
               foregroundColor: Colors.grey,
               padding: const EdgeInsets.all(6),
               alignment: Alignment.centerLeft,
@@ -77,20 +77,20 @@ class _MarketsState extends State<Markets> {
         body: Column(
           children: [
             SizedBox(
-              height: 40,
+              height: MediaQuery.of(context).size.height * 0.05,
               width: MediaQuery.of(context).size.width,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(right: 230),
+                    margin: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.575),
                     child: const Text(
                       "Name",
                       style: TextStyle(fontSize: 19),
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(right: 20),
+                    margin: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.045),
                     child: const Text(
                       "Price",
                       style: TextStyle(fontSize: 19),

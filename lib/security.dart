@@ -101,9 +101,9 @@ class _UserSecurityState extends State<UserSecurity> {
                           margin: EdgeInsets.only(
                               right: MediaQuery.of(context).size.width * 0.05,
                               top: MediaQuery.of(context).size.height * 0.03),
-                          child: const Icon(
+                          child: Icon(
                             Icons.arrow_right_sharp,
-                            size: 25,
+                            size: MediaQuery.of(context).size.width * 0.07,
                           )),
                     ],
                   ),
@@ -135,9 +135,9 @@ class _UserSecurityState extends State<UserSecurity> {
                           margin: EdgeInsets.only(
                               right: MediaQuery.of(context).size.width * 0.05,
                               top: MediaQuery.of(context).size.height * 0.03),
-                          child: const Icon(
+                          child: Icon(
                             Icons.arrow_right_sharp,
-                            size: 25,
+                            size: MediaQuery.of(context).size.width * 0.07,
                           )),
                     ],
                   ),
@@ -169,11 +169,11 @@ class _UserSecurityState extends State<UserSecurity> {
                           margin: EdgeInsets.only(
                               right: MediaQuery.of(context).size.width * 0.05,
                               top: MediaQuery.of(context).size.height * 0.03),
-                          child: const Row(
+                          child: Row(
                             children: [
                               Icon(
                                 Icons.arrow_right_sharp,
-                                size: 25,
+                                size: MediaQuery.of(context).size.width * 0.07,
                               )
                             ],
                           )),
@@ -238,11 +238,11 @@ class _UserSecurityState extends State<UserSecurity> {
                           margin: EdgeInsets.only(
                               right: MediaQuery.of(context).size.width * 0.05,
                               top: MediaQuery.of(context).size.height * 0.03),
-                          child: const Row(
+                          child: Row(
                             children: [
                               Icon(
                                 Icons.arrow_right_sharp,
-                                size: 25,
+                                size: MediaQuery.of(context).size.width * 0.07,
                                 color: Colors.redAccent,
                               )
                             ],
