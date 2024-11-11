@@ -18,6 +18,7 @@ To run this application locally, follow these steps:
 
 1. Clone this repository: git clone https://github.com/apalex/Mobile-App.git
 2. Navigate to the project directory: cd Mobile-App
-3. Install dependencies: flutter pub get
-4. Run the app: flutter run
-Make sure you have Flutter installed on your machine before proceeding with the installation.
+3. Make sure you have the latest version of Flutter SDK installed
+4. Run the command: flutter doctor
+5. Install dependencies: flutter pub get
+6. Run the app: flutter run
