@@ -1,6 +1,6 @@
 import 'package:crypto_app/SQLite/database_helper.dart';
-import 'package:crypto_app/navigation_menu.dart';
 import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/registration.dart';
 import 'package:http/http.dart' as http;
@@ -37,7 +37,8 @@ class _LoginState extends State<Login> {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (context) => NavigationMenu(
+              builder: (context) => SplashScreen(
+                    action: "Login",
                     user: user,
                   )));
     } else {
@@ -88,7 +89,9 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       // Welcome
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.045,),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.045,
+                      ),
                       Container(
                         padding: const EdgeInsets.all(12),
                         child: Row(
@@ -182,7 +185,9 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       // Login Button
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.045,),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.045,
+                      ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.4,
                         height: MediaQuery.of(context).size.height * 0.066,
