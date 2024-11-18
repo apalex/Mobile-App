@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:clipboard/clipboard.dart';
 import 'package:crypto_app/Models/user_activity_model.dart';
 import 'package:crypto_app/payment_history.dart';
@@ -8,6 +9,7 @@ import 'package:crypto_app/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   final User? user;
@@ -21,6 +23,7 @@ class _ProfileState extends State<Profile> {
   final db = DatabaseHelper();
   late DatabaseHelper handler;
   late Future<List<UserActivity>> userAct;
+  File? _selectedImage;
 
   @override
   void initState() {
@@ -34,6 +37,58 @@ class _ProfileState extends State<Profile> {
 
   Future<List<UserActivity>> getAllActivity() {
     return handler.getUserActivities();
+  }
+
+  Widget bottomSheet() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.1,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            TextButton.icon(
+              icon: Icon(Icons.camera),
+              onPressed: () {
+                _pickImageFromCamera();
+              },
+              label: Text("Camera"),
+            ),
+            TextButton.icon(
+              icon: Icon(Icons.image),
+              onPressed: () {
+                _pickImageFromGallery();
+              },
+              label: Text("Gallery"),
+            ),
+          ])
+        ],
+      ),
+    );
+  }
+
+  Future _pickImageFromGallery() async {
+    final returnedImaged =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (returnedImaged == null) return;
+      
+    setState(() {
+      _selectedImage = File(returnedImaged!.path);
+    });
+  }
+
+  Future _pickImageFromCamera() async {
+    final returnedImaged =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+
+    if (returnedImaged == null) return;
+      
+    setState(() {
+      _selectedImage = File(returnedImaged!.path);
+    });
   }
 
   AppBar _buildAppBar(BuildContext context) {
@@ -76,10 +131,40 @@ class _ProfileState extends State<Profile> {
                 ),
                 Row(
                   children: [
-                    Icon(
-                      Icons.account_circle,
-                      size: MediaQuery.of(context).size.width * 0.2,
-                      color: Colors.black54,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.02,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: ((builder) => bottomSheet()),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          _selectedImage == null ? 
+                          Icon(
+                            Icons.account_circle,
+                            size: MediaQuery.of(context).size.width * 0.25,
+                            color: Colors.black54,
+                          ) : 
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: Image.file(_selectedImage!).image,
+                            // Image.file(_selectedImage!)
+                          ),
+                          Positioned(
+                            bottom: 10.0,
+                            right: 5.0,
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.teal,
+                              size: 26.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.02,

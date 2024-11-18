@@ -149,14 +149,14 @@ class _CoinState extends State<Coin> {
                   ),
                   Text(
                     widget.coin.priceChange24H > 0
-                        ? '24h \$ Change: +${widget.coin.priceChange24H.toStringAsFixed(2)}'
-                        : '24h \$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}',
+                        ? '24h\$ Change: +\$${widget.coin.priceChange24H.toStringAsFixed(2)}'
+                        : '24h\$ Change: ${widget.coin.priceChange24H.toStringAsFixed(2)}',
                     style: const TextStyle(fontSize: 13),
                   ),
                   Text(
                     widget.coin.priceChangePercentage24H > 0
-                        ? '24h % Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%'
-                        : '24h % Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%',
+                        ? '24h% Change: +${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%'
+                        : '24h% Change: -${widget.coin.priceChangePercentage24H.toStringAsFixed(2)}%',
                     style: const TextStyle(fontSize: 13),
                   ),
                 ],

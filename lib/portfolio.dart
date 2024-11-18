@@ -188,7 +188,7 @@ class _PortfolioState extends State<Portfolio> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        isVisibleBal ? bal.userBalance.toString() : hidden,
+                        isVisibleBal ? "\$${bal.userBalance.toString()}" : hidden,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 22,

@@ -4,6 +4,7 @@ import 'package:crypto_app/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// ignore: must_be_immutable
 class SplashScreen extends StatefulWidget {
   String? action;
   User? user;
