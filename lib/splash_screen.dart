@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
             .pushReplacement(MaterialPageRoute(builder: (_) => Welcome()));
       });
     } else {
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 1), () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (_) => NavigationMenu(
                   user: widget.user,

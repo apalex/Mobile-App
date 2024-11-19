@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:clipboard/clipboard.dart';
 import 'package:crypto_app/Models/user_activity_model.dart';
+import 'package:crypto_app/coin_history.dart';
 import 'package:crypto_app/payment_history.dart';
 import 'package:crypto_app/security.dart';
 import 'package:crypto_app/settings.dart';
@@ -311,7 +312,7 @@ class _ProfileState extends State<Profile> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PaymentHistory(
+                            builder: (context) => CoinHistory(
                                   user: widget.user,
                                 )));
                   },

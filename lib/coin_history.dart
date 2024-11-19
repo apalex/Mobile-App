@@ -1,34 +1,34 @@
 import 'package:crypto_app/Models/user_model.dart';
-import 'package:crypto_app/Models/user_payment_model.dart';
+import 'package:crypto_app/Models/user_transfers.dart';
 import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class PaymentHistory extends StatefulWidget {
+class CoinHistory extends StatefulWidget {
   final User? user;
-  const PaymentHistory({super.key, this.user});
+  const CoinHistory({super.key, this.user});
 
   @override
-  State<PaymentHistory> createState() => _PaymentHistoryState();
+  State<CoinHistory> createState() => _CoinHistoryState();
 }
 
-class _PaymentHistoryState extends State<PaymentHistory> {
+class _CoinHistoryState extends State<CoinHistory> {
   late DatabaseHelper handler;
-  late Future<List<UserPayment>> up;
+  late Future<List<UserTransfers>> ut;
   final db = DatabaseHelper();
 
   @override
   void initState() {
     handler = DatabaseHelper();
-    up = handler.getUserPayments(widget.user?.userId);
+    ut = handler.getUserTransfers(widget.user?.userId);
     handler.open().whenComplete(() {
-      up = getUserPayments();
+      ut = getUserTransfers();
     });
     super.initState();
   }
 
-  Future<List<UserPayment>> getUserPayments() {
-    return handler.getUserPayments(widget.user?.userId);
+  Future<List<UserTransfers>> getUserTransfers() {
+    return handler.getUserTransfers(widget.user?.userId);
   }
 
   @override
@@ -43,13 +43,13 @@ class _PaymentHistoryState extends State<PaymentHistory> {
             },
             child: const Icon(Icons.arrow_back_sharp),
           ),
-          title: const Text("Deposit/Withdrawal History"),
+          title: const Text("Transaction History"),
           centerTitle: true,
         ),
-        body: FutureBuilder<List<UserPayment>>(
-            future: up,
+        body: FutureBuilder<List<UserTransfers>>(
+            future: ut,
             builder: (BuildContext context,
-                AsyncSnapshot<List<UserPayment>> snapshot) {
+                AsyncSnapshot<List<UserTransfers>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               } else if (snapshot.hasData && snapshot.data!.isEmpty) {
@@ -57,7 +57,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
               } else if (snapshot.hasError) {
                 return Text(snapshot.error.toString());
               } else {
-                final items = snapshot.data ?? <UserPayment>[];
+                final items = snapshot.data ?? <UserTransfers>[];
                 return ListView.builder(
                     itemCount: items.length,
                     itemBuilder: (context, index) {
@@ -78,7 +78,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
                                 Text(
-                                  items[index].action,
+                                  items[index].coinName,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
@@ -87,19 +87,19 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
-                                Text(items[index].paymentMethod),
+                                Text(items[index].transferAmt.toString()),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
                                 Text(
-                                    "${items[index].paymentAmt.toString()} USDT"),
+                                    "${items[index].usdtAmt.toString()} USDT"),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.width * 0.02,
                                 ),
                                 Text(DateFormat('yyyy-MM-dd hh:mm').format(
-                                    DateTime.parse(items[index].paymentDate))),
+                                    DateTime.parse(items[index].transactionDate))),
                               ],
                             ),
                           ),

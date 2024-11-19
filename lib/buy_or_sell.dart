@@ -218,22 +218,44 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                       await db
                                           .insertUserTransfer(UserTransfers(
                                               userId: widget.user?.userId,
-                                              coinName: widget.coin.id,
-                                              transferAmt: widget
-                                                      .coin.currentPrice *
-                                                  double.parse(amount.text
-                                                      .replaceAll(",", ""))))
+                                              coinName: widget.coin.symbol.toUpperCase(),
+                                              transferAmt: double.parse(amount
+                                                  .text
+                                                  .replaceAll(",", "")),
+                                              usdtAmt: (widget
+                                                          .coin.currentPrice *
+                                                      double.parse(amount.text
+                                                          .replaceAll(
+                                                              ",", ""))),
+                                              transactionDate: DateTime.now()
+                                                  .toIso8601String()))
                                           .whenComplete(() async {
-                                            PortfolioModel userAverage = await db.getCoinBuyAverage(widget.user?.userId, widget.coin.id);
-                                            if (pm.averageBuyPrice <= 0) {
-                                              await db.editCoinBuyAverage(widget.user?.userId, widget.coin.id, widget.coin.currentPrice).whenComplete(() {
-                                                successPopup(context);
-                                              });
-                                            } else {
-                                              await db.editCoinBuyAverage(widget.user?.userId, widget.coin.id, (userAverage.averageBuyPrice + widget.coin.currentPrice)/2).whenComplete(() {
-                                                successPopup(context);
-                                              });
-                                            }
+                                        PortfolioModel userAverage =
+                                            await db.getCoinBuyAverage(
+                                                widget.user?.userId,
+                                                widget.coin.id);
+                                        if (pm.averageBuyPrice <= 0) {
+                                          await db
+                                              .editCoinBuyAverage(
+                                                  widget.user?.userId,
+                                                  widget.coin.id,
+                                                  widget.coin.currentPrice)
+                                              .whenComplete(() {
+                                            successPopup(context);
+                                          });
+                                        } else {
+                                          await db
+                                              .editCoinBuyAverage(
+                                                  widget.user?.userId,
+                                                  widget.coin.id,
+                                                  (userAverage.averageBuyPrice +
+                                                          widget.coin
+                                                              .currentPrice) /
+                                                      2)
+                                              .whenComplete(() {
+                                            successPopup(context);
+                                          });
+                                        }
                                       });
                                     });
                                   } else {
@@ -244,18 +266,25 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                             coinName: widget.coin.id,
                                             coinAmt: double.parse(amount.text
                                                 .replaceAll(",", "")),
-                                              averageBuyPrice: widget.coin.currentPrice))
+                                            averageBuyPrice:
+                                                widget.coin.currentPrice))
                                         .whenComplete(() async {
                                       // Add Transfer History
                                       await db
                                           .insertUserTransfer(UserTransfers(
                                               userId: widget.user?.userId,
-                                              coinName: widget.coin.id,
-                                              transferAmt: widget
-                                                      .coin.currentPrice *
-                                                  double.parse(amount.text
+                                              coinName: widget.coin.symbol.toUpperCase(),
+                                              transferAmt: double.parse(amount
+                                                      .text
                                                       .replaceAll(",", "")) *
-                                                  widget.coin.currentPrice))
+                                                  widget.coin.currentPrice,
+                                              usdtAmt: (widget
+                                                          .coin.currentPrice *
+                                                      double.parse(amount.text
+                                                          .replaceAll(
+                                                              ",", ""))),
+                                              transactionDate: DateTime.now()
+                                                  .toIso8601String()))
                                           .whenComplete(() {
                                         successPopup(context);
                                       });
@@ -269,14 +298,18 @@ class _BuyOrSellState extends State<BuyOrSell> {
                               // Check if Coin is Owned
                               var response = await db.isCoinOwned(
                                   widget.user?.userId, widget.coin.id);
-                              PortfolioModel usdt = await db.getCoinAmt(widget.user?.userId, 'tether');
+                              PortfolioModel usdt = await db.getCoinAmt(
+                                  widget.user?.userId, 'tether');
                               if (response == true) {
                                 // If Coin is owned, add to USDT
                                 await db
                                     .editCoinPortfolio(
                                         widget.user?.userId,
                                         'tether',
-                                        usdt.coinAmt + (widget.coin.currentPrice * double.parse(amount.text.replaceAll(",", ""))))
+                                        usdt.coinAmt +
+                                            (widget.coin.currentPrice *
+                                                double.parse(amount.text
+                                                    .replaceAll(",", ""))))
                                     .whenComplete(() async {
                                   // Remove Coin amount sold from Portfolio
                                   PortfolioModel pm = await db.getCoinAmt(
@@ -289,10 +322,22 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                               double.parse(amount.text
                                                   .replaceAll(",", "")))
                                       .whenComplete(() async {
-                                        UserBalance userBalance = await db.getUserBalance(widget.user?.userId);
-                                        await db.insertDepositBalance(widget.user?.userId, (userBalance.userBalance - pm.averageBuyPrice) + ((double.parse(amount.text.replaceAll(",", "")) * pm.averageBuyPrice) * (widget.coin.currentPrice / pm.averageBuyPrice))).whenComplete(() {
-                                          successPopup(context);
-                                        });
+                                    UserBalance userBalance = await db
+                                        .getUserBalance(widget.user?.userId);
+                                    await db
+                                        .insertDepositBalance(
+                                            widget.user?.userId,
+                                            (userBalance.userBalance -
+                                                    pm.averageBuyPrice) +
+                                                ((double.parse(amount.text
+                                                            .replaceAll(
+                                                                ",", "")) *
+                                                        pm.averageBuyPrice) *
+                                                    (widget.coin.currentPrice /
+                                                        pm.averageBuyPrice)))
+                                        .whenComplete(() {
+                                      successPopup(context);
+                                    });
                                   });
                                 });
                               } else {
