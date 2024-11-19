@@ -27,7 +27,7 @@ class DatabaseHelper {
       // User Activity
       await db.execute("CREATE TABLE IF NOT EXISTS User_Activity (userActivityId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, activityTimeStamp TEXT DEFAULT CURRENT_TIMESTAMP, ipAddress TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Transfers
-      await db.execute("CREATE TABLE IF NOT EXISTS User_Transfers (userTransferId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, coinName TEXT, transferAmt REAL, usdtAmt REAL, transactionDate TEXT DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
+      await db.execute("CREATE TABLE IF NOT EXISTS User_Transfers (userTransferId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, coinName TEXT, transferAmt REAL, usdtAmt REAL, transactionDate TEXT DEFAULT CURRENT_TIMESTAMP, action TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
       // User Payments
       await db.execute("CREATE TABLE IF NOT EXISTS User_Payments (userPaymentId INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, paymentMethod TEXT, paymentAmt REAL, paymentDate TEXT DEFAULT CURRENT_TIMESTAMP, action TEXT, FOREIGN KEY (userId) REFERENCES User_Info(userId));");
     });

@@ -93,7 +93,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
                                 Text(
-                                    "${items[index].paymentAmt.toString()} USDT"),
+                                    "${items[index].paymentAmt.toString()} USDT", style: TextStyle(color: items[index].action == "Deposit" ? Colors.green : Colors.red),),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.width * 0.02,

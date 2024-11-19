@@ -218,17 +218,18 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                       await db
                                           .insertUserTransfer(UserTransfers(
                                               userId: widget.user?.userId,
-                                              coinName: widget.coin.symbol.toUpperCase(),
+                                              coinName: widget.coin.symbol
+                                                  .toUpperCase(),
                                               transferAmt: double.parse(amount
                                                   .text
                                                   .replaceAll(",", "")),
                                               usdtAmt: (widget
-                                                          .coin.currentPrice *
-                                                      double.parse(amount.text
-                                                          .replaceAll(
-                                                              ",", ""))),
+                                                      .coin.currentPrice *
+                                                  double.parse(amount.text
+                                                      .replaceAll(",", ""))),
                                               transactionDate: DateTime.now()
-                                                  .toIso8601String()))
+                                                  .toIso8601String(),
+                                              action: "Buy"))
                                           .whenComplete(() async {
                                         PortfolioModel userAverage =
                                             await db.getCoinBuyAverage(
@@ -273,18 +274,18 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                       await db
                                           .insertUserTransfer(UserTransfers(
                                               userId: widget.user?.userId,
-                                              coinName: widget.coin.symbol.toUpperCase(),
+                                              coinName: widget.coin.symbol
+                                                  .toUpperCase(),
                                               transferAmt: double.parse(amount
                                                       .text
-                                                      .replaceAll(",", "")) *
-                                                  widget.coin.currentPrice,
+                                                      .replaceAll(",", "")),
                                               usdtAmt: (widget
-                                                          .coin.currentPrice *
-                                                      double.parse(amount.text
-                                                          .replaceAll(
-                                                              ",", ""))),
+                                                      .coin.currentPrice *
+                                                  double.parse(amount.text
+                                                      .replaceAll(",", ""))),
                                               transactionDate: DateTime.now()
-                                                  .toIso8601String()))
+                                                  .toIso8601String(),
+                                              action: "Buy"))
                                           .whenComplete(() {
                                         successPopup(context);
                                       });
@@ -335,8 +336,22 @@ class _BuyOrSellState extends State<BuyOrSell> {
                                                         pm.averageBuyPrice) *
                                                     (widget.coin.currentPrice /
                                                         pm.averageBuyPrice)))
-                                        .whenComplete(() {
-                                      successPopup(context);
+                                        .whenComplete(() async {
+                                      // Add Transfer History
+                                      await db.insertUserTransfer(UserTransfers(
+                                          userId: widget.user?.userId,
+                                          coinName:
+                                              widget.coin.symbol.toUpperCase(),
+                                          transferAmt: double.parse(amount.text
+                                                  .replaceAll(",", "")),
+                                          usdtAmt: (widget.coin.currentPrice *
+                                              double.parse(amount.text
+                                                  .replaceAll(",", ""))),
+                                          transactionDate:
+                                              DateTime.now().toIso8601String(),
+                                          action: "Sell")).whenComplete(() {
+                                            successPopup(context);
+                                          });
                                     });
                                   });
                                 });

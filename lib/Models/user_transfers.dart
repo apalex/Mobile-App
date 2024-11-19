@@ -5,6 +5,7 @@ class UserTransfers {
   final double transferAmt;
   final double usdtAmt;
   final String transactionDate;
+  final String action;
 
   const UserTransfers({
     this.userTransferId,
@@ -12,7 +13,8 @@ class UserTransfers {
     required this.coinName,
     required this.transferAmt,
     required this.usdtAmt,
-    required this.transactionDate
+    required this.transactionDate,
+    required this.action
   });
 
   factory UserTransfers.fromMap(Map<String, dynamic> json) => UserTransfers(
@@ -21,7 +23,8 @@ class UserTransfers {
     coinName: json['coinName'],
     transferAmt: json['transferAmt'],
     usdtAmt: json['usdtAmt'],
-    transactionDate: json['transactionDate']
+    transactionDate: json['transactionDate'],
+    action: json['action']
   );
   
   Map<String, dynamic> toMap() => {
@@ -30,7 +33,8 @@ class UserTransfers {
     'coinName': coinName,
     'transferAmt': transferAmt,
     'usdtAmt': usdtAmt,
-    'transactionDate': transactionDate
+    'transactionDate': transactionDate,
+    'action': action
   };  
 
 }

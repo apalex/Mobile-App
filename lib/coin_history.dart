@@ -78,7 +78,7 @@ class _CoinHistoryState extends State<CoinHistory> {
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
                                 Text(
-                                  items[index].coinName,
+                                  "${items[index].action}",
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18),
@@ -87,19 +87,25 @@ class _CoinHistoryState extends State<CoinHistory> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
-                                Text(items[index].transferAmt.toString()),
+                                Text("${items[index].transferAmt.toString()} ${items[index].coinName}"),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.01,
                                 ),
                                 Text(
-                                    "${items[index].usdtAmt.toString()} USDT"),
+                                  "${items[index].usdtAmt.toString()} USDT",
+                                  style: TextStyle(
+                                      color: items[index].action == "Buy"
+                                          ? Colors.green
+                                          : Colors.red),
+                                ),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.width * 0.02,
                                 ),
                                 Text(DateFormat('yyyy-MM-dd hh:mm').format(
-                                    DateTime.parse(items[index].transactionDate))),
+                                    DateTime.parse(
+                                        items[index].transactionDate))),
                               ],
                             ),
                           ),
