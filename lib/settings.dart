@@ -1,6 +1,7 @@
 import 'package:crypto_app/welcome.dart';
 import 'package:crypto_app/Models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserSettings extends StatelessWidget {
   final User? user;
@@ -140,7 +141,9 @@ class UserSettings extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                            sharedPreferences.clear();
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
