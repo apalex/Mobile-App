@@ -1,8 +1,10 @@
 import 'package:crypto_app/Models/user_model.dart';
+import 'package:crypto_app/SQLite/database_helper.dart';
 import 'package:crypto_app/navigation_menu.dart';
 import 'package:crypto_app/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class SplashScreen extends StatefulWidget {
@@ -16,10 +18,31 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  var username;
+  var password;
+
+  void _checkLoginStatus() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    username = sharedPreferences.getString("username");
+    password = sharedPreferences.getString("password");
+
+    if (username != null && password != null) {
+      final db = DatabaseHelper();
+      User userlog = await db.getUser(username);
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => NavigationMenu(
+          user: userlog,
+        )));
+      }
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    _checkLoginStatus();
 
     if (widget.action == "Boot") {
       Future.delayed(Duration(seconds: 3), () {

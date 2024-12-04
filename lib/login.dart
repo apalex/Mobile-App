@@ -4,6 +4,7 @@ import 'package:crypto_app/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:crypto_app/registration.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -34,6 +35,13 @@ class _LoginState extends State<Login> {
     if (response == true) {
       if (!mounted) return;
       insertUserLoginDate();
+      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      try {
+        sharedPreferences.setString("username", username.text);
+        sharedPreferences.setString("password", password.text);
+      } catch (e) {
+        print("Error storing preferences: $e");
+      }
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
